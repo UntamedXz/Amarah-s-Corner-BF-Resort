@@ -166,9 +166,6 @@ $admin_type = $info['admin_type'];
             <button onclick="location.href = 'insert-product';" id="getInsert" class="insert_cat"
                 type="button"><i class="fa-solid fa-plus"></i> <span>INSERT PRODUCT</span> </button>
 
-            <!-- <button onclick="location.href = 'insert-variable-product';" id="getInsert" class="insert_cat"
-                type="button"><i class="fa-solid fa-plus"></i> <span>INSERT VARIABLE PRODUCT</span> </button> -->
-
             <div class="wrapper">
                 <table id="example" class="table table-bordered table-striped">
                     <thead>
@@ -227,7 +224,7 @@ $admin_type = $info['admin_type'];
                 $.ajax({
                     url: './functions/crud/product',
                     type: 'POST',
-                    data: 'product_id=' + product_id,
+                    data: 'product_id_key=' + product_id,
                     success: function (res) {
                         location.href = res;
                     }

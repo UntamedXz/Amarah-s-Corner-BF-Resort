@@ -81,7 +81,7 @@ if(isset($_GET['id'])) {
 
     <!-- MAIN -->
     <main>
-        <h1 class="title">Insert Product</h1>
+        <h1 class="title">Update Product</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
@@ -228,6 +228,12 @@ if(isset($_GET['id'])) {
                                                             <input type="text" name="attribute_values[]" id="attribute_values" placeholder="Enter some text, or some attributes by &rdquo;|&rdquo; separating values." value="<?php $get_variation = mysqli_query($conn, "SELECT variation_value FROM product_variation WHERE attribute_id = $attribute_id"); $items = array(); foreach($get_variation as $variation) { $items[] = $variation['variation_value']; } print implode("|", $items); ?>">
                                                         </div>
                                                     </div>
+                                                    <!-- <div class="hgroup">
+                                                        <div class="vname vgroup">
+                                                            <span>Regular Price:</span>
+                                                            <input type="text" name="reg_price_variable" id="reg_price_variable">
+                                                        </div>
+                                                    </div> -->
                                                 <button class="remove_attribute_field field_count<?php echo $count; ?>" data-id="<?php echo $count; ?>" id="field_count<?php echo $count; ?>">Remove</button>
                                                 <?php
                                             }
@@ -396,7 +402,7 @@ if(isset($_GET['id'])) {
                     </div>
                 </div>
             </form>
-            <button type="submit" class="insert_product" form="insert_product">INSERT PRODUCT</button>
+            <button type="submit" class="insert_product" form="insert_product">UPDATE PRODUCT</button>
         </section>
 
         <script>
@@ -725,7 +731,7 @@ if(isset($_GET['id'])) {
                                 }, 5000);
                             } else {
                                 var form = new FormData(this);
-                                form.append('insert_variable', true);
+                                form.append('update_variable', true);
                                 $.ajax({
                                     url: "./functions/crud/product",
                                     type: "POST",
@@ -735,7 +741,7 @@ if(isset($_GET['id'])) {
                                     processData: false,
                                     success: function(data) {
                                         var str = data;
-                                        if(str.includes("insert-product?id")) {
+                                        if(str.includes("update-product?id")) {
                                             location.href = data;
                                         } else if(str.includes("Undefined array key 2")) {
                                             location.reload();

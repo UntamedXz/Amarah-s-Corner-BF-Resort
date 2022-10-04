@@ -110,67 +110,38 @@ if(isset($_SESSION['id'])) {
             <div class="container-right">
                 <div class="container-right-cont">
                     <?php
-                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id WHERE product.category_id = $decode_id");
+                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id WHERE product.category_id = $decode_id");
 
                     foreach ($getProduct as $rowProduct) {
-
-                        if($rowProduct['product_status'] == 2 || $rowProduct['product_price'] == null) {
                     ?>
-                        <a href="#" class="catalog-box" style="position: relative;">
-                            <?php
-                            if(!empty($rowProduct['product_img1'])) {
-                            ?>
-                            <div class="img-cont">
-                                <img style="filter: grayscale(100%);" src="./assets/images/<?php echo $rowProduct['product_img1']; ?>" alt="">
-                            </div>
-                            <?php
-                            } else {
-                            ?>
-                            <div class="no-img-cont">
-                                <img style="filter: grayscale(100%);" src="./assets/images/image_not_available-yellow.png" alt="">
-                            </div>
-                            <?php
-                            }
-                            ?>
-                            <div class="details">
-                                <h4 style="filter: grayscale(100%);"><?php echo $rowProduct['product_title'] ?></h4>
-                                <h5 style="color: #ffaf08; font-weight: 400; filter: grayscale(100%);"><?php echo $rowProduct['subcategory_title']; ?></h5>
-                                <h5 style="filter: grayscale(100%);" class="price">P<?php echo $rowProduct['product_price'] ?></h5>
-                                <button style="filter: grayscale(100%);" class="order-btn"><i class='bx bxs-cart'></i><span>ORDER NOW</span></button>
-                            </div>
-                            <span style="color: #fff; font-weight: 800; font-size: 32px; position: absolute; filter: unset; padding-left: 10px; top: 35%; transform: translateY(50%); transform: rotate(-15deg);" class="status">NOT AVAILABLE</span>
-                        </a>
+                        <a href="product?link=<?php echo $rowProduct['product_slug']; ?>" class="catalog-box" style="position: relative;">
                     <?php
-                        } else {
+                        if(!empty($rowProduct['product_img1'])) {
                         ?>
-                        <a href="product?link=<?php echo $rowProduct['product_slug']; ?>" class="catalog-box">
-                            <?php
-                            if(!empty($rowProduct['product_img1'])) {
-                            ?>
                             <div class="img-cont">
                                 <img src="./assets/images/<?php echo $rowProduct['product_img1']; ?>" alt="">
                             </div>
-                            <?php
-                            } else {
-                            ?>
+                        <?php
+                        } else {
+                        ?>
                             <div class="no-img-cont">
                                 <img src="./assets/images/image_not_available-yellow.png" alt="">
                             </div>
-                            <?php
-                            }
-                            ?>
+                        <?php
+                        }
+                        ?>
                             <div class="details">
                                 <h4><?php echo $rowProduct['product_title'] ?></h4>
                                 <h5 style="color: #ffaf08; font-weight: 400;"><?php echo $rowProduct['subcategory_title']; ?></h5>
                                 <h5 class="price">P<?php echo $rowProduct['product_price'] ?></h5>
+                                
                                 <button class="order-btn"><i class='bx bxs-cart'></i>ORDER NOW</button>
                             </div>
                         </a>
                         <?php
                         }
-                    }
                     ?>
-                </div>
+                </div>                                
                 <div id="load-more-products">
                     <input type="submit" class="load-more-products" value="LOAD MORE">
                 </div>

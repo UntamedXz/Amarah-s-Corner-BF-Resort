@@ -21,7 +21,6 @@
         </li>
         <li class="divider" data-text="product">Product</li>
         <li>
-        <li><a href="product-variant"><i class='bx bx-list-plus icon'></i>Product Variants</a></li>
         <li><a href="product"><i class='bx bxs-bowl-hot icon'></i>Products</a></li>
         <li><a href="stocks"><i class='bx bx-package icon'></i>Stocks</a></li>
         </li>
