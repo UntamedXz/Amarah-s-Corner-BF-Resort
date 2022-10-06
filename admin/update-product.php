@@ -745,6 +745,8 @@ if(isset($_GET['id'])) {
                                             location.href = data;
                                         } else if(str.includes("Undefined array key 2")) {
                                             location.reload();
+                                        } else if(str.includes("Undefined array key 6")) {
+                                            location.reload();
                                         } else if(data == '') {
                                             location.reload();
                                         } else if(str.includes("Uncaught TypeError: count():")) {

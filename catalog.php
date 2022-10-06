@@ -114,7 +114,7 @@ if(isset($_SESSION['id'])) {
 
                     foreach ($getProduct as $rowProduct) {
                     ?>
-                        <a href="product?link=<?php echo $rowProduct['product_slug']; ?>" class="catalog-box" style="position: relative;">
+                        <a href="product?link=<?php echo $rowProduct['product_slug'] . "&id=" . $rowProduct['product_id']; ?>" class="catalog-box" style="position: relative;">
                     <?php
                         if(!empty($rowProduct['product_img1'])) {
                         ?>

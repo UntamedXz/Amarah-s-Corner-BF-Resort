@@ -4,6 +4,8 @@ require_once "./includes/database_conn.php";
 
 $id = $_GET['link'];
 
+$product_id = $_GET['id'];
+
 if(isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
 } else {
@@ -138,6 +140,7 @@ if(isset($_SESSION['id'])) {
         </div>
     </section>
 
+    <form action="" id="cart">
     <?php
     $getProduct = mysqli_query($conn, "SELECT * FROM product WHERE product_slug = '$id'");
 
@@ -167,7 +170,7 @@ if(isset($_SESSION['id'])) {
                     <h1 class="product-title">
                         <?php echo $row['product_title']; ?>
                     </h1>
-                    <span class="price"><small>Starts at </small> <b>P<span
+                    <span class="price"><b>P<span
                                 class="priceValue"><?php echo $row['product_price']; ?></span> </b></span>
                     <span class="desc">
                         <?php
@@ -177,43 +180,50 @@ if(isset($_SESSION['id'])) {
                 </div>
             </div>
             <div class="right">
+            <?php
+                $get_attribute_info = mysqli_query($conn, "SELECT * FROM product_attribute WHERE product_id = $product_id");
+                $get_category_id = mysqli_query($conn, "SELECT category_id FROM product WHERE product_id = $product_id");
+
+                $fetched_category_id = mysqli_fetch_array($get_category_id);
+                $category_id = $fetched_category_id['category_id'];
+
+                $get_category_name = mysqli_query($conn, "SELECT * FROM category WHERE category_id = $category_id");
+
+                $fetched_category_name = mysqli_fetch_array($get_category_name);
+                $category_name = $fetched_category_name['category_title'];
+
+                foreach($get_attribute_info as $attr_info) {
+                    $attribute_id = $attr_info['attribute_id'];
+                    
+                ?>
+                <div class="form-group variation">
+                    <span>Choose your <?php echo $category_name . " " . $attr_info['attribute_name']; ?></span>
+                    <div class="radio-tile-group">
+                        <?php
+                        $get_variation_info = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id AND attribute_id = $attribute_id");
+                        $i = 1;
+                        foreach($get_variation_info as $variation_info) {
+                        ?>
+                        <div class="input-container">
+                            <input class="attribute" type="radio" name="radio[<?php echo $variation_info['attribute_id']; ?>]" id="<?php echo $variation_info['variation_id']; ?>" value="<?php echo $variation_info['variation_id']; ?>" required>
+                            <div class="radio-tile">
+                                <label for="<?php echo $variation_info['variation_id']; ?>"><?php echo $variation_info['variation_value']; ?></label>
+                                <span class="price">P<?php echo $variation_info['product_price']; ?></span>
+                            </div>
+                        </div>
+                        <?php
+                        }
+                        $i++;
+                        ?>
+                    </div>
+                </div>
+                <?php
+                }
+                ?>
+                    
                 <div class="form-group">
                     <span>Special Instructions (Optional)</span>
                     <textarea class="instruction" type="text" name="" id=""></textarea>
-
-                    <!-- <fieldset>
-
-<legend> SIZE </legend>
-
-    <div>
-      <input type="radio" id="size" name="size" value="size"
-             checked>
-      <label for="size">10"</label>
-    </div>
-
-    <div>
-      <input type="radio" id="size" name="size" value="size">
-      <label for="size">12"</label>
-    </div>
-
-</fieldset>
-<fieldset>
-<legend> FLAVOR </legend>
-
-    <div>
-      <input type="radio" id="size" name="size" value="size"
-             checked>
-      <label for="size">CHEESECAKE</label>
-    </div>
-
-    <div>
-      <input type="radio" id="size" name="size" value="size">
-      <label for="size">OVERLOAD</label>
-    </div>
-
-</fieldset> -->
-
-
                 </div>
             </div>
         </div>
@@ -241,6 +251,7 @@ if(isset($_SESSION['id'])) {
             </div>
         </div>
     </div>
+    </form>
 
     <?php include './includes/cart-count.php' ?>
     <script src="./assets/js/script.js"></script>
@@ -270,6 +281,11 @@ if(isset($_SESSION['id'])) {
                 }
             });
 
+            $("input[name='radio[]']").change(function(e) {
+                e.preventDefault();
+                alert('gago');
+            })
+
             $(".qtyBtn").on('click', function () {
                 var total = parseFloat($('.number-spinner').val()).toFixed(2);
                 var price = parseFloat($('.priceValue').text()).toFixed(2);
@@ -281,12 +297,17 @@ if(isset($_SESSION['id'])) {
     </script>
 
     <script>
-        $('#addToCart').on('click', function (e) {
+        
+
+        $('#cart').on('submit', function (e) {
             e.preventDefault();
             var userId = $('#user_id').val();
-            var product_id = $('#product_id').val();
-            var qty = $('.number-spinner').val();
+            // var product_id = $('#product_id').val();
+            // var qty = $('.number-spinner').val();
+            var form = new FormData(this);
             var total = $('.totalPriceSpan').text();
+            form.append('total', total);
+            form.append('add_to_cart', true);
 
             if(userId == '') {
                 location.href = 'http://localhost/theserve-amarah-s-corner-las-pinas/login';
@@ -294,17 +315,15 @@ if(isset($_SESSION['id'])) {
                 $.ajax ({
                     type: "POST",
                     url: "./functions/crud/cart",
-                    data: {
-                        'add_to_cart': true,
-                        'userId': userId,
-                        'product_id': product_id,
-                        'qty': qty,
-                        'total': total,
-                    },
+                    data: form,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
                     success: function (response) {
                         if (response == 'success') {
                             location.reload();
                         }
+                        console.log(response);
                     }
                 })
             }
@@ -339,6 +358,67 @@ if(isset($_SESSION['id'])) {
         window.addEventListener("load", function () {
             loader.style.display = "none";
         })
+
+        $('select.dropdown').each(function() {
+
+        var dropdown = $('<div />').addClass('dropdown selectDropdown');
+
+        $(this).wrap(dropdown);
+
+        var label = $('<span />').text($(this).attr('placeholder')).insertAfter($(this));
+        var list = $('<ul />');
+
+        $(this).find('option').each(function() {
+            list.append($('<li />').append($('<a />').text($(this).text())));
+        });
+
+        list.insertAfter($(this));
+
+        if($(this).find('option:selected').length) {
+            label.text($(this).find('option:selected').text());
+            list.find('li:contains(' + $(this).find('option:selected').text() + ')').addClass('active');
+            $(this).parent().addClass('filled');
+        }
+
+        });
+
+        $(document).on('click touch', '.selectDropdown ul li a', function(e) {
+        e.preventDefault();
+        var dropdown = $(this).parent().parent().parent();
+        var active = $(this).parent().hasClass('active');
+        var label = active ? dropdown.find('select').attr('placeholder') : $(this).text();
+
+        dropdown.find('option').prop('selected', false);
+        dropdown.find('ul li').removeClass('active');
+
+        dropdown.toggleClass('filled', !active);
+        dropdown.children('span').text(label);
+
+        if(!active) {
+            dropdown.find('option:contains(' + $(this).text() + ')').prop('selected', true);
+            $(this).parent().addClass('active');
+        }
+
+        dropdown.removeClass('open');
+        });
+
+        $('.dropdown > span').on('click touch', function(e) {
+        var self = $(this).parent();
+        self.toggleClass('open');
+        });
+
+        $(document).on('click touch', function(e) {
+        var dropdown = $('.dropdown');
+        if(dropdown !== e.target && !dropdown.has(e.target).length) {
+            dropdown.removeClass('open');
+        }
+        });
+
+        // light
+        $('.switch input').on('change', function(e) {
+        $('.dropdown, body').toggleClass('light', $(this).is(':checked'));
+        });
+
     </script>
 </body>
 

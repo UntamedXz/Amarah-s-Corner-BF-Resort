@@ -522,19 +522,24 @@ if(isset($_POST['insert_variable'])) {
                             }
                         }
                         if(count($variation_id) > 0) {
-                            $variation_value = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
+                            $get_variation_count = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
 
-                            $j = 0;
+                            if(mysqli_num_rows($get_variation_count) != count($variation_id)) {
+                                $delete_variation_info_db = mysqli_query($conn, "UPDATE product_variation SET product_price = NULL, product_sale = NULL, stock = NULL, stock_status = 1 WHERE product_id = $product_id_saved");
+                            } else {
+                                $get_all_variation = mysqli_query($conn, "SELECT * FROM `product_variation` WHERE product_id = $product_id_saved");
 
-                            while($row = mysqli_fetch_assoc($variation_value)) {
-                                
-                                $variation_id_db = $row['variation_id'];
+                                $i = 0;
 
-                                $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$j]', ''), product_sale = NULLIF('$variable_sale_price[$j]', ''), stock = NULLIF('$variable_stock[$j]', ''), stock_status = '$variable_stock_status[$j]' WHERE variation_id = $variation_id_db");
+                                while ($row = mysqli_fetch_array($get_all_variation)) {
 
-                                $j++;
+                                    $variation_id_db = $row['variation_id'];
+
+                                    $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$i]', ''), product_sale = NULLIF('$variable_sale_price[$i]', ''), stock = NULLIF('$variable_stock[$i]', ''), stock_status = '$variable_stock_status[$i]' WHERE variation_id = $variation_id_db");
+
+                                    $i++;
+                                }
                             }
-                            echo 'insert-product?id=' . $product_id_saved;
                         } else {
                             echo 'insert-product?id=' . $product_id_saved;
                         }
@@ -576,19 +581,24 @@ if(isset($_POST['insert_variable'])) {
                             }
                         }
                         if(count($variation_id) > 0) {
-                            $variation_value = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
+                            $get_variation_count = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
 
-                            $j = 0;
+                            if(mysqli_num_rows($get_variation_count) != count($variation_id)) {
+                                $delete_variation_info_db = mysqli_query($conn, "UPDATE product_variation SET product_price = NULL, product_sale = NULL, stock = NULL, stock_status = 1 WHERE product_id = $product_id_saved");
+                            } else {
+                                $get_all_variation = mysqli_query($conn, "SELECT * FROM `product_variation` WHERE product_id = $product_id_saved");
 
-                            while($row = mysqli_fetch_assoc($variation_value)) {
-                                
-                                $variation_id_db = $row['variation_id'];
+                                $i = 0;
 
-                                $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$j]', ''), product_sale = NULLIF('$variable_sale_price[$j]', ''), stock = NULLIF('$variable_stock[$j]', ''), stock_status = '$variable_stock_status[$j]' WHERE variation_id = $variation_id_db");
+                                while ($row = mysqli_fetch_array($get_all_variation)) {
 
-                                $j++;
+                                    $variation_id_db = $row['variation_id'];
+
+                                    $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$i]', ''), product_sale = NULLIF('$variable_sale_price[$i]', ''), stock = NULLIF('$variable_stock[$i]', ''), stock_status = '$variable_stock_status[$i]' WHERE variation_id = $variation_id_db");
+
+                                    $i++;
+                                }
                             }
-                            echo 'insert-product?id=' . $product_id_saved;
                         } else {
                             echo 'insert-product?id=' . $product_id_saved;
                         }
@@ -630,6 +640,7 @@ if(isset($_POST['update_variable'])) {
                 
             } else {
                 $delete_attributes = mysqli_query($conn, "DELETE FROM product_attribute WHERE product_id = $product_id_saved");
+                
 
                 if(count($attribute_name) > 0) {
                     for($i = 0; $i < count($attribute_name); $i++) {
@@ -647,17 +658,24 @@ if(isset($_POST['update_variable'])) {
                         }
                     }
                     if(count($variation_id) > 0) {
-                        $variation_value = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
 
-                        $j = 0;
+                        $get_variation_count = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
 
-                        while($row = mysqli_fetch_assoc($variation_value)) {
-                            
-                            $variation_id_db = $row['variation_id'];
+                        if(mysqli_num_rows($get_variation_count) != count($variation_id)) {
+                            $delete_variation_info_db = mysqli_query($conn, "UPDATE product_variation SET product_price = NULL, product_sale = NULL, stock = NULL, stock_status = 1 WHERE product_id = $product_id_saved");
+                        } else {
+                            $get_all_variation = mysqli_query($conn, "SELECT * FROM `product_variation` WHERE product_id = $product_id_saved");
 
-                            $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$j]', ''), product_sale = NULLIF('$variable_sale_price[$j]', ''), stock = NULLIF('$variable_stock[$j]', ''), stock_status = '$variable_stock_status[$j]' WHERE variation_id = $variation_id_db");
+                            $i = 0;
 
-                            $j++;
+                            while ($row = mysqli_fetch_array($get_all_variation)) {
+
+                                $variation_id_db = $row['variation_id'];
+
+                                $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$i]', ''), product_sale = NULLIF('$variable_sale_price[$i]', ''), stock = NULLIF('$variable_stock[$i]', ''), stock_status = '$variable_stock_status[$i]' WHERE variation_id = $variation_id_db");
+
+                                $i++;
+                            }
                         }
                     } else {
                         echo 'insert-product?id=' . $product_id_saved;
@@ -700,17 +718,23 @@ if(isset($_POST['update_variable'])) {
                         }
                     }
                     if(count($variation_id) > 0) {
-                        $variation_value = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
+                        $get_variation_count = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id_saved");
 
-                        $j = 0;
+                        if(mysqli_num_rows($get_variation_count) != count($variation_id)) {
+                            $delete_variation_info_db = mysqli_query($conn, "UPDATE product_variation SET product_price = NULL, product_sale = NULL, stock = NULL, stock_status = 1 WHERE product_id = $product_id_saved");
+                        } else {
+                            $get_all_variation = mysqli_query($conn, "SELECT * FROM `product_variation` WHERE product_id = $product_id_saved");
 
-                        while($row = mysqli_fetch_assoc($variation_value)) {
-                            
-                            $variation_id_db = $row['variation_id'];
+                            $i = 0;
 
-                            $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$j]', ''), product_sale = NULLIF('$variable_sale_price[$j]', ''), stock = NULLIF('$variable_stock[$j]', ''), stock_status = '$variable_stock_status[$j]' WHERE variation_id = $variation_id_db");
+                            while ($row = mysqli_fetch_array($get_all_variation)) {
 
-                            $j++;
+                                $variation_id_db = $row['variation_id'];
+
+                                $update_variation = mysqli_query($conn, "UPDATE product_variation SET product_price = NULLIF('$variable_reg_price[$i]', ''), product_sale = NULLIF('$variable_sale_price[$i]', ''), stock = NULLIF('$variable_stock[$i]', ''), stock_status = '$variable_stock_status[$i]' WHERE variation_id = $variation_id_db");
+
+                                $i++;
+                            }
                         }
                     } else {
                         echo 'insert-product?id=' . $product_id_saved;
