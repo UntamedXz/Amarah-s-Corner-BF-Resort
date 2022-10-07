@@ -35,26 +35,28 @@ if(isset($_POST['delete_all_cart'])) {
 }
 
 if(isset($_POST['add_to_cart'])) {
-    // $product_id = $_POST['product_id'];
-    // $userId = $_POST['userId'];
-    // $qty = $_POST['qty'];
-    // $total = $_POST['total'];
+    $product_id = $_POST['product_id'];
+    $userId = $_POST['user_id'];
+    $qty = $_POST['qty'];
+    $total = $_POST['total'];
+    $special_instructions = mysqli_real_escape_string($conn, $_POST['special_instructions']) ?? null;
 
-    // $getProduct = mysqli_query($conn, "SELECT * FROM product WHERE product_id = $product_id");
+    $getProduct = mysqli_query($conn, "SELECT * FROM product WHERE product_id = $product_id");
 
-    // while($row = mysqli_fetch_array($getProduct)) {
-    //     $productId = $row['product_id'];
-    //     $categoryId = $row['category_id'];
-    //     $subcategoryId = $row['subcategory_id'];
-    // }
+    while($row = mysqli_fetch_array($getProduct)) {
+        $productId = $row['product_id'];
+        $categoryId = $row['category_id'];
+        $subcategoryId = $row['subcategory_id'];
+    }
 
-    // $insertCart = mysqli_query($conn, "INSERT INTO cart (user_id, category_id, subcategory_id, product_id, product_qty, product_total) VALUES ('$userId', '$categoryId', '$subcategoryId', '$productId', '$qty', '$total')");
+    $insertCart = mysqli_query($conn, "INSERT INTO cart (user_id, category_id, subcategory_id, product_id, product_qty, product_total, special_instructions) VALUES ($userId, $categoryId, NULLIF('$subcategoryId', ''), $productId, '$qty', '$total', NULLIF('$special_instructions', ''))");
 
-    // if($insertCart) {
-    //     $_SESSION['alert'] = 'success';
-    //     echo 'success';
-    // }
-    print_r($_POST['radio']);
+    if($insertCart) {
+        $_SESSION['alert'] = 'success';
+        echo 'success';
+    }
+
+    // echo $userId . ' - ' . $categoryId . ' - ' . $subcategoryId . ' - ' . $productId . ' - ' . $qty . ' - ' . $total;
 }
 
 if(isset($_POST['cancel'])) {

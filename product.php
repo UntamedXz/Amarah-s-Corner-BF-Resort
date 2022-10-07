@@ -149,8 +149,8 @@ if(isset($_SESSION['id'])) {
     <section class="product-details">
         <div class="product-details__wrapper">
             <div class="left">
-                <input type="hidden" name="" id="product_id" value="<?php echo $row['product_id']; ?>">
-                <input type="hidden" name="" id="user_id" value="<?php echo $user_id; ?>">
+                <input type="hidden" name="product_id" id="product_id" value="<?php echo $row['product_id']; ?>">
+                <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>">
                 <?php
                 if (!empty($row['product_img1'])) {
                 ?>
@@ -201,19 +201,18 @@ if(isset($_SESSION['id'])) {
                     <div class="radio-tile-group">
                         <?php
                         $get_variation_info = mysqli_query($conn, "SELECT * FROM product_variation WHERE product_id = $product_id AND attribute_id = $attribute_id");
-                        $i = 1;
+                        
                         foreach($get_variation_info as $variation_info) {
                         ?>
                         <div class="input-container">
-                            <input class="attribute" type="radio" name="radio[<?php echo $variation_info['attribute_id']; ?>]" id="<?php echo $variation_info['variation_id']; ?>" value="<?php echo $variation_info['variation_id']; ?>" required>
+                            <input class="attribute" data-price="<?php echo $variation_info['product_price']; ?>" type="radio" name="radio[<?php echo $variation_info['attribute_id']; ?>]" id="<?php echo $variation_info['variation_id']; ?>" value="<?php echo $variation_info['variation_id']; ?>" required>
                             <div class="radio-tile">
                                 <label for="<?php echo $variation_info['variation_id']; ?>"><?php echo $variation_info['variation_value']; ?></label>
-                                <span class="price">P<?php echo $variation_info['product_price']; ?></span>
+                                <span class="price">P <span class="each_price"><?php echo $variation_info['product_price']; ?></span></span>
                             </div>
                         </div>
                         <?php
                         }
-                        $i++;
                         ?>
                     </div>
                 </div>
@@ -223,7 +222,7 @@ if(isset($_SESSION['id'])) {
                     
                 <div class="form-group">
                     <span>Special Instructions (Optional)</span>
-                    <textarea class="instruction" type="text" name="" id=""></textarea>
+                    <textarea class="instruction" type="text" name="special_instructions" id="special_instructions"></textarea>
                 </div>
             </div>
         </div>
@@ -237,13 +236,13 @@ if(isset($_SESSION['id'])) {
             <div class="qty-container">
                 <div class="prev qtyBtn">-</div>
                 <div class="next qtyBtn">+</div>
-                <input class="number-spinner" type="number" name="" id="" value="1" min="1">
+                <input class="number-spinner" type="number" name="qty" id="qty" value="1" min="1">
             </div>
             <div class="total-box">
                 <div class="total">
                     <span class="totalText">Total</span>
                     <span class="totalPrice">P<span
-                            class="totalPriceSpan"><?php echo $row['product_price']; ?></span></span>
+                            class="totalPriceSpan"></span></span>
                 </div>
                 <div class="btn-container">
                     <button type="submit" id="addToCart">ADD TO CART</button>
@@ -281,9 +280,16 @@ if(isset($_SESSION['id'])) {
                 }
             });
 
-            $("input[name='radio[]']").change(function(e) {
-                e.preventDefault();
-                alert('gago');
+            $(document).on("change", ".attribute", function() {
+                var sum = 0;
+                $(".attribute:checked").each(function() {
+                    sum += +$(this).data('price');
+                })
+                $('.priceValue').text(parseFloat(sum).toFixed(2));
+
+                var qty = parseFloat($('.number-spinner').val()).toFixed(2);
+                var multiply = qty * sum;
+                $('.totalPriceSpan').text(parseFloat(multiply).toFixed(2));
             })
 
             $(".qtyBtn").on('click', function () {
@@ -293,6 +299,8 @@ if(isset($_SESSION['id'])) {
                 var sum = parseFloat(total * price).toFixed(2);
                 $('.totalPriceSpan').text(sum);
             });
+
+            $('.totalPriceSpan').text($('.priceValue').text());
         })
     </script>
 
