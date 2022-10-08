@@ -205,7 +205,7 @@ if(isset($_SESSION['id'])) {
                         foreach($get_variation_info as $variation_info) {
                         ?>
                         <div class="input-container">
-                            <input class="attribute" data-price="<?php echo $variation_info['product_price']; ?>" type="radio" name="radio[<?php echo $variation_info['attribute_id']; ?>]" id="<?php echo $variation_info['variation_id']; ?>" value="<?php echo $variation_info['variation_id']; ?>" required>
+                            <input class="attribute" data-price="<?php echo $variation_info['product_price']; ?>" type="radio" name="radio[<?php echo $variation_info['attribute_id']; ?>]" id="<?php echo $variation_info['variation_id']; ?>" value="<?php echo $attr_info['attribute_name'] . ': ' . $variation_info['variation_value'];?>" required>
                             <div class="radio-tile">
                                 <label for="<?php echo $variation_info['variation_id']; ?>"><?php echo $variation_info['variation_value']; ?></label>
                                 <span class="price">P <span class="each_price"><?php echo $variation_info['product_price']; ?></span></span>
@@ -310,11 +310,13 @@ if(isset($_SESSION['id'])) {
         $('#cart').on('submit', function (e) {
             e.preventDefault();
             var userId = $('#user_id').val();
+            var price_value = $('.priceValue').text();
             // var product_id = $('#product_id').val();
             // var qty = $('.number-spinner').val();
             var form = new FormData(this);
             var total = $('.totalPriceSpan').text();
             form.append('total', total);
+            form.append('price_value', price_value);
             form.append('add_to_cart', true);
 
             if(userId == '') {

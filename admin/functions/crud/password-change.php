@@ -15,6 +15,8 @@ if(isset($_POST['password-change'])) {
 
         if($update_password) {
             echo 'Password updated successfully!';
+
+            $delete_vkey = mysqli_query($conn, "UPDATE customers SET vkey = NULL WHERE email = '$email'");
         } else {
             echo 'Something went wrong!';
         }

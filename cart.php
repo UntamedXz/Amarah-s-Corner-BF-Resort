@@ -174,7 +174,7 @@ body {
     <section class="cart">
         <div class="wrapper">
             <input type="hidden" name="user_id" id="user_id" value="<?php echo $userId; ?>">
-            <h1>Shopping Cart</h1>
+            <h1>Cart</h1>
             <hr>
             <?php
                     if($cartCount > 0) {
@@ -191,7 +191,7 @@ body {
                 <div class="shop">
                     <?php
 
-                    $getUserCart = mysqli_query($conn, "SELECT cart.cart_id, product.product_title, product.product_img1, subcategory.subcategory_title, product.product_price, cart.product_qty, cart.product_total
+                    $getUserCart = mysqli_query($conn, "SELECT cart.cart_id, product.product_title, product.product_img1, subcategory.subcategory_title, product.product_price, cart.product_qty, cart.product_total, cart.variation_value, cart.product_total_price
                     FROM cart
                     LEFT JOIN product
                     ON cart.product_id = product.product_id
@@ -199,6 +199,7 @@ body {
                     ON cart.subcategory_id = subcategory.subcategory_id WHERE cart.user_id = $userId");
 
                     foreach($getUserCart as $row) {
+                        $variation_value = explode(" | ", $row['variation_value']);
                     ?>
                     <form id="cart_item">
                         <div class="box" data-id="<?php echo $row['cart_id']; ?>">
@@ -222,8 +223,15 @@ body {
                             <div class="content">
                                 <h3><?php echo $row['product_title']; ?></h3>
                                 <h5><?php echo $row['subcategory_title']; ?></h5>
+                                <?php
+                                foreach($variation_value as $vval) {
+                                ?>
+                                <h5 style="text-transform: unset;"><?php echo $vval; ?></h5>
+                                <?php
+                                }
+                                ?>
                                 <h4>Price <strong>P<span
-                                            data-price="<?php echo $row['cart_id']; ?>"><?php echo $row['product_price']; ?></span>
+                                            data-price="<?php echo $row['cart_id']; ?>"><?php echo $row['product_total_price']; ?></span>
                                     </strong></h4>
                                 <div class="qty-remove">
                                     <p class="unit">Quantity: <input id="qty" min="1" class="qty"

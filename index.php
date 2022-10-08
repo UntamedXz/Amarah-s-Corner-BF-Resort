@@ -490,61 +490,54 @@ document.querySelector("#send").addEventListener("click", async () => {
     <section class="feedbacks" id="feedbacks">
         <h3 class="title-header">FEEDBACKS</h3>
         <div class="feedbacks__cont">
-            <!-- FEEDBACK 1 -->
-            <div class="feedbacks__card">
-                <div class="feedbacks__top">
-                    <div class="feedbacks__user-profile">
-                        <div class="feedbacks__user-profile__image">
-                            <img class="img" src="./assets/images/B612_20220322_202642_720-min.jpg">
-                        </div>
-                        <div class="feedbacks__name-user">
-                            <h4>Jennifer Sabado</h4>
-                            <h5>@jennifer.sabado</h5>
-                        </div>
-                    </div>
-
-                    <div class="feedbacks__rate">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                    </div>
-                </div>
-                <div class="feedbacks__comments">
-                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates quos error reiciendis
-                        pariatur
-                        voluptate eos, mollitia sit explicabo corrupti dolores, fugiat saepe ad nulla ut!</h5>
-                </div>
-            </div>
             <!-- FEEDBACK 2 -->
+            <?php
+            $get_feedback = mysqli_query($conn, "SELECT * FROM feedback ORDER BY id DESC");
+
+            foreach($get_feedback as $feedback) {
+                $email = $feedback['email'];
+
+                $get_info = mysqli_query($conn, "SELECT * FROM customers WHERE email = '$email' LIMIT 1");
+
+                $row = mysqli_fetch_array($get_info);
+
+                $username = $row['username'];
+                $pfp = $row['user_profile_image'];
+                $name = $row['name'];
+            ?>
             <div class="feedbacks__card">
                 <div class="feedbacks__top">
                     <div class="feedbacks__user-profile">
                         <div class="feedbacks__user-profile__image">
-                            <img class="img" src="./assets/images/Kaye.jpg">
+                            <img class="img" src="./assets/images/<?php echo $pfp; ?>">
                         </div>
                         <div class="feedbacks__name-user">
-                            <h4>Kaye Billones</h4>
-                            <h5>@kaye.billones</h5>
+                            <h4><?php echo $name; ?></h4>
+                            <h5><?php echo $username ?></h5>
                         </div>
                     </div>
 
                     <div class="feedbacks__rate">
+                        <?php
+                        $count = $feedback['quality_score'];
+
+                        for($i = 0; $i < $count; $i++)
+                        {
+                        ?>
                         <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="feedbacks__comments">
-                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates quos error reiciendis
-                        pariatur
-                        voluptate eos, mollitia sit explicabo corrupti dolores, fugiat saepe ad nulla ut!</h5>
+                    <h5><?php echo $feedback['feedback'] ?></h5>
                 </div>
             </div>
-            <!-- FEEDBACK 3 -->
+            <?php
+            }
+            ?>
+            <!-- FEEDBACK 3
             <div class="feedbacks__card">
                 <div class="feedbacks__top">
                     <div class="feedbacks__user-profile">
@@ -571,9 +564,11 @@ document.querySelector("#send").addEventListener("click", async () => {
                         voluptate eos, mollitia sit explicabo corrupti dolores, fugiat saepe ad nulla ut!</h5>
                 </div>
             </div>
-            <!-- FEEDBACK 4 -->
+             -->
+            <!-- FEEDBACK 4 
             <div class="feedbacks__card">
                 <div class="feedbacks__top">
+
                     <div class="feedbacks__user-profile">
                         <div class="feedbacks__user-profile__image">
                             <img class="img" src="./assets/images/Jovy.jpg">
@@ -598,6 +593,7 @@ document.querySelector("#send").addEventListener("click", async () => {
                         voluptate eos, mollitia sit explicabo corrupti dolores, fugiat saepe ad nulla ut!</h5>
                 </div>
             </div>
+            -->
         </div>
         <div id="load-more-feedbacks">
             <input type="submit" class="load-more-feedbacks" value="LOAD MORE">

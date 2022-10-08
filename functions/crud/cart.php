@@ -38,7 +38,9 @@ if(isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
     $userId = $_POST['user_id'];
     $qty = $_POST['qty'];
+    $product_total_price = $_POST['price_value'];
     $total = $_POST['total'];
+    $variation_value = $_POST['radio'] ?? null;
     $special_instructions = mysqli_real_escape_string($conn, $_POST['special_instructions']) ?? null;
 
     $getProduct = mysqli_query($conn, "SELECT * FROM product WHERE product_id = $product_id");
@@ -49,14 +51,23 @@ if(isset($_POST['add_to_cart'])) {
         $subcategoryId = $row['subcategory_id'];
     }
 
-    $insertCart = mysqli_query($conn, "INSERT INTO cart (user_id, category_id, subcategory_id, product_id, product_qty, product_total, special_instructions) VALUES ($userId, $categoryId, NULLIF('$subcategoryId', ''), $productId, '$qty', '$total', NULLIF('$special_instructions', ''))");
+    if($variation_value == NULL) {
+        $insertCart = mysqli_query($conn, "INSERT INTO cart (user_id, category_id, subcategory_id, product_id, product_qty, product_total, special_instructions, product_total_price) VALUES ($userId, $categoryId, NULLIF('$subcategoryId', ''), $productId, '$qty', '$total', NULLIF('$special_instructions', ''), '$product_total_price')");
 
-    if($insertCart) {
-        $_SESSION['alert'] = 'success';
-        echo 'success';
+        if($insertCart) {
+            $_SESSION['alert'] = 'success';
+            echo 'success';
+        }
+    } else {
+        $variation_implode = implode(' | ',$_POST['radio']);
+        
+        $insertCart = mysqli_query($conn, "INSERT INTO cart (user_id, category_id, subcategory_id, product_id, product_qty, product_total, special_instructions, variation_value, product_total_price) VALUES ($userId, $categoryId, NULLIF('$subcategoryId', ''), $productId, '$qty', '$total', NULLIF('$special_instructions', ''), NULLIF('$variation_implode', ''), '$product_total_price')");
+
+        if($insertCart) {
+            $_SESSION['alert'] = 'success';
+            echo 'success';
+        }
     }
-
-    // echo $userId . ' - ' . $categoryId . ' - ' . $subcategoryId . ' - ' . $productId . ' - ' . $qty . ' - ' . $total;
 }
 
 if(isset($_POST['cancel'])) {
