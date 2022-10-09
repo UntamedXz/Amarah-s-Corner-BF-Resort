@@ -167,7 +167,7 @@ if(isset($_SESSION['id'])) {
                         }
 
                         if (response == 'success') {
-                            location.href = 'http://localhost/theserve-amarah-s-corner-las-pinas';
+                            location.href = 'http://localhost/theserve-amarah-s-corner-bf-resort';
                         }
 
                         console.log(response);

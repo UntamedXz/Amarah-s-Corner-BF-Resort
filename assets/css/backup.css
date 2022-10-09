@@ -3206,4 +3206,17 @@ footer .footer-wrapper .copyright span {
   color: var(--primary);
 }
 
+.verified {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  flex-direction: column;
+}
+.verified h4 {
+  font-weight: 500;
+}
+
 /*# sourceMappingURL=backup.css.map */

@@ -8,10 +8,10 @@ if(isset($_GET['vkey'])) {
 
     if(mysqli_num_rows($check_vkey) == 1) {
         // Validate email
-        $update = mysqli_query($conn, "UPDATE customers SET verified = 1 WHERE vkey = '$vkey' LIMIT 1");
+        $update = mysqli_query($conn, "UPDATE customers SET verified = 1, vkey = NULL WHERE vkey = '$vkey' LIMIT 1");
 
         if($update) {
-            echo "Your account has been verified. You may now login. <a href='http://localhost/theserve-amarah-s-corner-las-pinas/login'>http://localhost/theserve-amarah-s-corner-las-pinas/login</a>";
+            header('location: verified');
         } else {
             echo 'Something went wrong.';
         }
