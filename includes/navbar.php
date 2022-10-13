@@ -140,6 +140,20 @@
             })
 
     })
+
+    // CLOCK SCRIPT
+    function myTime() {
+        var time = new Date();
+        $('.clock').html(time.toLocaleTimeString());
+    }
+
+    $(document).ready(function() {
+        setInterval(myTime, 1000);
+    })
+
+    var date = new Date();
+
+    document.getElementById('date').innerHTML = date;
 </script>
 
 <?php

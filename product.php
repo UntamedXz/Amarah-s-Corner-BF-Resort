@@ -161,7 +161,7 @@ if(isset($_SESSION['id'])) {
                 } else {
                 ?>
                 <div class="no-img-container">
-                    <img src="./assets/images/image_not_available-black.png" alt="">
+                    <img src="./assets/images/image_not_available-yellow.png" alt="">
                 </div>
                 <?php
                 }
