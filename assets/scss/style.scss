@@ -340,6 +340,22 @@ body {
   }
 }
 
+.checkout_overlay {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  transition: all 0.3s ease;
+
+  &.active {
+    bottom: 0;
+  }
+}
+
 // FOR ALL TITLES IN PAGE
 .title-header {
   @media (min-width: 992px) {
@@ -3059,6 +3075,13 @@ footer {
               padding: 0;
             }
           }
+
+          .pin_button {
+            font-size: 13px !important;
+            padding: 5px 10px !important;
+            height: unset;
+            line-height: unset;
+          }
         }
 
 
@@ -3303,6 +3326,47 @@ footer {
       hr {
         margin: 10px 0;
       }
+    }
+  }
+
+  .map_container {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    max-width: 94%;
+    height: 450px;
+    background-color: #ffaf08;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 8px 16px #070506;
+
+    #map {
+      width: 100%;
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    button {
+      background-color: #070506 !important;
+      color: #ffaf08;
+      padding: 0 10px !important;
+      font-size: 14px !important;
+      border: 2px solid #070506 !important;
+
+      &:hover {
+        background-color: transparent !important;
+        color: #070506 !important;
+      }
+    }
+
+    &.active {
+      top: 134px;
     }
   }
 }

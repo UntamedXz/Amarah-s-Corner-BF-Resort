@@ -270,6 +270,7 @@ if(isset($_SESSION['id'])) {
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");
                                 }, 5000);
+                                $('#register')[0].reset();
                             } else {
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');

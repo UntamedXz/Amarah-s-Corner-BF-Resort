@@ -2,6 +2,116 @@
 session_start();
 require_once '../../includes/database_conn.php';
 
+if(isset($_POST['map'])) {
+    $long = $_POST['longitude'];
+    $lat = $_POST['latitude'];
+
+    $key = "pk_test_929096cd212d3fdf7baf925728e87cb3"; // put your lalamove API key here
+    $secret = "sk_test_tr/l1Zg3PyBdu3OKgasoAdjHjFBLDFt35X6JCQhSXal85dTw6+oaTozfiIr6oXdP"; 
+    // put your lalamove API secret here
+
+    $time = time() * 1000;
+
+    $baseURL = "https://rest.sandbox.lalamove.com"; // URl to Lalamove Sandbox API
+    $method = 'POST';
+    $path = '/v2/quotations';
+    $region = 'PH_MNL';
+    $lng = $_POST['longitude'];
+    $lat = $_POST['latitude'];
+
+    // $_SESSION['long'] =$lng;
+    // $_SESSION['latt'] =$lat;
+
+
+    // Please, find information about body structure and passed values here https://developers.lalamove.com/#get-quotation
+    $body = '{
+        "serviceType": "MOTORCYCLE",
+        "specialRequests": [],
+        "requesterContact": {
+            "name": "Amarahs Corner",
+            "phone": "0899183138"
+        },
+        "stops": [
+            {
+                "location": {
+                    "lat": "14.551776",
+                    "lng": "121.016847"
+                },
+                "addresses": {
+                    "en_PH": {
+                        "displayString": "BF las pinas resort",
+                        "market": "'.$region.'"
+                    }
+                }
+            },
+            {
+                "location": {
+                    "lat": "'.$lat.'",
+                    "lng": "'.$lng.'"
+                },
+            "addresses": {
+                "en_PH": {
+                    "displayString": "address",
+                    "market": "'.$region.'"
+                }
+            }
+            }
+    ],
+    "deliveries": [
+            {
+                "toStop": 1,
+                "toContact": {
+                    "name": "customer",
+                    "phone": "123123"
+                },
+            "remarks": "Do not take this order - SANDBOX CLIENT TEST"
+            }
+    ]
+    }';
+
+    $rawSignature = "{$time}\r\n{$method}\r\n{$path}\r\n\r\n{$body}";
+    $signature = hash_hmac("sha256", $rawSignature, $secret);
+    $startTime = microtime(true);
+    $token = $key.':'.$time.':'.$signature;
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $baseURL.$path,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 3,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HEADER => false, // Enable this option if you want to see what headers Lalamove API returning in response
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => $body,
+        CURLOPT_HTTPHEADER => array(
+            "Content-type: application/json; charset=utf-8",
+            "Authorization: hmac ".$token, // A unique Signature Hash has to be generated for EVERY API call at the time of making such call.
+            "Accept: application/json",
+            "X-LLM-Market: {$region}" // Please note to which city are you trying to make API call
+        ),
+    ));
+
+    $response = curl_exec($curl);
+    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    $res = json_decode($response, JSON_OBJECT_AS_ARRAY);
+
+    $distance = $res['distance']['text'];
+    $delfee = $res['totalFee'];
+    $delcurr = $res['totalFee'].$res['totalFeeCurrency'];
+
+    // $_SESSION['dis'] =$distance;
+    // $_SESSION['dfee'] =$delfee;
+    if(isset($distance) || $distance == null) {
+        echo $delfee;
+    } else {
+        echo 'Invalid address!';
+    }
+}
+
 if(isset($_POST['update'])) {
     $price = $_POST['price'];
     $cart_id = $_POST['cart_id'];

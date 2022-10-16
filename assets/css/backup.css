@@ -294,6 +294,21 @@ body {
   display: block;
 }
 
+.checkout_overlay {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  transition: all 0.3s ease;
+}
+.checkout_overlay.active {
+  bottom: 0;
+}
+
 .title-header {
   margin: 0 auto;
   background: var(--black);
@@ -2786,6 +2801,12 @@ footer .footer-wrapper .copyright span {
   font-weight: 600;
   padding: 0;
 }
+.checkout .checkout_wrapper .left_checkout_wrapper form .group_form_group .pin_button {
+  font-size: 13px !important;
+  padding: 5px 10px !important;
+  height: unset;
+  line-height: unset;
+}
 .checkout .checkout_wrapper .left_checkout_wrapper form .gcash_payment {
   width: 100%;
   display: flex;
@@ -2993,6 +3014,42 @@ footer .footer-wrapper .copyright span {
 }
 .checkout .checkout_wrapper .right_checkout_wrapper hr {
   margin: 10px 0;
+}
+.checkout .map_container {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  max-width: 94%;
+  height: 450px;
+  background-color: #ffaf08;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 8px 16px #070506;
+}
+.checkout .map_container #map {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+}
+.checkout .map_container button {
+  background-color: #070506 !important;
+  color: #ffaf08;
+  padding: 0 10px !important;
+  font-size: 14px !important;
+  border: 2px solid #070506 !important;
+}
+.checkout .map_container button:hover {
+  background-color: transparent !important;
+  color: #070506 !important;
+}
+.checkout .map_container.active {
+  top: 134px;
 }
 
 .my_orders {

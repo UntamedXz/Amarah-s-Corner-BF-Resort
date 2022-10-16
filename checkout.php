@@ -47,6 +47,17 @@ if($cartCount < 1) {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+   integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+   crossorigin=""></script>
+   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.skypack.dev/maplibre-gl/dist/maplibre-gl.css">
 
 </head>
 
@@ -76,6 +87,8 @@ if($cartCount < 1) {
 </head>
 
 <body>
+    <div class="checkout_overlay">
+    </div>
     <div id="preloader"></div>
 
     <?php include './includes/navbar.php';?>
@@ -147,7 +160,44 @@ if($cartCount < 1) {
 }
 ?>
                     <span class="click_here"><a href="account">Click here</a> to update personal information</span>
-                    <div class="group_form_group">
+
+                    <div class="payment-wrapper">
+                        <span>Mode of Delivery</span>
+                        <div class="option_wrapper">
+                            <input type="radio" name="deliver" value="1" class="deliver" id="option-1-d" checked>
+                            <input type="radio" name="deliver" value="2" class="deliver"
+                                id="option-2-d">
+                            <input type="radio" name="deliver" value="3" class="deliver"
+                                id="option-3-d">
+                            <label for="option-1-d" class="option option-1">
+                                <div class="box"></div>
+                                <span>Pick Up</span>
+                            </label>
+                            <label for="option-2-d" class="option option-2">
+                                <div class="box"></div>
+                                <span>Delivery via Lalamove</span>
+                            </label>
+                            <label for="option-3-d" class="option option-3">
+                                <div class="box"></div>
+                                <span>Delivery within BF</span>
+                            </label>
+                        </div>
+                        <span class="error-deliver" style="color: #dc3545;"></span>
+                    </div>
+
+                    <div class="group_form_group pin_button_container">
+                        <button class="pin_button" type="button">UPDATE MY PIN</button>
+                    </div>
+
+                    <div class="map_container">
+                        <div id="map"></div>
+                        <button type="button" class="close_map">Confirm</button>
+                    </div>
+                    <input type="hidden" name="lng" id="lng">
+                    <input type="hidden" name="lat" id="lat">
+                    <input type="hidden" name="sf" id="sf">
+
+                    <div class="group_form_group address_div">
                         <div class="form_group">
                             <span>Block No., Bldg. & St. Name</span>
                             <input type="text" name="address" id="block">
@@ -159,7 +209,7 @@ if($cartCount < 1) {
                             <span class="error-province" style="color: #dc3545;"></span>
                         </div>
                     </div>
-                    <div class="group_form_group">
+                    <div class="group_form_group address_div">
                         <div class="form_group">
                             <span>City/Municipality</span>
                             <input type="text" name="city" id="city">
@@ -204,30 +254,6 @@ if($cartCount < 1) {
                                 <span class="error-reference" style="color: #dc3545;"></span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="payment-wrapper">
-                        <span>Mode of Delivery</span>
-                        <div class="option_wrapper">
-                            <input type="radio" name="deliver" value="1" class="deliver" id="option-1-d" checked>
-                            <input type="radio" name="deliver" value="2" class="deliver"
-                                id="option-2-d">
-                            <input type="radio" name="deliver" value="3" class="deliver"
-                                id="option-3-d">
-                            <label for="option-1-d" class="option option-1">
-                                <div class="box"></div>
-                                <span>Pick Up</span>
-                            </label>
-                            <label for="option-2-d" class="option option-2">
-                                <div class="box"></div>
-                                <span>Delivery via Lalamove</span>
-                            </label>
-                            <label for="option-3-d" class="option option-3">
-                                <div class="box"></div>
-                                <span>Delivery within BF</span>
-                            </label>
-                        </div>
-                        <span class="error-deliver" style="color: #dc3545;"></span>
                     </div>
 
                     <input type="hidden" name="shipping_value" id="shipping_value">
@@ -303,6 +329,19 @@ if($cartCount < 1) {
     </script>
 
     <script type="text/javascript">
+        // CLOSE MAP MODAL
+        $(document).on('click', '.close_map',function() {
+            console.log('clicked');
+            $('.map_container').removeClass('active');
+            $('.checkout_overlay').removeClass('active');
+        })
+
+        $(document).on('click', '.pin_button',function() {
+            console.log('clicked');
+            $('.map_container').addClass('active');
+            $('.checkout_overlay').addClass('active');
+        })
+
         // GET TOTAL
         $(window).on('load', function () {
 
@@ -336,12 +375,16 @@ if($cartCount < 1) {
 
         $('.deliver').on('change', function () {
             var delivery_opt = $('input[name=deliver]:checked').val();
-            var df = (<?php
-                echo $_SESSION['dfee'];
-                ?>);
+            var df = $('#sf').val();
             if (delivery_opt == "2") {
+                if(df = "NaN") {
+                $('.shipping_fee').text(parseFloat(0).toFixed(2));
+                $('#shipping_value').val(parseFloat(0).toFixed(2));
+                }
+                else {
                 $('.shipping_fee').text(parseFloat(df).toFixed(2));
                 $('#shipping_value').val(parseFloat(df).toFixed(2));
+                }                
             } else {
                 $('.shipping_fee').text(parseFloat(0).toFixed(2));
                 $('#shipping_value').val(parseFloat(0).toFixed(2));
@@ -362,6 +405,50 @@ if($cartCount < 1) {
                 $('.gcash_payment').css("display", "flex");
             } else {
                 $('.gcash_payment').css("display", "none");
+            }
+        })
+
+        // MODE OF DELIVERY VALUE
+        if($('input[name="deliver"]:checked').val() == 2) {
+            $('.address_div').css('display', 'flex');
+            $('.pin_button_container').css('display', 'flex');
+        } else if($('input[name="deliver"]:checked').val() == 1) {
+            $('.address_div').css('display', 'none');
+            $('.pin_button_container').css('display', 'none');
+        } else if($('input[name="deliver"]:checked').val() == 3) {
+            $('.address_div').css('display', 'flex');
+            $('.pin_button_container').css('display', 'none');
+        }
+
+        $('input[type=radio][name=deliver]').change(function(e) {
+            e.preventDefault();
+            if($('input[name="deliver"]:checked').val() == 2) {
+                $('.address_div').css('display', 'flex');
+                $('.map_container').addClass('active');
+                $('.checkout_overlay').addClass('active');
+                $('.pin_button_container').css('display', 'flex');
+                $('#province').val('');
+                $('#city').val('');
+                $('#barangay').val('');
+                $('#province').attr('readonly', false);
+                $('#city').attr('readonly', false);
+                $('#barangay').attr('readonly', false);
+            } else if($('input[name="deliver"]:checked').val() == 1) {
+                $('.address_div').css('display', 'none');
+                $('.map_container').removeClass('active');
+                $('.checkout_overlay').removeClass('active');
+                $('.pin_button_container').css('display', 'none');
+            } else if($('input[name="deliver"]:checked').val() == 3) {
+                $('.address_div').css('display', 'flex');
+                $('.map_container').removeClass('active');
+                $('.checkout_overlay').removeClass('active');
+                $('.pin_button_container').css('display', 'none');
+                $('#province').val('Metro Manila');
+                $('#city').val('Las Piñas');
+                $('#barangay').val('BF Resorts Village');
+                $('#province').attr('readonly', 'readonly');
+                $('#city').attr('readonly', 'readonly');
+                $('#barangay').attr('readonly', 'readonly');
             }
         })
 
@@ -461,8 +548,77 @@ if($cartCount < 1) {
                 })
             }
 
-        })
+        });
 
+        // GAGO SI RYAN
+        var map = new maplibregl.Map({
+        container: 'map', // container id
+        style: 'https://api.maptiler.com/maps/hybrid/style.json?key=FhKrOmteMEqBErh5pfgf', // style URL
+        center: [120.99027438102536,14.437238300580049], // starting position [lng, lat]
+        zoom: 15 // starting zoom
+        });
+        var marker = new maplibregl.Marker({
+        color: "#FFAF08",
+        scale: 1.2,
+        draggable: true
+        })
+        .setLngLat([ 120.99027438102536,14.437238300580049])
+        .addTo(map);
+
+        function onDragEnd() {
+        var lngLat = marker.getLngLat();
+        document.getElementById('lng').value = lngLat.lng;
+        document.getElementById('lat').value = lngLat.lat;
+
+        var longitude = lngLat.lng;
+        var latitude = lngLat.lat;
+
+        $.ajax({
+            type: "POST",
+            url: "./functions/crud/cart",
+            data: {
+                'map': true,
+                'longitude': longitude,
+                'latitude': latitude,
+            },
+            success: function(response) {
+                var str = response;
+                if(str.includes("Warning")) {
+                    console.log('invalid address');
+                    $('#sf').val('');
+                    $('.shipping_fee').text('0.00');
+                    var total_purchases = $('.total_purchases').text();
+                    var shipping_fee = $('.shipping_fee').text();
+                    var sum = parseFloat(total_purchases) + parseFloat(shipping_fee);
+
+                    $('.overall_total').text(parseFloat(sum).toFixed(2));
+                    $('#order_total_val').val(parseFloat(sum).toFixed(2));
+                    $('#toast').addClass('active');
+                    $('.progress').addClass('active');
+                    $('.text-1').text('Error!');
+                    $('.text-2').text('Invalid address!');
+                    setTimeout(() => {
+                        $('#toast').removeClass("active");
+                        $('.progress').removeClass("active");
+                    }, 5000);
+                } else {
+                    $('#sf').val(response);
+                    $('.shipping_fee').text(parseFloat(response).toFixed(2));
+                    var total_purchases = $('.total_purchases').text();
+                    var shipping_fee = $('.shipping_fee').text();
+                    var sum = parseFloat(total_purchases) + parseFloat(shipping_fee);
+
+                    $('.overall_total').text(parseFloat(sum).toFixed(2));
+                    $('#order_total_val').val(parseFloat(sum).toFixed(2));
+                    console.log(response);
+                }
+            }
+        })
+        }
+        marker.on('dragend', onDragEnd);
+
+
+        map.addControl(new NavigationControl());
     </script>
 </body>
 

@@ -497,7 +497,17 @@ document.querySelector("#send").addEventListener("click", async () => {
                 <div class="feedbacks__top">
                     <div class="feedbacks__user-profile">
                         <div class="feedbacks__user-profile__image">
-                            <img class="img" src="./assets/images/<?php echo $pfp; ?>">
+                            <?php
+                            if($pfp != null) {
+                                ?>
+                                <img class="img" src="./assets/images/<?php echo $pfp; ?>">
+                                <?php
+                            } else {
+                                ?>
+                                <img class="img" src="./assets/images/no_profile_pic.png">
+                                <?php
+                            }
+                            ?>
                         </div>
                         <div class="feedbacks__name-user">
                             <h4><?php echo $name; ?></h4>
@@ -525,63 +535,6 @@ document.querySelector("#send").addEventListener("click", async () => {
             <?php
             }
             ?>
-            <!-- FEEDBACK 3
-            <div class="feedbacks__card">
-                <div class="feedbacks__top">
-                    <div class="feedbacks__user-profile">
-                        <div class="feedbacks__user-profile__image">
-                            <img class="img" src="./assets/images/Mark.jpg">
-                        </div>
-                        <div class="feedbacks__name-user">
-                            <h4>Mark Ryan Jancorda</strong>
-                                <h5>@markryan.jancorda</h5>
-                        </div>
-                    </div>
-
-                    <div class="feedbacks__rate">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                    </div>
-                </div>
-                <div class="feedbacks__comments">
-                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates quos error reiciendis
-                        pariatur
-                        voluptate eos, mollitia sit explicabo corrupti dolores, fugiat saepe ad nulla ut!</h5>
-                </div>
-            </div>
-             -->
-            <!-- FEEDBACK 4 
-            <div class="feedbacks__card">
-                <div class="feedbacks__top">
-
-                    <div class="feedbacks__user-profile">
-                        <div class="feedbacks__user-profile__image">
-                            <img class="img" src="./assets/images/Jovy.jpg">
-                        </div>
-                        <div class="feedbacks__name-user">
-                            <h4>Jovelyn Ocampo</strong>
-                                <h5>@jovelyn.ocampo</h5>
-                        </div>
-                    </div>
-
-                    <div class="feedbacks__rate">
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                        <i class='bx bxs-star'></i>
-                    </div>
-                </div>
-                <div class="feedbacks__comments">
-                    <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates quos error reiciendis
-                        pariatur
-                        voluptate eos, mollitia sit explicabo corrupti dolores, fugiat saepe ad nulla ut!</h5>
-                </div>
-            </div>
-            -->
         </div>
         <div id="load-more-feedbacks">
             <input type="submit" class="load-more-feedbacks" value="LOAD MORE">
