@@ -34,12 +34,12 @@ if(isset($_POST['map'])) {
         "stops": [
             {
                 "location": {
-                    "lat": "14.551776",
-                    "lng": "121.016847"
+                    "lat": "14.4370461",
+                    "lng": "120.9881286"
                 },
                 "addresses": {
                     "en_PH": {
-                        "displayString": "BF las pinas resort",
+                        "displayString": "Blk 5 Lot 71 JB Tan St., BF Resort Village, Las Piñas, 1740 Metro Manila",
                         "market": "'.$region.'"
                     }
                 }
@@ -215,17 +215,19 @@ if(isset($_POST['checkout_process'])) {
     $billing_name = $_POST['billing_name'];
     $billing_phone = $_POST['billing_phone'];
     $email = $_POST['billing_email'];
-    $address = $_POST['address'];
-    $province = $_POST['province'];
-    $city = $_POST['city'];
-    $barangay = $_POST['barangay'];
+    $address = $_POST['address'] ?? null;
+    $province = $_POST['province'] ?? null;
+    $city = $_POST['city'] ?? null;
+    $barangay = $_POST['barangay'] ?? null;
     $payment = $_POST['payment'];
     $delivery = $_POST['deliver'];
-    $screenshot = $_FILES['screenshot']['name'];
-    $screenshottmp = $_FILES['screenshot']['tmp_name'];
-    $reference = $_POST['reference'];
+    $screenshot = $_FILES['screenshot']['name'] ?? null;
+    $screenshottmp = $_FILES['screenshot']['tmp_name'] ?? null;
+    $reference = $_POST['reference'] ?? null;
     $shipping_value = $_POST['shipping_value'];
     $order_total = $_POST['order_total_val'];
+    $longitude = $_POST['lng'] ?? null;
+    $latitude = $_POST['lat'] ?? null;
     $date = date('F j, Y h:i A');
 
     if ($payment == 2) {
@@ -235,12 +237,12 @@ if(isset($_POST['checkout_process'])) {
         $newImageName = uniqid() . '.' . $imgExt;
         move_uploaded_file($screenshottmp, '../../assets/images/' . $newImageName);
 
-        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, screenshot_payment, reference, order_total, order_date, order_status) VALUES ('$user_id', '$payment', '$delivery', '$shipping_value', '$newImageName', '$reference', '$order_total', '$date', '1')");
+        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, longitude, latitude, screenshot_payment, reference, order_total, order_date, order_status) VALUES ('$user_id', '$payment', '$delivery', NULLIF('$shipping_value', ''), NULLIF('$longitude', ''), NULLIF('$latitude', ''), '$newImageName', '$reference', '$order_total', '$date', '1')");
 
         if ($insert_orders) {
             $order_id = mysqli_insert_id($conn);
 
-            $insert_order_address = mysqli_query($conn, "INSERT INTO order_address (order_id, block_street_building, province, city_municipality, barangay) VALUES ('$order_id', '$address', '$province', '$city', '$barangay')");
+            $insert_order_address = mysqli_query($conn, "INSERT INTO order_address (order_id, block_street_building, province, city_municipality, barangay) VALUES ('$order_id', NULLIF('$address', ''), NULLIF('$province', ''), NULLIF('$city', ''), NULLIF('$barangay', ''))");
 
             if ($insert_order_address) {
                 $get_cart = mysqli_query($conn, "SELECT * FROM cart WHERE user_id = $user_id");
@@ -249,10 +251,13 @@ if(isset($_POST['checkout_process'])) {
                     $product_id = $row['product_id'];
                     $cart_id = $row['cart_id'];
                     $subcategory_id = $row['subcategory_id'];
+                    $category_id = $row['category_id'];
+                    $variation_value = $row['variation_value'];
                     $product_qty = $row['product_qty'];
                     $product_total = $row['product_total'];
+                    $special_instructions = $row['special_instructions'];
 
-                    $insert_order_list = mysqli_query($conn, "INSERT INTO order_items (order_id, product_id, subcategory_id, qty, product_total) VALUES ('$order_id', '$product_id', '$subcategory_id', '$product_qty', '$product_total')");
+                    $insert_order_list = mysqli_query($conn, "INSERT INTO order_items (order_id, product_id, category_id, subcategory_id, variation_value, qty, product_total, special_instructions) VALUES ('$order_id', '$product_id', NULLIF('$category_id', ''), NULLIF('$subcategory_id', ''), NULLIF('$variation_value', ''), '$product_qty', '$product_total', NULLIF('$special_instructions', ''))");
 
                     if ($insert_order_list) {
                         $delete_cart_item = mysqli_query($conn, "DELETE FROM cart WHERE cart_id = $cart_id");
@@ -323,12 +328,12 @@ if(isset($_POST['checkout_process'])) {
             }
         }
     } else {
-        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, order_total, order_date, order_status) VALUES ('$user_id', '$payment', '$delivery', '$shipping_value', '$order_total', '$date', '1')");
+        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, longitude, latitude, order_total, order_date, order_status) VALUES ('$user_id', '$payment', '$delivery', NULLIF('$shipping_value', ''), NULLIF('$longitude', ''), NULLIF('$latitude', ''), '$order_total', '$date', '1')");
 
         if ($insert_orders) {
             $order_id = mysqli_insert_id($conn);
 
-            $insert_order_address = mysqli_query($conn, "INSERT INTO order_address (order_id, billing_name, billing_number, block_street_building, province, city_municipality, barangay) VALUES ('$order_id', '$billing_name', '$billing_phone', '$address', '$province', '$city', '$barangay')");
+            $insert_order_address = mysqli_query($conn, "INSERT INTO order_address (order_id, billing_name, billing_number, block_street_building, province, city_municipality, barangay) VALUES ('$order_id', '$billing_name', '$billing_phone', NULLIF('$address', ''), NULLIF('$province', ''), NULLIF('$city', ''), NULLIF('$barangay', ''))");
 
             if ($insert_order_address) {
                 $get_cart = mysqli_query($conn, "SELECT * FROM cart WHERE user_id = $user_id");
@@ -336,11 +341,14 @@ if(isset($_POST['checkout_process'])) {
                 foreach ($get_cart as $row) {
                     $product_id = $row['product_id'];
                     $cart_id = $row['cart_id'];
+                    $category_id = $row['category_id'];
                     $subcategory_id = $row['subcategory_id'];
+                    $variation_value = $row['variation_value'];
                     $product_qty = $row['product_qty'];
                     $product_total = $row['product_total'];
+                    $special_instructions = $row['special_instructions'];
 
-                    $insert_order_list = mysqli_query($conn, "INSERT INTO order_items (order_id, product_id, subcategory_id, qty, product_total) VALUES ('$order_id', '$product_id', '$subcategory_id', '$product_qty', '$product_total')");
+                    $insert_order_list = mysqli_query($conn, "INSERT INTO order_items (order_id, product_id, category_id, subcategory_id, variation_value, qty, product_total, special_instructions) VALUES ('$order_id', '$product_id', NULLIF('$category_id', ''), NULLIF('$subcategory_id', ''), NULLIF('$variation_value', ''), '$product_qty', '$product_total', NULLIF('$special_instructions', ''))");
 
                     if ($insert_order_list) {
                         $delete_cart_item = mysqli_query($conn, "DELETE FROM cart WHERE cart_id = $cart_id");
@@ -405,97 +413,6 @@ if(isset($_POST['checkout_process'])) {
                     if ($response->Messages[0]->Status == 'success') {
                         $_SESSION['order_id'] = $order_id;
                         $_SESSION['checkout'] = 'success';
-                        $lng= $_SESSION['long'];
-$lat= $_SESSION['latt'];
-$dist= $_SESSION['dis'];
-$fee= $_SESSION['dfee'];
-
-$key = "pk_test_929096cd212d3fdf7baf925728e87cb3";
-$secret = "sk_test_tr/l1Zg3PyBdu3OKgasoAdjHjFBLDFt35X6JCQhSXal85dTw6+oaTozfiIr6oXdP"; 
-
-$time = time() * 1000;
-$baseURL = "https://rest.sandbox.lalamove.com";
-$method = 'POST';
-$path = '/v2/orders';
-$region = 'PH_MNL';
-$body = '{
-    "serviceType": "MOTORCYCLE",
-    "specialRequests": [],
-    "requesterContact": {
-        "name": "Amarah Pizza Corner",
-        "phone": "0899183138"
-    },
-    "stops": [
-        {
-            "location": {
-                "lat": "14.551776",
-                "lng": "121.016847"
-            },
-            "addresses": {
-                "en_PH": {
-                    "displayString": "BF las pinas resort",
-                    "market": "'.$region.'"
-                }
-            }
-        },
-        {
-            "location": {
-                "lat": "'.$lat.'",
-                "lng": "'.$lng.'"
-            },
-           "addresses": {
-               "en_PH": {
-                   "displayString": "'.$address.'",
-                   "market": "'.$region.'"
-               }
-           }
-        }
-   ],
-   "deliveries": [
-        {
-            "toStop": 1,
-            "toContact": {
-                "name": "'.$billing_name.'",
-                "phone": "'.$billing_phone.'"
-            },
-           "remarks": "Do not take this order - SANDBOX CLIENT TEST"
-        }
-   ],
-    "quotedTotalFee": {
-        "amount": "'.$fee.'",
-        "currency": "PHP"
-    }
-}';
-
-$rawSignature = "{$time}\r\n{$method}\r\n{$path}\r\n\r\n{$body}";
-$signature = hash_hmac("sha256", $rawSignature, $secret);
-$startTime = microtime(true);
-$token = $key.':'.$time.':'.$signature;
-
-$curl = curl_init();
-curl_setopt_array($curl, array(
-    CURLOPT_URL => $baseURL.$path,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 3,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HEADER => false, // Enable this option if you want to see what headers Lalamove API returning in response
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS => $body,
-    CURLOPT_HTTPHEADER => array(
-        "Content-type: application/json; charset=utf-8",
-        "Authorization: hmac ".$token, // A unique Signature Hash has to be generated for EVERY API call at the time of making such call.
-        "Accept: application/json",
-        "X-LLM-Market: {$region}" // Please note to which city are you trying to make API call
-    ),
-));
-
-$rez = curl_exec($curl);
-$http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-curl_close($curl);
-$res = json_decode($rez, JSON_OBJECT_AS_ARRAY);
                         echo 'success';
                     }
                 }

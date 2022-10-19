@@ -1255,6 +1255,7 @@ main .insert-product .insert-product-wrapper .form_container_variable form .form
 }
 main .insert-product .insert-product-wrapper .form_container_variable form .form_group textarea {
   border-radius: 5px;
+  padding: 5px;
 }
 main .insert-product .insert-product-wrapper .form_container_variable form .form_group input {
   background-color: #fff;
@@ -1384,6 +1385,7 @@ main .insert-products form .left_group .form_group input {
 }
 main .insert-products form .left_group .form_group textarea {
   border-radius: 5px;
+  padding: 5px;
 }
 main .insert-products form .left_group .simple_product_tab {
   border: 1px solid #ffaf08;
@@ -1876,6 +1878,10 @@ main .orders-view-edit .wrapper .left-wrapper .order_details_sec .product_order 
 main .orders-view-edit .wrapper .left-wrapper .order_details_sec .product_order .products .products_details .product_subcategory {
   color: #ffaf08;
   font-size: 14px;
+}
+main .orders-view-edit .wrapper .left-wrapper .order_details_sec .product_order .products .products_details .variation_value {
+  font-size: 13px;
+  color: #fe7;
 }
 main .orders-view-edit .wrapper .left-wrapper .order_details_sec .product_order .products .products_details .product_qty {
   font-size: 12px;

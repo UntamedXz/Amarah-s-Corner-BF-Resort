@@ -1451,6 +1451,7 @@ main {
 
             textarea {
               border-radius: 5px;
+              padding: 5px;
             }
 
             input {
@@ -1602,6 +1603,7 @@ main {
 
           textarea {
             border-radius: 5px;
+            padding: 5px;
           }
         }
 
@@ -2174,6 +2176,11 @@ main {
                 .product_subcategory {
                   color: #ffaf08;
                   font-size: 14px;
+                }
+
+                .variation_value {
+                  font-size: 13px;
+                  color: #fe7;
                 }
 
                 .product_qty {

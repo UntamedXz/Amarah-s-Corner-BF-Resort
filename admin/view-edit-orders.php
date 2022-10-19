@@ -100,7 +100,7 @@ $decode_id = base64_decode(urldecode($id));
 
                         <div class="product_order">
                             <?php
-                            $get_items = mysqli_query($conn, "SELECT product.product_title, subcategory.subcategory_title, order_items.qty, order_items.product_total
+                            $get_items = mysqli_query($conn, "SELECT product.product_title, subcategory.subcategory_title,  order_items.qty, order_items.product_total, order_items.variation_value, order_items.special_instructions
                             FROM order_items
                             LEFT JOIN product
                             ON product.product_id = order_items.product_id
@@ -109,11 +109,20 @@ $decode_id = base64_decode(urldecode($id));
                             WHERE order_items.order_id = $decode_id");
 
                             foreach($get_items as $items) {
+                                $variation_value = explode(" | ", $items['variation_value']);
                             ?>
                             <div class="products">
                                 <div class="products_details">
                                     <span class="product_name"><?php echo $items['product_title']; ?></span>
                                     <span class="product_subcategory"><?php echo $items['subcategory_title']; ?></span>
+                                    <?php
+                                    foreach($variation_value as $vval) {
+                                    ?>
+                                    <span class="variation_value"><?php echo $vval; ?></span>
+                                    <?php
+                                    }
+                                    ?>
+                                    <span class="variation_value">SPECIAL INSTRUCTIONS: <?php echo $items['special_instructions'] ?></span>
                                     <span class="product_qty">x<?php echo $items['qty']; ?></span>
                                 </div>
                                 <span>P <?php echo $items['product_total']; ?></span>

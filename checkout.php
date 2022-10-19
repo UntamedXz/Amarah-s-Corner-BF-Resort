@@ -190,6 +190,11 @@ if($cartCount < 1) {
                     </div>
 
                     <div class="map_container">
+                        <div class="note">
+                            <center>
+                                <h4>Notice:</h4><p>Please double check if your pin corresponds to your current address such as incorrectly placing your pin location will incur additional charges</p>
+                            </center>
+                        </div>
                         <div id="map"></div>
                         <button type="button" class="close_map">Confirm</button>
                     </div>
@@ -229,7 +234,7 @@ if($cartCount < 1) {
                             <input type="radio" value="2" name="payment" class="payment" id="option-2">
                             <label for="option-1" class="option option-1">
                                 <div class="box"></div>
-                                <span>Cash on Delivery</span>
+                                <span>Cash on Delivery/Pick Up</span>
                             </label>
                             <label for="option-2" class="option option-2">
                                 <div class="box"></div>
@@ -266,20 +271,35 @@ if($cartCount < 1) {
                 <span class="order_title">YOUR ORDER</span>
                 <hr>
                 <?php
-                $get_cart = mysqli_query($conn, "SELECT product.product_title, subcategory.subcategory_title, cart.product_total, product_qty
+                $get_cart = mysqli_query($conn, "SELECT product.product_title, product.product_price, subcategory.subcategory_title, cart.product_total, cart.variation_value, product_qty, category.category_title, cart.special_instructions
                 FROM cart
                 LEFT JOIN product
                 ON cart.product_id = product.product_id
                 LEFT JOIN subcategory
                 ON cart.subcategory_id = subcategory.subcategory_id
+                LEFT JOIN category
+                ON cart.category_id = category.category_id
                 WHERE user_id = $user_id");
 
                 foreach ($get_cart as $cart) {
+                    $variation_value = explode(" | ", $cart['variation_value']);
                 ?>
                 <div class="form_group">
                     <div class="span_group">
-                        <span><?php echo $cart['product_title']; ?></span>
-                        <span class="sub_category"><?php echo $cart['subcategory_title']; ?></span>
+                        <span class="product_title"><?php echo $cart['product_title']; ?></span>
+                        <span class="sub_category"><?php echo $cart['category_title'] . " - " . $cart['subcategory_title']; ?></span>
+                        <?php foreach($variation_value as $vval) {
+                        ?>
+                        <span class="variation_value"><?php echo $vval; ?></span>
+                        <?php
+                        }
+
+                        if($cart['special_instructions'] != null) {
+                        ?>
+                        <span class="variation_value">SPECIAL INSTRUCTIONS: <?php echo $cart['special_instructions']; ?></span>
+                        <?php
+                        }
+                        ?>
                         <span class="qty">x<?php echo $cart['product_qty']; ?></span>
                     </div>
                     <div class="total_span">
@@ -332,6 +352,16 @@ if($cartCount < 1) {
         // CLOSE MAP MODAL
         $(document).on('click', '.close_map',function() {
             console.log('clicked');
+            if($('#sf').val().length == 0) {
+                $('#toast').addClass('active');
+                $('.progress').addClass('active');
+                $('.text-1').text('Error!');
+                $('.text-2').text('Invalid address!');
+                setTimeout(() => {
+                    $('#toast').removeClass("active");
+                    $('.progress').removeClass("active");
+                }, 5000);
+            }
             $('.map_container').removeClass('active');
             $('.checkout_overlay').removeClass('active');
         })
@@ -342,20 +372,57 @@ if($cartCount < 1) {
             $('.checkout_overlay').addClass('active');
         })
 
+        // MODE OF DELIVERY VALUE
+        $(window).on('load', function () {
+            if($('input[name="deliver"]:checked').val() == 2) {
+                $('.address_div').css('display', 'flex');
+                $('.pin_button_container').css('display', 'flex');
+            } else if($('input[name="deliver"]:checked').val() == 1) {
+                $('.address_div').css('display', 'none');
+                $('.pin_button_container').css('display', 'none');
+            } else if($('input[name="deliver"]:checked').val() == 3) {
+                $('.address_div').css('display', 'flex');
+                $('.pin_button_container').css('display', 'none');
+            }
+        })
+
+        $('input[type=radio][name=deliver]').change(function(e) {
+            e.preventDefault();
+            if($('input[name="deliver"]:checked').val() == 2) {
+                $('.address_div').css('display', 'flex');
+                $('.map_container').addClass('active');
+                $('.checkout_overlay').addClass('active');
+                $('.pin_button_container').css('display', 'flex');
+                $('#province').val('');
+                $('#city').val('');
+                $('#barangay').val('');
+                $('#province').attr('readonly', false);
+                $('#city').attr('readonly', false);
+                $('#barangay').attr('readonly', false);
+            } else if($('input[name="deliver"]:checked').val() == 1) {
+                $('.address_div').css('display', 'none');
+                $('.map_container').removeClass('active');
+                $('.checkout_overlay').removeClass('active');
+                $('.pin_button_container').css('display', 'none');
+            } else if($('input[name="deliver"]:checked').val() == 3) {
+                $('.address_div').css('display', 'flex');
+                $('.map_container').removeClass('active');
+                $('.checkout_overlay').removeClass('active');
+                $('.pin_button_container').css('display', 'none');
+                $('#province').val('Metro Manila');
+                $('#city').val('Las Piñas');
+                $('#barangay').val('BF Resorts Village');
+                $('#province').attr('readonly', 'readonly');
+                $('#city').attr('readonly', 'readonly');
+                $('#barangay').attr('readonly', 'readonly');
+            }
+        })
+
         // GET TOTAL
         $(window).on('load', function () {
 
             var delivery_opt = $('input[name=deliver]:checked').val();
-            var df = (<?php
-                echo $_SESSION['dfee'];
-                ?>);
-            if (delivery_opt == "2") {
-                $('.shipping_fee').text(parseFloat(df).toFixed(2));
-                $('#shipping_value').val(parseFloat(df).toFixed(2));
-            }else {
-                $('.shipping_fee').text(parseFloat(0).toFixed(2));
-                $('#shipping_value').val(parseFloat(0).toFixed(2));
-            }
+            $('.shipping_fee').text('0.00');
 
             var overall_total = 0;
             $('.total_per_item').each(function () {
@@ -408,144 +475,276 @@ if($cartCount < 1) {
             }
         })
 
-        // MODE OF DELIVERY VALUE
-        if($('input[name="deliver"]:checked').val() == 2) {
-            $('.address_div').css('display', 'flex');
-            $('.pin_button_container').css('display', 'flex');
-        } else if($('input[name="deliver"]:checked').val() == 1) {
-            $('.address_div').css('display', 'none');
-            $('.pin_button_container').css('display', 'none');
-        } else if($('input[name="deliver"]:checked').val() == 3) {
-            $('.address_div').css('display', 'flex');
-            $('.pin_button_container').css('display', 'none');
-        }
-
-        $('input[type=radio][name=deliver]').change(function(e) {
-            e.preventDefault();
-            if($('input[name="deliver"]:checked').val() == 2) {
-                $('.address_div').css('display', 'flex');
-                $('.map_container').addClass('active');
-                $('.checkout_overlay').addClass('active');
-                $('.pin_button_container').css('display', 'flex');
-                $('#province').val('');
-                $('#city').val('');
-                $('#barangay').val('');
-                $('#province').attr('readonly', false);
-                $('#city').attr('readonly', false);
-                $('#barangay').attr('readonly', false);
-            } else if($('input[name="deliver"]:checked').val() == 1) {
-                $('.address_div').css('display', 'none');
-                $('.map_container').removeClass('active');
-                $('.checkout_overlay').removeClass('active');
-                $('.pin_button_container').css('display', 'none');
-            } else if($('input[name="deliver"]:checked').val() == 3) {
-                $('.address_div').css('display', 'flex');
-                $('.map_container').removeClass('active');
-                $('.checkout_overlay').removeClass('active');
-                $('.pin_button_container').css('display', 'none');
-                $('#province').val('Metro Manila');
-                $('#city').val('Las Piñas');
-                $('#barangay').val('BF Resorts Village');
-                $('#province').attr('readonly', 'readonly');
-                $('#city').attr('readonly', 'readonly');
-                $('#barangay').attr('readonly', 'readonly');
-            }
-        })
-
         // SUBMIT CHECKOUT
         $('#checkout_form').on('submit', function(e) {
             e.preventDefault();
+            var delivery_opt = $('input[name=deliver]:checked').val();
 
-            if($.trim($('#fullname').val()) == '') {
-                $('.error-fullname').text('Input fullname!');
-            } else {
-                $('.error-fullname').text('');
-            }
-            
-            if($.trim($('#phone_number').val()).length < 11) {
-                $('.error-phone_number').text('Complete phone number first!');
-            } else {
-                $('.error-phone_number').text('');
-            }
-
-            if($.trim($('#block').val()) == '') {
-                $('.error-block').text('Input Block No/Building/Street No!');
-            } else {
-                $('.error-block').text('');
-            }
-
-            if($.trim($('#province').val()) == '') {
-                $('.error-province').text('Input Province!');
-            } else {
-                $('.error-province').text('');
-            }
-
-            if($.trim($('#city').val()) == '') {
-                $('.error-city').text('Input City!');
-            } else {
-                $('.error-city').text('');
-            }
-
-            if($.trim($('#barangay').val()) == '') {
-                $('.error-barangay').text('Input barangay!');
-            } else {
-                $('.error-barangay').text('');
-            }
-
-            if($('.gcash_payment').css("display") == "flex") {
-                if($.trim($('#screenshot').val()) == '') {
-                    $('.error-screenshot').text('Upload payment screenshot!');
+            if(delivery_opt == 2) {
+                if($('#sf').val().length == 0) {
+                    $('#toast').addClass('active');
+                    $('.progress').addClass('active');
+                    $('.text-1').text('Error!');
+                    $('.text-2').text('Invalid pin address!');
+                    setTimeout(() => {
+                        $('#toast').removeClass("active");
+                        $('.progress').removeClass("active");
+                    }, 5000);
                 } else {
-                    var imgExt = $('#screenshot').val().split('.').pop().toLowerCase();
-
-                    if ($.inArray(imgExt, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
-                        $('.error-screenshot').text('File not supported');
+                    if($.trim($('#fullname').val().length) == 0) {
+                        $('.error-fullname').text('Input fullname!');
                     } else {
-                        var imgSize = $('#screenshot')[0].files[0].size;
+                        $('.error-fullname').text('');
+                    }
 
-                        if (imgSize > 10485760) {
-                            $('.error-screenshot').text('File too large');
+                    if($.trim($('#phone_number').val()).length < 11) {
+                        $('.error-phone_number').text('Complete phone number first!');
+                    } else {
+                        $('.error-phone_number').text('');
+                    }
+
+                    if($.trim($('#block').val().length) == 0) {
+                        $('.error-block').text('Input Block No/Building/Street No!');
+                    } else {
+                        $('.error-block').text('');
+                    }
+
+                    if($.trim($('#province').val().length) == 0) {
+                        $('.error-province').text('Input Province!');
+                    } else {
+                        $('.error-province').text('');
+                    }
+
+                    if($.trim($('#city').val().length) == 0) {
+                        $('.error-city').text('Input City!');
+                    } else {
+                        $('.error-city').text('');
+                    }
+
+                    if($.trim($('#barangay').val().length) == 0) {
+                        $('.error-barangay').text('Input barangay!');
+                    } else {
+                        $('.error-barangay').text('');
+                    }
+
+                    if($('.gcash_payment').css("display") == "flex") {
+                        if($.trim($('#screenshot').val().length) == 0) {
+                            $('.error-screenshot').text('Upload payment screenshot!');
                         } else {
-                            $('.error-screenshot').text('');
+                            var imgExt = $('#screenshot').val().split('.').pop().toLowerCase();
+
+                            if ($.inArray(imgExt, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                                $('.error-screenshot').text('File not supported');
+                            } else {
+                                var imgSize = $('#screenshot')[0].files[0].size;
+
+                                if (imgSize > 10485760) {
+                                    $('.error-screenshot').text('File too large');
+                                } else {
+                                    $('.error-screenshot').text('');
+                                }
+                            }
                         }
+
+                        if($.trim($('#reference').val().length) == 0) {
+                            $('.error-reference').text('Input reference!');
+                        } else {
+                            $('.error-reference').text('');
+                        }
+                    } else {
+                        $('.error-screenshot').text('');
+                        $('.error-reference').text('');
+                    }
+
+                    if($('.error-fullname').text() != '' || $('.error-phone_number').text() != '' || $('.error-block').text() != '' || $('.error-province').text() != '' || $('.error-city').text() != '' || $('.error-barangay').text() != '' || $('.error-screenshot').text() != '' || $('.error-reference').text() != '') {
+                        $('#toast').addClass('active');
+                        $('.progress').addClass('active');
+                        $('.text-1').text('Error!');
+                        $('.text-2').text('Fill all required fields!');
+                        setTimeout(() => {
+                            $('#toast').removeClass("active");
+                            $('.progress').removeClass("active");
+                        }, 5000);
+                    } else {
+                        var form = new FormData(this);
+                        form.append('checkout_process', true);
+                        $.ajax({
+                            type: "POST",
+                            url: "./functions/crud/cart",
+                            data: form,
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            success: function(response) {
+                                if(response == 'success') {
+                                    window.location.href = "index";
+                                }
+                                console.log(response);
+                            }
+                        })
                     }
                 }
-
-                if($.trim($('#reference').val()) == '') {
-                    $('.error-reference').text('Input reference!');
+            } else if(delivery_opt == 1) {
+                if($.trim($('#fullname').val().length) == 0) {
+                    $('.error-fullname').text('Input fullname!');
                 } else {
+                    $('.error-fullname').text('');
+                }
+
+                if($.trim($('#phone_number').val()).length < 11) {
+                    $('.error-phone_number').text('Complete phone number first!');
+                } else {
+                    $('.error-phone_number').text('');
+                }
+
+                if($('.gcash_payment').css("display") == "flex") {
+                    if($.trim($('#screenshot').val().length) == 0) {
+                        $('.error-screenshot').text('Upload payment screenshot!');
+                    } else {
+                        var imgExt = $('#screenshot').val().split('.').pop().toLowerCase();
+
+                        if ($.inArray(imgExt, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                            $('.error-screenshot').text('File not supported');
+                        } else {
+                            var imgSize = $('#screenshot')[0].files[0].size;
+
+                            if (imgSize > 10485760) {
+                                $('.error-screenshot').text('File too large');
+                            } else {
+                                $('.error-screenshot').text('');
+                            }
+                        }
+                    }
+
+                    if($.trim($('#reference').val().length) == 0) {
+                        $('.error-reference').text('Input reference!');
+                    } else {
+                        $('.error-reference').text('');
+                    }
+                } else {
+                    $('.error-screenshot').text('');
+                }
+
+                if($('.error-fullname').text() != '' || $('.error-phone_number').text() != '' || $('.error-screenshot').text() != '' || $('.error-reference').text() != '') {
+                    $('#toast').addClass('active');
+                    $('.progress').addClass('active');
+                    $('.text-1').text('Error!');
+                    $('.text-2').text('Fill all required fields!');
+                    setTimeout(() => {
+                        $('#toast').removeClass("active");
+                        $('.progress').removeClass("active");
+                    }, 5000);
+                } else {
+                    var form = new FormData(this);
+                    form.append('checkout_process', true);
+                    $.ajax({
+                        type: "POST",
+                        url: "./functions/crud/cart",
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(response) {
+                            if(response == 'success') {
+                                window.location.href = "index";
+                            }
+                            console.log(response);
+                        }
+                    })
+                }
+            } else {
+                if($.trim($('#fullname').val().length) == 0) {
+                    $('.error-fullname').text('Input fullname!');
+                } else {
+                    $('.error-fullname').text('');
+                }
+
+                if($.trim($('#phone_number').val()).length < 11) {
+                    $('.error-phone_number').text('Complete phone number first!');
+                } else {
+                    $('.error-phone_number').text('');
+                }
+
+                if($.trim($('#block').val().length) == 0) {
+                    $('.error-block').text('Input Block No/Building/Street No!');
+                } else {
+                    $('.error-block').text('');
+                }
+
+                if($.trim($('#province').val().length) == 0) {
+                    $('.error-province').text('Input Province!');
+                } else {
+                    $('.error-province').text('');
+                }
+
+                if($.trim($('#city').val().length) == 0) {
+                    $('.error-city').text('Input City!');
+                } else {
+                    $('.error-city').text('');
+                }
+
+                if($.trim($('#barangay').val().length) == 0) {
+                    $('.error-barangay').text('Input barangay!');
+                } else {
+                    $('.error-barangay').text('');
+                }
+
+                if($('.gcash_payment').css("display") == "flex") {
+                    if($.trim($('#screenshot').val().length) == 0) {
+                        $('.error-screenshot').text('Upload payment screenshot!');
+                    } else {
+                        var imgExt = $('#screenshot').val().split('.').pop().toLowerCase();
+
+                        if ($.inArray(imgExt, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                            $('.error-screenshot').text('File not supported');
+                        } else {
+                            var imgSize = $('#screenshot')[0].files[0].size;
+
+                            if (imgSize > 10485760) {
+                                $('.error-screenshot').text('File too large');
+                            } else {
+                                $('.error-screenshot').text('');
+                            }
+                        }
+                    }
+
+                    if($.trim($('#reference').val().length) == 0) {
+                        $('.error-reference').text('Input reference!');
+                    } else {
+                        $('.error-reference').text('');
+                    }
+                } else {
+                    $('.error-screenshot').text('');
                     $('.error-reference').text('');
                 }
-            } else {
-                $('.error-screenshot').text('');
-            }
 
-            if($('.error-fullname').text() != '' || $('.error-phone_number').text() != '' || $('.error-block').text() != '' || $('.error-province').text() != '' || $('.error-city').text() != '' || $('.error-barangay').text() != '' || $('.error-screenshot').text() != '') {
-                $('#toast').addClass('active');
-                $('.progress').addClass('active');
-                $('.text-1').text('Error!');
-                $('.text-2').text('Fill all required fields!');
-                setTimeout(() => {
-                    $('#toast').removeClass("active");
-                    $('.progress').removeClass("active");
-                }, 5000);
-            } else {
-                var form = new FormData(this);
-                form.append('checkout_process', true);
-                $.ajax({
-                    type: "POST",
-                    url: "./functions/crud/cart",
-                    data: form,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    success: function(response) {
-                        if(response == 'success') {
-                            window.location.href = "index";
+                if($('.error-fullname').text() != '' || $('.error-phone_number').text() != '' || $('.error-block').text() != '' || $('.error-province').text() != '' || $('.error-city').text() != '' || $('.error-barangay').text() != '' || $('.error-screenshot').text() != '' || $('.error-reference').text() != '') {
+                    $('#toast').addClass('active');
+                    $('.progress').addClass('active');
+                    $('.text-1').text('Error!');
+                    $('.text-2').text('Fill all required fields!');
+                    setTimeout(() => {
+                        $('#toast').removeClass("active");
+                        $('.progress').removeClass("active");
+                    }, 5000);
+                } else {
+                    var form = new FormData(this);
+                    form.append('checkout_process', true);
+                    $.ajax({
+                        type: "POST",
+                        url: "./functions/crud/cart",
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(response) {
+                            if(response == 'success') {
+                                window.location.href = "index";
+                            }
+                            console.log(response);
                         }
-                        console.log(response);
-                    }
-                })
+                    })
+                }
             }
 
         });
@@ -562,7 +761,7 @@ if($cartCount < 1) {
         scale: 1.2,
         draggable: true
         })
-        .setLngLat([ 120.99027438102536,14.437238300580049])
+        .setLngLat([ 120.9881286,14.4370461])
         .addTo(map);
 
         function onDragEnd() {
@@ -590,17 +789,6 @@ if($cartCount < 1) {
                     var total_purchases = $('.total_purchases').text();
                     var shipping_fee = $('.shipping_fee').text();
                     var sum = parseFloat(total_purchases) + parseFloat(shipping_fee);
-
-                    $('.overall_total').text(parseFloat(sum).toFixed(2));
-                    $('#order_total_val').val(parseFloat(sum).toFixed(2));
-                    $('#toast').addClass('active');
-                    $('.progress').addClass('active');
-                    $('.text-1').text('Error!');
-                    $('.text-2').text('Invalid address!');
-                    setTimeout(() => {
-                        $('#toast').removeClass("active");
-                        $('.progress').removeClass("active");
-                    }, 5000);
                 } else {
                     $('#sf').val(response);
                     $('.shipping_fee').text(parseFloat(response).toFixed(2));

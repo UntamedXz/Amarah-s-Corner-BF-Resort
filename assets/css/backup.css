@@ -3005,9 +3005,16 @@ footer .footer-wrapper .copyright span {
   display: flex;
   flex-direction: column;
 }
+.checkout .checkout_wrapper .right_checkout_wrapper .form_group .span_group .product_title {
+  font-weight: 600;
+}
 .checkout .checkout_wrapper .right_checkout_wrapper .form_group .span_group .sub_category {
   color: #ffaf08;
   font-size: 13px;
+}
+.checkout .checkout_wrapper .right_checkout_wrapper .form_group .span_group .variation_value {
+  color: #fe7;
+  font-size: 12px;
 }
 .checkout .checkout_wrapper .right_checkout_wrapper .form_group .span_group .qty {
   font-size: 12px;
@@ -3016,14 +3023,17 @@ footer .footer-wrapper .copyright span {
   margin: 10px 0;
 }
 .checkout .map_container {
+  background: url(../images/background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   position: fixed;
   top: -100%;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
+  width: 500px;
   max-width: 94%;
-  height: 450px;
-  background-color: #ffaf08;
+  height: 500px;
   border-radius: 10px;
   overflow: hidden;
   padding: 10px;
@@ -3032,10 +3042,25 @@ footer .footer-wrapper .copyright span {
   gap: 10px;
   box-shadow: 0 8px 16px #070506;
 }
+.checkout .map_container .note {
+  background: url(../images/adminpage_bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #ffaf08;
+  border-radius: 5px;
+  padding: 5px;
+}
+.checkout .map_container .note p {
+  font-size: 12px;
+  font-weight: 600;
+}
 .checkout .map_container #map {
   width: 100%;
   height: 100%;
-  border-radius: 3px;
+  border-radius: 5px;
+  border: 2px solid #070506;
+  overflow: hidden;
 }
 .checkout .map_container button {
   background-color: #070506 !important;

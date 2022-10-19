@@ -135,7 +135,7 @@ if(isset($_POST['insert_simple'])) {
 
             move_uploaded_file($product_image_tmp, '../../../assets/images/' . $new_img_name);
 
-            $update_product = mysqli_query($conn, "UPDATE product SET category_id = '$product_category', subcategory_id, NULLIF('$product_subcategory', ''), product_title = '$product_name', product_slug = '$product_slug', product_keyword = '$product_keyword', product_price = NULLIF('$reg_price', ''), product_sale = NULLIF('$sale_price', ''), product_desc = NULLIF('$product_desc', ''), product_status = '$stock_status', product_stock = NULLIF('$stock', ''), product_type = '$product_type', product_img1 = '$new_img_name' WHERE product_id = $product_id_saved");
+            $update_product = mysqli_query($conn, "UPDATE product SET category_id = '$product_category', subcategory_id = NULLIF('$product_subcategory', ''), product_title = '$product_name', product_slug = '$product_slug', product_keyword = '$product_keyword', product_price = NULLIF('$reg_price', ''), product_sale = NULLIF('$sale_price', ''), product_desc = NULLIF('$product_desc', ''), product_status = '$stock_status', product_stock = NULLIF('$stock', ''), product_type = '$product_type', product_img1 = '$new_img_name' WHERE product_id = $product_id_saved");
 
             if($update_product) {
                 $product_id = mysqli_insert_id($conn);
@@ -172,7 +172,7 @@ if(isset($_POST['insert_variable'])) {
             if(mysqli_num_rows($check_if_product_exist) > 0) {
                 echo 'Product already exist!';
             } else {
-                $insert_product = mysqli_query($conn, "INSERT INTO product (category_id, subcategory_id, product_title, product_slug, product_keyword, product_desc, product_type, product_price) VALUES ('$product_category', NULLIF('$product_subcategory', ''), '$product_name', '$product_slug', '$product_keyword', NULLIF('$product_desc', ''), '$product_type'), $display_price");
+                $insert_product = mysqli_query($conn, "INSERT INTO product (category_id, subcategory_id, product_title, product_slug, product_keyword, product_desc, product_type, product_price) VALUES ('$product_category', NULLIF('$product_subcategory', ''), '$product_name', '$product_slug', '$product_keyword', NULLIF('$product_desc', ''), '$product_type', $display_price)");
     
                 if($insert_product) {
                     $product_id = mysqli_insert_id($conn);

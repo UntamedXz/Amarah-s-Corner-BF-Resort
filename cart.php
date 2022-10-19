@@ -191,7 +191,7 @@ body {
                 <div class="shop">
                     <?php
 
-                    $getUserCart = mysqli_query($conn, "SELECT cart.cart_id, product.product_title, product.product_img1, subcategory.subcategory_title, product.product_price, cart.product_qty, cart.product_total, cart.variation_value, cart.product_total_price
+                    $getUserCart = mysqli_query($conn, "SELECT cart.cart_id, product.product_title, product.product_price, product.product_img1, subcategory.subcategory_title, product.product_price, cart.product_qty, cart.product_total, cart.variation_value, cart.product_total_price, cart.special_instructions
                     FROM cart
                     LEFT JOIN product
                     ON cart.product_id = product.product_id
@@ -204,7 +204,7 @@ body {
                     <form id="cart_item">
                         <div class="box" data-id="<?php echo $row['cart_id']; ?>">
                             <?php
-                        if($row['product_img1'] != '') { 
+                        if($row['product_img1'] != null) { 
                         ?>
                             <div class="img" style="background:
                             url(./assets/images/<?php echo $row['product_img1']; ?>) no-repeat; background-size: cover;
@@ -227,6 +227,12 @@ body {
                                 foreach($variation_value as $vval) {
                                 ?>
                                 <h5 style="text-transform: unset;"><?php echo $vval; ?></h5>
+                                <?php
+                                }
+
+                                if($row['special_instructions'] != null) {
+                                ?>
+                                <h5>Special Instructions: <?php echo $row['special_instructions']; ?></h5>
                                 <?php
                                 }
                                 ?>
@@ -422,21 +428,7 @@ body {
 
     $('#go_to_checkout').on('click', function(e) {
         e.preventDefault();
-        var fee = <?php 
-        if(isset($_SESSION['dfee'])) {
-            echo $_SESSION['dfee'];
-        }
-        else {
-            echo "0";
-        }
-        ?>;
-
-        if(fee == 0){
-            location.href = 'lmap';
-        }
-        else {
-            location.href = 'checkout';
-        }
+        location.href = 'checkout'
     })
 
     // CLOSE MODAL
