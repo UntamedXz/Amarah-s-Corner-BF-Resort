@@ -176,7 +176,6 @@ $userProfileIcon = $info['profile_image'];
         <script>
             // DATA TABLES
             var dataTable = $('#example').DataTable({
-                "processing": true,
                 "serverSide": true,
                 "paging": true,
                 "pagingType": "simple",
@@ -191,8 +190,14 @@ $userProfileIcon = $info['profile_image'];
                 "ajax": {
                     url: "./functions/order-table",
                     type: "post"
-                }
+                },
             });
+
+            setInterval( function () {
+                dataTable.ajax.reload();
+            }, 10000 );
+
+
 
             // GET EDIT
             $(document).on('click', '#getEdit', function (e) {

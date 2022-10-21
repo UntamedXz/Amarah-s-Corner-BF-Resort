@@ -81,7 +81,7 @@ if (mysqli_num_rows($checkRegUsername) > 0) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json')
             );
-            curl_setopt($ch, CURLOPT_USERPWD, "8ea9955361adc59aea3b7f23487b4e6d:5dae1f794a0b7c0117c9048a2562ef7e");
+            curl_setopt($ch, CURLOPT_USERPWD, "8ea9955361adc59aea3b7f23487b4e6d:72df21bb7f7cb69d689555039c4e3edf");
             $server_output = curl_exec($ch);
             curl_close($ch);
     

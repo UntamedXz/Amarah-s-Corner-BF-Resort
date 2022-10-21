@@ -132,7 +132,7 @@ if(isset($_SESSION['id'])) {
                                 $('#toast').removeClass("active");
                                 $('.progress').removeClass("active");
                             }, 5000);
-                        } else if(response == 'Check email for password link!') {
+                        } else if(response == 'Check email for password reset link!') {
                             $('#toast').addClass('active');
                                 $('.progress').addClass('active');
                                 $('#toast-icon').removeClass(

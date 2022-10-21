@@ -3206,11 +3206,16 @@ footer .footer-wrapper .copyright span {
   padding-top: 50px;
 }
 .feedback .container {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
   background: url(../images/adminpage_bg.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  max-width: 400px;
+  width: 500px;
+  max-width: 94%;
   border-radius: 5px;
   padding: 20px 30px;
   box-shadow: 2px 2px 10px #070506;
@@ -3234,11 +3239,26 @@ footer .footer-wrapper .copyright span {
   text-shadow: 0 0 20px #952;
 }
 .feedback .container .star_widget label {
-  font-size: 40px;
+  font-size: 25px;
   color: #444;
   padding: 10px;
   float: right;
   transition: all 0.2s ease;
+}
+@media (min-width: 375px) {
+  .feedback .container .star_widget label {
+    font-size: 30px;
+  }
+}
+@media (min-width: 414px) {
+  .feedback .container .star_widget label {
+    font-size: 35px;
+  }
+}
+@media (min-width: 768px) {
+  .feedback .container .star_widget label {
+    font-size: 40px;
+  }
 }
 .feedback .container .logo {
   display: flex;
