@@ -1780,7 +1780,7 @@ footer {
             height: 150px;
             border-radius: 5px;
             overflow: hidden;
-            border: 1px solid #ffaf08;
+            // border: 1px solid #ffaf08;
 
             img {
               width: 100%;
@@ -1849,6 +1849,19 @@ footer {
           &:nth-child(8) {
             display: flex;
           }
+        }
+      }
+
+      .close-hour-note {
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          font-size: 26px;
+          font-weight: 500;
         }
       }
 

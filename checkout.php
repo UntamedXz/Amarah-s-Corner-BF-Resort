@@ -58,7 +58,9 @@ if($cartCount < 1) {
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.skypack.dev/maplibre-gl/dist/maplibre-gl.css">
-
+    <script src="https://api.jawg.io/libraries/jawg-places@latest/jawg-places.js?access-token=fW9beqQeuIqz2IrxTv2f38PTASuc89UjbVhsgZjPMewqFe6aFFsZbKliOzJMDFqg"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@1.15.2/dist/maplibre-gl.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@1.15.2/dist/maplibre-gl.min.js"></script>
 </head>
 
 
@@ -749,13 +751,13 @@ if($cartCount < 1) {
 
         });
 
-        // GAGO SI RYAN
         var map = new maplibregl.Map({
         container: 'map', // container id
-        style: 'https://api.maptiler.com/maps/hybrid/style.json?key=FhKrOmteMEqBErh5pfgf', // style URL
-        center: [120.99027438102536,14.437238300580049], // starting position [lng, lat]
+        style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=FhKrOmteMEqBErh5pfgf', // style URL
+        center: [120.9881286,14.4370461], // starting position [lng, lat]
         zoom: 15 // starting zoom
         });
+
         var marker = new maplibregl.Marker({
         color: "#FFAF08",
         scale: 1.2,
@@ -763,6 +765,15 @@ if($cartCount < 1) {
         })
         .setLngLat([ 120.9881286,14.4370461])
         .addTo(map);
+
+        map.addControl(new JawgPlaces.MapLibre({            
+        searchOnTyping: true,
+        marker: {
+        anchor: 'center',
+        iconUrl: 'https://i.ibb.co/drNqF46/Untitled-2.png',
+        show: true,
+        }        
+        }));
 
         function onDragEnd() {
         var lngLat = marker.getLngLat();
@@ -805,7 +816,11 @@ if($cartCount < 1) {
         }
         marker.on('dragend', onDragEnd);
 
-
+        var bounds = [
+        [120.939988,14.386594], // [west, south]
+        [121.058464,14.498885]  // [east, north]
+        ];
+        map.setMaxBounds(bounds);
         map.addControl(new NavigationControl());
     </script>
 </body>

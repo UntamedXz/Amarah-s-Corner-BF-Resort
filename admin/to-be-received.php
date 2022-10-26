@@ -12,7 +12,6 @@ $get_admin_info = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id = $adm
 $info = mysqli_fetch_array($get_admin_info);
 
 $userProfileIcon = $info['profile_image'];
-$admin_type = $info['admin_type'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +107,9 @@ $admin_type = $info['admin_type'];
 </head>
 
 <body>
-    <input type="hidden" name="admin_type" id="admin_type" value="<?php echo $admin_type; ?>">
+    
+    <?php include 'top.php';?>
+
     <!-- TOAST -->
     <div class="toast" id="toast">
         <div class="toast-content" id="toast-content">
@@ -126,56 +127,69 @@ $admin_type = $info['admin_type'];
     <!-- DELETE -->
     <div id="popup-box" class="popup-box delete-modal">
         <div class="top">
-            <h3>Delete Feedback</h3>
+            <h3>Delete Order</h3>
             <div id="modalClose" class="fa-solid fa-xmark"></div>
         </div>
         <hr>
-        <form id="delete_feedback">
+        <form id="delete_order">
             <div style="display: none;" class="form-group">
-                <span>Feedback ID</span>
-                <input type="text" id="delete_feedback" name="delete_feedback" value="">
+                <span>Category ID</span>
+                <input type="text" id="delete_order_id" name="delete_order_id" value="">
             </div>
-            <p>Are you sure, you want to delete this feedback?</p>
+            <p>Are you sure, you want to delete this order?</p>
         </form>
         <hr>
         <div class="bottom">
             <div class="buttons">
                 <button id="modalClose" type="button" class="cancel">CLOSE</button>
-                <button form="delete_feedback" id="delete_feedback" type="submit" class="save">DELETE</button>
+                <button form="delete_order" id="deleteProduct" type="submit" class="save">DELETE</button>
             </div>
 
         </div>
     </div>
 
-    <?php include 'top.php';?>
-
     <!-- MAIN -->
     <main>
-        <h1 class="title">FEEDBACK</h1>
+        <h1 class="title">View Orders</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="updates" class="active">View Customers Feedback</a></li>
+            <li><a href="view-category" class="active">View Orders</a></li>
         </ul>
-        <section class="view-category">
-            <div class="wrapper">
-                <table id="example" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Quality Score</th>
-                            <th>Feedback</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
+        <section class="orders">
+        <div class="wrapper">
+            <table id="example" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Order No.</th>
+                        <th>Ship To</th>
+                        <th>Customer Email</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Order Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
         </section>
 
         <script>
+
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            } 
             // DATA TABLES
+            var searchTerm = getUrlVars()['search'];
             var dataTable = $('#example').DataTable({
-                "processing": true,
                 "serverSide": true,
                 "paging": true,
                 "pagingType": "simple",
@@ -188,66 +202,84 @@ $admin_type = $info['admin_type'];
                 "iDisplayLength": 5,
                 order: [[0, 'desc']],
                 "ajax": {
-                    url: "./functions/feedback-table",
+                    url: "./functions/to-be-received-table",
                     type: "post"
+                },
+                search: {
+                    search: searchTerm
                 }
             });
-        </script>
 
-        <script>
+            setInterval( function () {
+                dataTable.ajax.reload();
+            }, 10000 );
+
+
+
+            // GET EDIT
+            $(document).on('click', '#getEdit', function (e) {
+                e.preventDefault();
+                var order_id = $(this).data('id');
+                $.ajax({
+                    url: './functions/crud/order',
+                    type: 'POST',
+                    data: 'order_id=' + order_id,
+                    success: function (res) {
+                        location.href = res;
+                    }
+                })
+            });
+            
+            $('.action').on('click', function(e) {
+                e.preventDefault();
+                
+                if($('.action-list').hasClass('active')) {
+                    $('.action-list').removeClass('active');
+                } else {
+                $('.action-list').addClass('active');
+                }
+            })
+
             // GET DELETE
             $(document).on('click', '#getDelete', function (e) {
                 e.preventDefault();
                 $('.delete-modal').addClass('active');
-                var id = $(this).data('id');
-                $("#delete_feedback").val(id);
+                var order_id = $(this).data('id');
+                $("#delete_order_id").val(order_id);
             });
 
-            // CLOSE MODAL
-            $(document).on('click', '#modalClose', function () {
-                $('.edit-modal').removeClass("active");
-                $('.view-modal').removeClass("active");
-                $('.insert-modal').removeClass("active");
+            $(document).on('click', '#modalClose', function() {
                 $(".delete-modal").removeClass("active");
-                $("#edit-category")[0].reset();
-                $("#insert-updates")[0].reset();
-                $('#file').attr("src", '');
-                $('.error-text').text('');
-                $('.error-image').text('');
             })
-        </script>
 
-        <script>
-                // SUBMIT DELETE
-                $("#delete_feedback").on('submit', function (e) {
+            // SUBMIT DELETE
+            $("#delete_order").on('submit', function(e) {
                     e.preventDefault();
                     var form = new FormData(this);
-                    form.append('feedback', true);
+                    form.append('delete_order', true);
                     $.ajax({
                         type: "POST",
-                        url: "./functions/crud/feedback",
+                        url: "./functions/crud/order",
                         data: form,
                         dataType: 'text',
                         contentType: false,
                         cache: false,
                         processData: false,
-                        success: function (response) {
-                            if (response === 'success') {
+                        success: function(response) {
+                            if (response === 'deleted') {
                                 $('.delete-modal').removeClass("active");
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');
-                                $('#toast-icon').removeClass(
-                                    'fa-solid fa-triangle-exclamation').addClass(
-                                    'fa-solid fa-check warning');
+                                $('#toast-icon').removeClass('fa-solid fa-triangle-exclamation').addClass('fa-solid fa-check warning');
                                 $('.text-1').text('Success!');
-                                $('.text-2').text('Update deleted successfully!');
+                                $('.text-2').text('Order deleted successfully!');
                                 setTimeout(() => {
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");
                                 }, 5000);
                                 $('#example').DataTable().ajax.reload();
-                                $('#delete_feedback')[0].reset();
                             } else {
+                                $('.delete-modal').removeClass("active");
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');
                                 $('.text-1').text('Error!');
@@ -256,12 +288,15 @@ $admin_type = $info['admin_type'];
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");
                                 }, 5000);
+                                $('#example').DataTable().ajax.reload();
                             }
+                            console.log(response);
                         }
                     })
                 })
-            ;
         </script>
+
+
 
 
         <?php include 'bottom.php'?>

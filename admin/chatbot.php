@@ -12,6 +12,7 @@ $get_admin_info = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id = $adm
 $info = mysqli_fetch_array($get_admin_info);
 
 $userProfileIcon = $info['profile_image'];
+$admin_type = $info['admin_type'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,223 +29,412 @@ $userProfileIcon = $info['profile_image'];
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://get.mavo.io/stable/mavo.es5.min.js"></script>
-    <script src="https://get.mavo.io/stable/mavo.es5.min.js"></script>
-    <script src="https://codepen.io/username/pen/aBcDef.css"></script>
-    <link rel="stylesheet" href="https://codepen.io/username/pen/aBcDef.css">
+    <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700;800&family=Poppins:wght@200;300;400;500;600;700&display=swap">
 
     <link rel="stylesheet" href="../assets/css/admin.css">
 
     <style>
-       /* Style the tab */
-.tab {
-  overflow: hidden;
-  background-color: black;
-}
+        .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody::-webkit-scrollbar {
+            width: 0px;
+        }
 
-/* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
-  color: #ffaf08;
-  border: 1px solid #ffaf08;
-  border-radius: 5px;
-}
+        .dataTables_wrapper .dataTables_info {
+            color: #936500 !important;
+        }
 
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ffaf08;
-  color: black;
-}
+        .dataTables_filter {
+            margin-bottom: 10px;
+        }
 
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ffaf08;
-  color: black;
-}
+        .dataTables_filter label {
+            color: #ffaf08;
+        }
 
-/* Style the tab content */
-.tabcontent {
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #ffaf08;
+            color: #ffaf08;
+        }
 
-  padding: 6px 12px;
-  border: 1px solid #ffaf08;
-  border-radius: 5px;
-  border-top: none;
-}
-input[type=text], select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+        table.dataTable thead {
+            border-radius: 5px !important;
+        }
 
-input[type=submit] {
-  width: 100%;
-  background-color: #ffaf08;
-  color: black;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+        table.dataTable thead tr {
+            background-color: #ffaf08;
+            color: #070506;
+            white-space: nowrap;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
 
-input[type=submit]:hover {
-  background-color: black;
-  border: 2px solid #ffaf08;
-  color: #ffaf08;
-}
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 5px 10px;
+            background-color: #ffaf08 !important;
+            color: #070506 !important;
+        }
 
-div.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-.full { width: 100%; 
-        padding: 10px;}
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #070506 !important;
+            border-color: #ffaf08;
+            color: #ffaf08 !important;
+        }
 
-.full tr:hover {background-color: #ddd;
-color: black;
-}
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            background-color: #936500 !important;
+            color: #070506 !important;
+        }
 
-.full th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  background-color: #ffaf08;
-  color: black;
-}
-.full tr{
-  text-align: center;
-  padding: 10px;
-}
+        .dataTables_wrapper .dataTables_length select {
+            color: #ffaf08 !important;
+            border-color: #936500;
+            background: #070506 !important;
+        }
+
+        .dataTables_wrapper .dataTables_length label {
+            color: #936500 !important;
+        }
+
+        table thead tr th:first-child {
+            border-top-left-radius: 5px !important;
+        }
+
+        table thead tr th:last-child {
+            border-top-right-radius: 5px !important;
+        }
     </style>
     <title>Admin Panel</title>
 </head>
 
 <body>
-    
+    <input type="hidden" name="admin_type" id="admin_type" value="<?php echo $admin_type; ?>">
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <div class="toast-content" id="toast-content">
+            <i id="toast-icon" class="fa-solid fa-triangle-exclamation warning"></i>
+
+            <div class="message">
+                <span class="text text-1" id="text-1"></span>
+                <span class="text text-2" id="text-2"></span>
+            </div>
+        </div>
+        <i class="fa-solid fa-xmark close"></i>
+        <div class="progress"></div>
+    </div>
+
+    <!-- DELETE -->
+    <div id="popup-box" class="popup-box delete-modal">
+        <div class="top">
+            <h3>Delete Response</h3>
+            <div id="modalClose" class="fa-solid fa-xmark"></div>
+        </div>
+        <hr>
+        <form id="delete_chat">
+            <div style="display: none;" class="form-group">
+                <span>Chat ID</span>
+                <input type="text" id="delete_chat" name="delete_chat" value="">
+            </div>
+            <p>Are you sure, you want to delete this Response?</p>
+        </form>
+        <hr>
+        <div class="bottom">
+            <div class="buttons">
+                <button id="modalClose" type="button" class="cancel">CLOSE</button>
+                <button form="delete_chat" id="deleteSubCategory" type="submit" class="save">DELETE</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ADD RESPONSE -->
+    <div id="popup-box" class="popup-box add-modal">
+        <div class="top">
+            <h3>Add Response</h3>
+            <div id="modalClose" class="fa-solid fa-xmark"></div>
+        </div>
+        <hr>
+        <form enctype="multipart/form-data" id="add_chat">
+            <div class="form-group" style="display: flex;">
+                <span>Chat ID</span>
+                <input type="text" style="border-radius: 5px; padding: 0 5px;" name="add_id" id="add_id"></input>
+            </div>
+            <div class="form-group">
+                <span>Messages</span>
+                <textarea style="border-radius: 5px; padding: 0 5px;" name="add_messages" id="add_messages" cols="20" rows="5"></textarea>
+                <span class="error-text-update" style="color: #ffaf08; font-size: 13px; font-weight: 600;"></span>
+            </div>
+            <div class="form-group">
+                <span>Response</span>
+                <textarea style="border-radius: 5px; padding: 0 5px;" name="add_response" id="add_response" cols="20" rows="5"></textarea>
+                <span class="error-text-update" style="color: #ffaf08; font-size: 13px; font-weight: 600;"></span>
+            </div>
+           
+        </form>
+        <hr>
+        <div class="bottom">
+            <div class="buttons">
+                <button id="modalClose" type="button" class="cancel">CANCEL</button>
+                <button form="add_chat" type="submit" id="add_chat" name="add_chat" class="save">ADD RESPONSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT RESPONSE -->
+    <div id="popup-box" class="popup-box edit-modal">
+        <div class="top">
+            <h3>Edit Response</h3>
+            <div id="modalClose" class="fa-solid fa-xmark"></div>
+        </div>
+        <hr>
+        <form enctype="multipart/form-data" id="update_chat">
+            <div class="form-group" style="display: flex;">
+                <span>Chat ID</span>
+                <input type="text" style="border-radius: 5px; padding: 0 5px;" name="id" id="id"></input>
+            </div>
+            <div class="form-group">
+                <span>Messages</span>
+                <textarea style="border-radius: 5px; padding: 0 5px;" name="messages" id="messages" cols="20" rows="5"></textarea>
+                <span class="error-text-update" style="color: #ffaf08; font-size: 13px; font-weight: 600;"></span>
+            </div>
+            <div class="form-group">
+                <span>Response</span>
+                <textarea style="border-radius: 5px; padding: 0 5px;" name="response" id="response" cols="20" rows="5"></textarea>
+                <span class="error-text-update" style="color: #ffaf08; font-size: 13px; font-weight: 600;"></span>
+            </div>
+           
+        </form>
+        <hr>
+        <div class="bottom">
+            <div class="buttons">
+                <button id="modalClose" type="button" class="cancel">CANCEL</button>
+                <button form="update_chat" type="submit" id="update_chat" name="update_chat" class="save">SAVE
+                    CHANGES</button>
+            </div>
+        </div>
+    </div>
+
     <?php include 'top.php';?>
 
     <!-- MAIN -->
     <main>
-        <h1 class="title">Chatbot</h1>
+        <h1 class="title">CHATBOT</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="view-category" class="active">View Customer's Chat</a></li>
+            <li><a href="chatbot" class="active">View Message & Response</a></li>
         </ul>
-        <section class="orders">
-        <div class="wrapper">
-
-        <!--Chatbot tabs-->
-        <div class="tabs-wrapper">
-        <div class="tab">
-        <button class="tablinks active" onclick="openCity(event, 'Settings')">Settings</button>
-        <button class="tablinks" onclick="openCity(event, 'Response')">Response List</button>
-        <button class="tablinks" onclick="openCity(event, 'Unanswered')">Unanswered List</button>
-        </div>
-
-         <div id="Settings" class="tabcontent">
-             <br><h3>Chatbot Information</h3>
-             <br><form action="/action_page.php">
-    <label for="chatbot_name">Chatbot Name</label>
-    <input type="text" id="chatbot_name" name="chatbot_name" placeholder="Chatbot Name" value="Amarah's Corner">
-
-    <label for="intro">Introduction Message</label>
-    <input type="text" id="intro" name="intro" placeholder="Introduction Message" value="Hi! I'm Era, a ChatBot of Amarah's Corner-Las Pinas. How can I help you?">
-
-    <label for="noresult">No Result Message</label>
-    <input type="text" id="noresult" name="noresult" placeholder="No Result Message" value="I am sorry. I can't understand your question. Please rephrase your question and make sure it is related to this site. Thank you :)">
-
-    <label for="country">Upload Bot Avatar</label>
- <br>
-  <input type="file" name="fileToUpload" id="fileToUpload">
- <br> 
-    <input type="submit" value="UPDATE">
-  </form>
-         </div>
-
-        <div id="Response" class="tabcontent" style="display:none">
-             <br><h3>Response List</h3>
-             <br><table class="full">
+        <section class="view-category">
+            <div class="wrapper">
+                <table id="example" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Question</th>
+                            <th>Messages</th>
                             <th>Response</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                           <td>1</td>
-                           <td>What is Pizza?</td>
-                           <td>Pizza is a dish of Italian origin consisting of a usually round, flat base of leavened wheat-based dough topped with tomatoes, cheese, and often various ingredients.</td>
-                           <td>
-              <button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button>
-              <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-            </td>
-                        </tr>
-                      </tbody>
                 </table>
-              
-        </div>
-
-        <div id="Unanswered" class="tabcontent" style="display:none">
-             <br><h3>Unanswered List</h3>
-             <br><table class="full">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Question</th>
-                            <th>Total Who Asks</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                           <td>1</td>
-                           <td>Bakit?</td>
-                           <td>9<td>
-              <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
-              <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-            <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-            </td>
-                        </tr>
-                      </tbody>
-                </table>
-        </div>
+            </div>
         </section>
-</main>
-        
-            <script>
-function openCity(evt, cityName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
+
+        <script>
+            // DATA TABLES
+            var dataTable = $('#example').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "paging": true,
+                "pagingType": "simple",
+                "scrollX": true,
+                "sScrollXInner": "100%",
+                "aLengthMenu": [
+                    [5, 10, 15, 100],
+                    [5, 10, 15, 100]
+                ],
+                "iDisplayLength": 5,
+                order: [[0, 'desc']],
+                "ajax": {
+                    url: "./functions/chatbot-table",
+                    type: "post"
+                }
+            });
         </script>
 
+        <script>
+              // GET ADD
+              $(document).on('click', '#getAdd', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: './functions/crud/chatbot',
+                    type: 'POST',
+                    data: 'id=' + id,
+                    success: function (res) {
+                        var obj = JSON.parse(res);
+                        $(".add-modal").addClass("active");
+                        $("#id").val(obj.id);
+                        $("#messages").val(obj.messages);
+                        $("#response").val(obj.response);
+                        console.log(res);
+                    }
+                })
+            });
+            // GET EDIT
+            $(document).on('click', '#getEdit', function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: './functions/crud/chatbot',
+                    type: 'POST',
+                    data: 'id=' + id,
+                    success: function (res) {
+                        var obj = JSON.parse(res);
+                        $(".edit-modal").addClass("active");
+                        $("#id").val(obj.id);
+                        $("#messages").val(obj.messages);
+                        $("#response").val(obj.response);
+                        console.log(res);
+                    }
+                })
+            });
 
+
+            // GET DELETE
+            $(document).on('click', '#getDelete', function (e) {
+                e.preventDefault();
+                $('.delete-modal').addClass('active');
+                var updates_id = $(this).data('id');
+                $("#delete_chat").val(id);
+            });
+
+            // CLOSE MODAL
+            $(document).on('click', '#modalClose', function () {
+                $('.edit-modal').removeClass("active");
+                $('.add-modal').removeClass("active");
+                $(".delete-modal").removeClass("active");
+                $("#edit-chat")[0].reset();
+                $("#insert_chat")[0].reset();
+                $('#file').attr("src", '');
+                $('.error-text').text('');
+                $('.error-image').text('');
+            })
+        </script>
+
+        <script>
+            // SUBMIT EDIT
+                $(document).ready(function () {
+                $("#update_chat").on('submit', function (e) {
+                    e.preventDefault();
+
+                    if($('#messages').val() == '') {
+                        $('.error-text-update').text('');
+                    } else {
+                        $('.error-text-update').text('');
+                    } 
+
+                    if($('#response').val() == '') {
+                        $('.error-text-update').text('');
+                    } else {
+                        $('.error-text-update').text('');
+                    } 
+
+                    if($('.error-text-update').text() != '' && $('.error-image-update').text() != '') {
+                        $('#toast').addClass('active');
+                        $('.progress').addClass('active');
+                        $('.text-1').text('Error!');
+                        $('.text-2').text('Fill all required fields!');
+                        setTimeout(() => {
+                            $('#toast').removeClass("active");
+                            $('.progress').removeClass("active");
+                        }, 5000);
+                    } else {
+                        var form = new FormData(this);
+                        form.append('update_chat', true);
+                        $.ajax({
+                            url: "./functions/crud/chatbot",
+                            type: "POST",
+                            data: form,
+                            dataType: 'text',
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            success: function(data) {
+                                if(data == 'success') {
+                                    $('.edit-modal').removeClass("active");
+                                    $('#toast').addClass('active');
+                                    $('.progress').addClass('active');
+                                    $('#toast-icon').removeClass(
+                                        'fa-solid fa-triangle-exclamation').addClass(
+                                        'fa-solid fa-check warning');
+                                    $('.text-1').text('Success!');
+                                    $('.text-2').text('Update updates successfully!');
+                                    setTimeout(() => {
+                                        $('#toast').removeClass("active");
+                                        $('.progress').removeClass("active");
+                                    }, 5000);
+                                    $('#example').DataTable().ajax.reload();
+                                    $('#update_chat')[0].reset();
+                                } else {
+                                    $('#toast').addClass('active');
+                                    $('.progress').addClass('active');
+                                    $('.text-1').text('Error!');
+                                    $('.text-2').text('Something went wrong!');
+                                    setTimeout(() => {
+                                        $('#toast').removeClass("active");
+                                        $('.progress').removeClass("active");
+                                    }, 5000);
+                                }
+                                console.log(data);
+                            }
+                        })
+                    }
+                })
+
+
+                // SUBMIT DELETE
+                $("#delete_chat").on('submit', function (e) {
+                    e.preventDefault();
+                    var form = new FormData(this);
+                    form.append('delete_chat', true);
+                    $.ajax({
+                        type: "POST",
+                        url: "./functions/crud/chatbot",
+                        data: form,
+                        dataType: 'text',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response === 'success') {
+                                $('.delete-modal').removeClass("active");
+                                $('#toast').addClass('active');
+                                $('.progress').addClass('active');
+                                $('#toast-icon').removeClass(
+                                    'fa-solid fa-triangle-exclamation').addClass(
+                                    'fa-solid fa-check warning');
+                                $('.text-1').text('Success!');
+                                $('.text-2').text('Update deleted successfully!');
+                                setTimeout(() => {
+                                    $('#toast').removeClass("active");
+                                    $('.progress').removeClass("active");
+                                }, 5000);
+                                $('#example').DataTable().ajax.reload();
+                                $('#delete_chat')[0].reset();
+                            } else {
+                                $('#toast').addClass('active');
+                                $('.progress').addClass('active');
+                                $('.text-1').text('Error!');
+                                $('.text-2').text('Something went wrong!');
+                                setTimeout(() => {
+                                    $('#toast').removeClass("active");
+                                    $('.progress').removeClass("active");
+                                }, 5000);
+                            }
+                        }
+                    })
+                })
+            });
+        </script>
 
 
         <?php include 'bottom.php'?>

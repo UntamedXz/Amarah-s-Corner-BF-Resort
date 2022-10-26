@@ -2,7 +2,8 @@
 session_start();
 require_once "./includes/database_conn.php";
 
-$id = $_GET['link'];
+$product_link = $_GET['link'];
+$id = $_GET['id'];
 
 $product_id = $_GET['id'];
 
@@ -142,7 +143,7 @@ if(isset($_SESSION['id'])) {
 
     <form action="" id="cart">
     <?php
-    $getProduct = mysqli_query($conn, "SELECT * FROM product WHERE product_slug = '$id'");
+    $getProduct = mysqli_query($conn, "SELECT * FROM product WHERE product_slug = '$product_link' AND product_id = $id");
 
     foreach ($getProduct as $row) {
     ?>

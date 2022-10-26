@@ -32,7 +32,6 @@ if(isset($_SESSION['id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./assets/css/backup.css">
     <title>Amarah's Corner - BF Resort Las Piñas</title>
-
     <style>
         body {
             background: url(./assets/images/background.png) no-repeat;
@@ -98,9 +97,9 @@ if(isset($_SESSION['id'])) {
         }
         
         .botLogo{
-            width: 120px;
+            width: 100px;
             margin-top: 15px;
-            margin-left: 140px;
+            margin-left: 120px;
         }
         #container
         {
@@ -114,8 +113,8 @@ if(isset($_SESSION['id'])) {
         }
         #screen
         {
-            height: 670px;
-            width: 400px;
+            height: 550px;
+            width: 350px;
             border-radius: 30px;
             background: #f6f6f6;
             border-radius: 25px;
@@ -125,47 +124,60 @@ if(isset($_SESSION['id'])) {
         }
         #header
         {
-            height: 80px;
+            height: 70px;
             width: 100%;
             background: #ffaf08;
             text-shadow: 1px 1px 2px #000000a1;
         }
         #messageDisplaySection
         {
-            height: 450px;
+            height: 400px;
             width: 100%;
             position: absolute;
             left: 0;
-            top: 100px;
-            padding: 0 20px;
+            top: 70px;
+            padding: 15px;
             overflow-y: auto;
-            
+            background: url(./assets/images/amarah-s-corner-white-bg.png);
+            background-size: cover;
         }
         .chat
         {
             min-height: 40px;
-            max-width: 60%;
-            padding: 15px;
+            max-width: 80%;
+            padding: 10px;
             border-radius: 10px;
-            margin: 15px 0;
+            margin: 5px 0;
             
         }
         .botMessages
         {
             background: #ffaf08;
             color: black;
-            text-shadow: 1px 1px 2px #000000d4;
+            text-shadow: 1px 1px 2px #000000d4;   
+            font-size: 14px;
+                  
         }
         #messagesContainer
         {
             height: auto;
             width: 100%;
             display: flex;
+            justify-content: flex-start;
+        }
+        #userMessagesContainer
+        {
+            height: auto;
+            width: 100%;
+            display: flex;
             justify-content: flex-end;
         }
+
         .usersMessages
         {
-            background: #00000010;
+            background: black;
+            color: white;
+            font-size: 14px;
         }
         #userInput
         {
@@ -181,15 +193,15 @@ if(isset($_SESSION['id'])) {
         }
         #messages
         {
-            height: 50px;
+            height: 40px;
             width: 90%;
             position: absolute;
             left: 0;
             border: none;
             outline: none;
             background: transparent;
-            padding: 0px 15px;
-            font-size: 17px;
+            padding: 0px 10px;
+            font-size: 14px;
         }
         #send
         {
@@ -202,20 +214,29 @@ if(isset($_SESSION['id'])) {
             display: grid;
             place-items: center;
             color: black;
-            font-size: 20px;
+            font-size: 14px;
             background: #ffaf08;
             cursor: pointer;
             display: none;
+            font-weight: bold;
+        }
+        a{
+            text-decoration: none;
         }
         .fa-brands{
             color: black;
+            height: 36px;
+            width: 36px;
             background: #ffaf08;
-            padding: 10px;
+            padding: 12px;
             border-radius: 50%;
+            display: flex;
+         
         }
         .fa-brands:hover{
-            color: #ffaf08;
             background: black;
+            color: #ffaf08;
+            border-radius: 50%;
         }
         .center-brands{
             justify-content: center;
@@ -225,17 +246,22 @@ if(isset($_SESSION['id'])) {
             background: #ffaf08;
             color: black;
             text-shadow: 1px 1px 2px #000000d4;
-            right: 0;
-            padding: 0px 15px;
-            font-size: 17px;
+            font-size: 14px;
             min-height: 40px;
             max-width: 60%;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
-            margin: 15px 0;
-            float: right;
+            margin: 5px 0;
+            float: left;
+        }
+        .welcome{
+            font-size:14px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 2px 2px #ffaf08;
         }
 </style>
+
 </head>
 
 <body>
@@ -259,83 +285,97 @@ if(isset($_SESSION['id'])) {
 
     <button class="open-button" onclick="openForm()"><img src="assets/images/amarahchatbot.png" class="chatbotLogo"></button>
 
-<div class="chat-popup" id="myForm">
+    <div class="chat-popup" id="myForm">
        
-        <div id="screen">
-            <div id="header"><img class="botLogo" src="./assets/images/botlogo.png">
-            <button type="button" class="btn cancel" onclick="closeForm()"><h3>X</h3></button></div>
-            
-            <div id="messageDisplaySection">
-            Welcome to Amarah's Corner!
-                <br>
-                Connect with us at:
-                <br>
-                <div class="center-brands">
-                   <a href="https://www.facebook.com/amarahscornerbf"><i class="fa-brands fa-facebook-f"></i></a>
-                   <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                   <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                </div>
-                <div class="default-message">
-                   <p>How can I help you?</p>
-                </div>
-                <br><br><br>
-            </div>
-            <!-- messages input field -->
-            <div id="userInput">
-                <input type="text" name="messages" id="messages" autocomplete="OFF" placeholder="Type Your Message Here." required>
-                <input type="submit" value="Send" id="send" name="send">
-            </div>
-        </div>
-    </div>
+       <div id="screen">
+           <div id="header"><img class="botLogo" src="./assets/images/botlogo.png">
+           <button type="button" class="btn cancel" onclick="closeForm()"><h3>x</h3></button></div>
+           
+           <div id="messageDisplaySection">
+          <!-- <p class="welcome">Welcome to Amarah's Corner!
+               <br>
+               Connect with us at:
+               <br></p>-->
+               <div class="center-brands">
+                   <div class="brand">
+                   <a href="https://www.facebook.com/amarahscornerbf"><i class="fa-brands fa-facebook-f"></i></a></div>
+                   <div class="brand">
+                  <a href="#"><i class="fa-brands fa-twitter"></i></a></div>
+                  <div class="brand">
+                  <a href="#"><i class="fa-brands fa-instagram"></i></a></div>
+               </div>
+               <div class="default-message">
+                  <p>How can I help you?</p>
+               </div>
+               <br><br><br>
+           </div>
+           <!-- messages input field -->
+           <div id="userInput">
+               <input type="text" name="messages" id="messages" autocomplete="OFF" placeholder="Type Your Message Here." required>
+               <input type="submit" value="Send" id="send" name="send">
+           </div>
+       </div>
+   </div>
 
 
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    
-    <!-- Jquery Start -->
-    <script>
-        $(document).ready(function(){
-            $("#messages").on("keyup",function(){
+   
+   <!-- Jquery Start -->
+   <script>
+       $(document).ready(function(){
+           $("#messages").on("keyup",function(){
 
-                if($("#messages").val()){
-                    $("#send").css("display","block");
-                }else{
-                    $("#send").css("display","none");
-                }
-            });
+               if($("#messages").val()){
+                   $("#send").css("display","block");
+               }else{
+                   $("#send").css("display","none");
+               }
+           });
+       });
+ 
+        $("#messages").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#send").click();
+            }
         });
-        // when send button clicked
-        $("#send").on("click",function(e){
-            $userMessage = $("#messages").val();
-            $appendUserMessage = '<div class="chat usersMessages">'+ $userMessage +'</div>';
-            $("#messageDisplaySection").append($appendUserMessage);
 
-            // ajax start
-            $.ajax({
-                url: "bot.php",
-                type: "POST",
-                // sending data
-                data: {messageValue: $userMessage},
-                // response text
-                success: function(data){
-                    // show response
-                    $appendBotResponse = '<div id="messagesContainer"><div class="chat botMessages">'+data+'</div></div>';
-                    $("#messageDisplaySection").append($appendBotResponse);
-                }
-            });
-            $("#messages").val("");
-            $("#send").css("display","none");
-        });
-    </script>
+ 
+       // when send button clicked
+       
+       $("#send").on("click",function(e){
+           $userMessage = $("#messages").val();
+           $appendUserMessage = '<div id="userMessagesContainer"><div class="chat usersMessages">'+ $userMessage +'</div></div>';
+           $("#messageDisplaySection").append($appendUserMessage);
+
+        
+           // ajax start
+           $.ajax({
+               url: "bot.php",
+               type: "POST",
+               // sending data
+               data: {messageValue: $userMessage},
+               // response text
+               success: function(data){
+                   // show response
+                   $appendBotResponse = '<div id="messagesContainer"><div class="chat botMessages">'+data+'</div></div>';
+                   $("#messageDisplaySection").append($appendBotResponse);
+               }
+           });
+           $("#messages").val("");
+           $("#send").css("display","none");
+       });
+   </script>
+
 
 <script>
 function openForm() {
-  document.getElementById("myForm").style.display = "block";
-  
+ document.getElementById("myForm").style.display = "block";
+ 
 }
 
 function closeForm() {
-  document.getElementById("myForm").style.display = "none";
+ document.getElementById("myForm").style.display = "none";
 }
 </script>
 
@@ -344,45 +384,45 @@ function closeForm() {
 // When send button gets clicked
 document.querySelector("#send").addEventListener("click", async () => {
 
-  // create new request object. get user message
-  let xhr = new XMLHttpRequest();
-  var userMessage = document.querySelector("#userInput").value
+ // create new request object. get user message
+ let xhr = new XMLHttpRequest();
+ var userMessage = document.querySelector("#userInput").value
 
 
-  // create html to hold user message. 
-  let userHtml = '<div class="userSection">'+'<div class="messages user-message">'+userMessage+'</div>'+
-  '<div class="seperator"></div>'+'</div>'
+ // create html to hold user message. 
+ let userHtml = '<div class="userSection">'+'<div class="messages user-message">'+userMessage+'</div>'+
+ '<div class="seperator"></div>'+'</div>'
 
 
-  // insert user message into the page
-  document.querySelector('#body').innerHTML+= userHtml;
+ // insert user message into the page
+ document.querySelector('#body').innerHTML+= userHtml;
 
-  // open a post request to server script. pass user message as parameter 
-  xhr.open("POST", "query.php");
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.send(`messageValue=${userMessage}`);
+ // open a post request to server script. pass user message as parameter 
+ xhr.open("POST", "query.php");
+ xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+ xhr.send(`messageValue=${userMessage}`);
 
 
-  // When response is returned, get reply text into HTML and insert in page
-  xhr.onload = function () {
-      let botHtml = '<div class="botSection">'+'<div class="messages bot-reply">'+this.responseText+'</div>'+
-      '<div class="seperator"></div>'+'</div>'
+ // When response is returned, get reply text into HTML and insert in page
+ xhr.onload = function () {
+     let botHtml = '<div class="botSection">'+'<div class="messages bot-reply">'+this.responseText+'</div>'+
+     '<div class="seperator"></div>'+'</div>'
 
-      document.querySelector('#body').innerHTML+= botHtml;
-  }
+     document.querySelector('#body').innerHTML+= botHtml;
+ }
 
 })
 
 </script>
-    <script>
-        $(window).on('load', function() {
-            if($('#profileIconCheck').val() == '') {
-                $('#profileIcon').attr("src","./assets/images/no_profile_pic.png");
-            } else {
-                $('#profileIcon').attr("src","./assets/images/" + $('#profileIconCheck').val());
-            }
-        })
-    </script>
+   <script>
+       $(window).on('load', function() {
+           if($('#profileIconCheck').val() == '') {
+               $('#profileIcon').attr("src","./assets/images/no_profile_pic.png");
+           } else {
+               $('#profileIcon').attr("src","./assets/images/" + $('#profileIconCheck').val());
+           }
+       })
+   </script>
 
     <!-- BANNER SECTION -->
     <section class="banner" id="home">
@@ -497,17 +537,7 @@ document.querySelector("#send").addEventListener("click", async () => {
                 <div class="feedbacks__top">
                     <div class="feedbacks__user-profile">
                         <div class="feedbacks__user-profile__image">
-                            <?php
-                            if($pfp != null) {
-                                ?>
-                                <img class="img" src="./assets/images/<?php echo $pfp; ?>">
-                                <?php
-                            } else {
-                                ?>
-                                <img class="img" src="./assets/images/no_profile_pic.png">
-                                <?php
-                            }
-                            ?>
+                            <img class="img" src="./assets/images/<?php echo $pfp; ?>">
                         </div>
                         <div class="feedbacks__name-user">
                             <h4><?php echo $name; ?></h4>
@@ -535,6 +565,7 @@ document.querySelector("#send").addEventListener("click", async () => {
             <?php
             }
             ?>
+           
         </div>
         <div id="load-more-feedbacks">
             <input type="submit" class="load-more-feedbacks" value="LOAD MORE">

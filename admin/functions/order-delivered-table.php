@@ -63,8 +63,12 @@ $data = array();
 
 while ($row = mysqli_fetch_array($query)) {
     $subdata = array();
-    $subdata[] = $row[0];
-    $subdata[] = $row[1] . ", " . $row[2] . ", " . $row[3] . ", " . $row[4];
+    $subdata[] = "#" . $row[0];
+    if(($row[1] == null) && ($row[2] == null) && ($row[3] == null) && ($row[4] == null)) {
+        $subdata[] = 'Pick up';
+    } else {
+        $subdata[] = $row[1] . ", " . $row[2] . ", " . $row[3] . ", " . $row[4];
+    }
     $subdata[] = $row[5];
     $subdata[] = $row[6];
     $subdata[] = "P " . $row[7];

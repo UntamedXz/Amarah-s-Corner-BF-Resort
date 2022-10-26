@@ -15,7 +15,9 @@ if(mysqli_num_rows($runQuery) > 0){
     // echo result
     echo $result['response'];
 }else{
-    echo "Sorry can't be able to understand you!";
+    $sql ="INSERT INTO chatbot(messages, response)values('$user_messages', ' ')";
+    $result = mysqli_query($conn, $sql);
+    echo "Sorry can't be able to understand you! Amarah will set a response for this message.";
 }
 }else{
     echo "connection Failed " . mysqli_connect_errno();

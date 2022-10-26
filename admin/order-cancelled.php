@@ -12,7 +12,6 @@ $get_admin_info = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id = $adm
 $info = mysqli_fetch_array($get_admin_info);
 
 $userProfileIcon = $info['profile_image'];
-$admin_type = $info['admin_type'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +29,7 @@ $admin_type = $info['admin_type'];
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
-
+    
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700;800&family=Poppins:wght@200;300;400;500;600;700&display=swap">
 
     <link rel="stylesheet" href="../assets/css/admin.css">
@@ -69,10 +68,6 @@ $admin_type = $info['admin_type'];
             text-transform: uppercase;
         }
 
-        .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
-            overflow-x: scroll !important;
-        }
-
         .dataTables_wrapper .dataTables_paginate .paginate_button {
             padding: 5px 10px;
             background-color: #ffaf08 !important;
@@ -107,30 +102,13 @@ $admin_type = $info['admin_type'];
         table thead tr th:last-child {
             border-top-right-radius: 5px !important;
         }
-
-        .full { width: 100%; 
-        padding: 10px;}
-
-.full tr:hover {background-color: #ddd;
-color: black;
-}
-
-.full th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  background-color: #ffaf08;
-  color: black;
-}
-.full tr{
-  text-align: center;
-  padding: 10px;
-}
     </style>
     <title>Admin Panel</title>
 </head>
 
 <body>
-    <input type="hidden" name="admin_type" id="admin_type" value="<?php echo $admin_type; ?>">
+    
+    <?php include 'top.php';?>
 
     <!-- TOAST -->
     <div class="toast" id="toast">
@@ -149,82 +127,60 @@ color: black;
     <!-- DELETE -->
     <div id="popup-box" class="popup-box delete-modal">
         <div class="top">
-            <h3>Delete Product</h3>
+            <h3>Delete Order</h3>
             <div id="modalClose" class="fa-solid fa-xmark"></div>
         </div>
         <hr>
-        <form id="delete_product">
+        <form id="delete_order">
             <div style="display: none;" class="form-group">
                 <span>Category ID</span>
-                <input type="text" id="delete_product_id" name="delete_product_id" value="">
+                <input type="text" id="delete_order_id" name="delete_order_id" value="">
             </div>
-            <p>Are you sure, you want to delete this product?</p>
+            <p>Are you sure, you want to delete this order?</p>
         </form>
         <hr>
         <div class="bottom">
             <div class="buttons">
                 <button id="modalClose" type="button" class="cancel">CLOSE</button>
-                <button form="delete_product" id="deleteProduct" type="submit" class="save">DELETE</button>
+                <button form="delete_order" id="deleteProduct" type="submit" class="save">DELETE</button>
             </div>
 
         </div>
     </div>
 
-    <?php include 'top.php'; ?>
-
     <!-- MAIN -->
     <main>
-        <h1 class="title">Stocks</h1>
+        <h1 class="title">View Order Delivered</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="product" class="active">View Stocks</a></li>
+            <li><a href="order-delivered" class="active">View Order Delivered</a></li>
         </ul>
-        <section class="view-category">
-
-            <!-- <button onclick="location.href = 'insert-variable-product';" id="getInsert" class="insert_cat"
-                type="button"><i class="fa-solid fa-plus"></i> <span>INSERT VARIABLE PRODUCT</span> </button> -->
-
-            <div class="wrapper">
-                <table class="full">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Status</th>
-                            <th>Level of Items</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                           <td>HAWAIIAN PIZZA</td>
-                           <td>Available</td>
-                           <td><i class="fa fa-battery-full fa-2xl" aria-hidden="true"></i></td>
-                        </tr>
-                        <tr>
-                           <td>SPAGHETTI</td>
-                           <td>Available</td>
-                           <td><i class="fa fa-battery-half fa-2xl" aria-hidden="true"></i></td>
-                        </tr>
-                        <tr>
-                           <td>MILKTEA</td>
-                           <td>Not Available</td>
-                           <td><i class="fa fa-battery-empty fa-2xl" aria-hidden="true"></i></td>
-                        </tr>
-                      </tbody>
-                </table>
-            </div>
+        <section class="orders">
+        <div class="wrapper">
+            <table id="example" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Order No.</th>
+                        <th>Ship To</th>
+                        <th>Customer Email</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Order Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
         </section>
 
         <script>
             if($('#admin_type').val() != 1) {
-                $('#getInsert').hide();
                 $('.delete-modal').hide();
             } else {
-                $('#getInsert').show();
                 $('.delete-modal').show();
             }
         </script>
-
 
         <script>
             // DATA TABLES
@@ -242,53 +198,55 @@ color: black;
                 "iDisplayLength": 5,
                 order: [[0, 'desc']],
                 "ajax": {
-                    url: "./functions/product-table",
+                    url: "./functions/order-cancelled-table",
                     type: "post"
                 }
             });
-        </script>
 
-        <script>
             // GET EDIT
             $(document).on('click', '#getEdit', function (e) {
                 e.preventDefault();
-                var product_id = $(this).data('id');
+                var order_id_view = $(this).data('id');
                 $.ajax({
-                    url: './functions/crud/product',
+                    url: './functions/crud/order-delivered',
                     type: 'POST',
-                    data: 'product_id=' + product_id,
+                    data: 'order_id_view=' + order_id_view,
                     success: function (res) {
                         location.href = res;
                     }
                 })
             });
+            
+            $('.action').on('click', function(e) {
+                e.preventDefault();
+                
+                if($('.action-list').hasClass('active')) {
+                    $('.action-list').removeClass('active');
+                } else {
+                $('.action-list').addClass('active');
+                }
+            })
 
             // GET DELETE
             $(document).on('click', '#getDelete', function (e) {
                 e.preventDefault();
                 $('.delete-modal').addClass('active');
-                var product_id = $(this).data('id');
-                $("#delete_product_id").val(product_id);
+                var order_id = $(this).data('id');
+                $("#delete_order_id").val(order_id);
             });
 
             $(document).on('click', '#modalClose', function() {
-                $('.edit-modal').removeClass("active");
-                $('.view-modal').removeClass("active");
-                $('.insert-modal').removeClass("active");
                 $(".delete-modal").removeClass("active");
-                $("#edit-category")[0].reset();
-                $("#insert-category")[0].reset();
             })
 
             // SUBMIT DELETE
-            $("#delete_product").on('submit', function(e) {
+            $("#delete_order").on('submit', function(e) {
                     e.preventDefault();
-                    var form = new FormData(this);
-                    form.append('delete_product', true);
+                    console.log('test');
                     $.ajax({
                         type: "POST",
-                        url: "./functions/crud/product",
-                        data: form,
+                        url: "./functions/delete-order",
+                        data: new FormData(this),
                         dataType: 'text',
                         contentType: false,
                         cache: false,
@@ -307,6 +265,7 @@ color: black;
                                 }, 5000);
                                 $('#example').DataTable().ajax.reload();
                             } else {
+                                $('.delete-modal').removeClass("active");
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');
                                 $('.text-1').text('Error!');
@@ -315,14 +274,18 @@ color: black;
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");
                                 }, 5000);
+                                $('#example').DataTable().ajax.reload();
                             }
+                            console.log(response);
                         }
                     })
                 })
         </script>
 
 
-        <?php include 'bottom.php' ?>
+
+
+        <?php include 'bottom.php'?>
 
 </body>
 

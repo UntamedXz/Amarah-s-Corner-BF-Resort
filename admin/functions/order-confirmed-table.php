@@ -22,7 +22,7 @@ LEFT JOIN order_status
 ON orders.order_status = order_status.order_status_id
 LEFT JOIN customers
 ON orders.user_id = customers.user_id
-WHERE order_status != 5";
+WHERE order_status = 2";
 
 $query = mysqli_query($conn, $sql);
 
@@ -38,7 +38,7 @@ LEFT JOIN order_status
 ON orders.order_status = order_status.order_status_id
 LEFT JOIN customers
 ON orders.user_id = customers.user_id
-WHERE order_status != 5 AND 1=1";
+WHERE order_status = 2 AND 1=1";
 
 if (!empty($request['search']['value'])) {
     $sql .= " AND (orders.order_id LIKE '" . $request['search']['value'] . "%' ";
@@ -73,10 +73,10 @@ while ($row = mysqli_fetch_array($query)) {
     $subdata[] = $row[6];
     $subdata[] = "P " . $row[7];
     $subdata[] = $row[8];
-    // $subdata[] = '
-    // <button type="button" id="getEdit" data-id="' . $row[0] . '"><i class="fa-solid fa-pen"></i><span>Edit</span></button>
-    // <button type="button" id="getDelete" data-id="' . $row[0] . '"><i class="fa-solid fa-trash-can"></i><span>Delete</span></button>
-    // ';
+    $subdata[] = '
+    <button type="button" id="getEdit" data-id="' . $row[0] . '"><i class="fa-solid fa-pen"></i><span>Edit</span></button>
+    <button type="button" id="getDelete" data-id="' . $row[0] . '"><i class="fa-solid fa-trash-can"></i><span>Delete</span></button>
+    ';
     $data[] = $subdata;
 }
 

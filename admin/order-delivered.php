@@ -196,6 +196,7 @@ $userProfileIcon = $info['profile_image'];
                     [5, 10, 15, 100]
                 ],
                 "iDisplayLength": 5,
+                order: [[0, 'desc']],
                 "ajax": {
                     url: "./functions/order-delivered-table",
                     type: "post"

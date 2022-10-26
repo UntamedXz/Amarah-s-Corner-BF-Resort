@@ -102,13 +102,25 @@ if(isset($_SESSION['id'])) {
     <section class="catalog">
         <h3 class="title-header"><?php echo $categoryTitle ?></h3>
         <div class="container">
-            <!-- <div class="container-left">
-                <div class="container-left-cont">
-
-                </div>
-            </div> -->
             <div class="container-right">
-                <div class="container-right-cont">
+                <?php
+                date_default_timezone_set('Asia/Manila');
+                $day = date('N');
+                $time = date('G:i');
+
+                $get_time_db = mysqli_query($conn, "SELECT * FROM open_hours WHERE day_id = $day");
+
+                $get_time = mysqli_fetch_array($get_time_db);
+
+
+                $open_time = $get_time['open_hour'];
+                $start_time = date('G:i', strtotime($open_time));
+                $close_time = $get_time['close_hour'];
+                $end_time = date('G:i', strtotime($close_time));
+
+                if (($start_time < $time) && ($time < $end_time)) {
+                    ?>
+                    <div class="container-right-cont">
                     <?php
                     $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id WHERE product.category_id = $decode_id");
 
@@ -141,7 +153,48 @@ if(isset($_SESSION['id'])) {
                         <?php
                         }
                     ?>
-                </div>                                
+                </div>
+                    <?php
+                } else {
+                    ?>
+                <div class="container-right-cont">
+                    <?php
+                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id WHERE product.category_id = $decode_id");
+
+                    foreach ($getProduct as $rowProduct) {
+                    ?>
+                        <a href="product?link=<?php echo $rowProduct['product_slug'] . "&id=" . $rowProduct['product_id']; ?>" class="catalog-box" style="position: relative;">
+                    <?php
+                        if(!empty($rowProduct['product_img1'])) {
+                        ?>
+                            <div class="img-cont">
+                                <img style="filter: grayscale(100%);" src="./assets/images/<?php echo $rowProduct['product_img1']; ?>" alt="">
+                            </div>
+                        <?php
+                        } else {
+                        ?>
+                            <div class="no-img-cont">
+                                <img style="filter: grayscale(100%);" src="./assets/images/image_not_available-yellow.png" alt="">
+                            </div>
+                        <?php
+                        }
+                        ?>
+                            <div class="details">
+                                <h4 style="filter: grayscale(100%);"><?php echo $rowProduct['product_title'] ?></h4>
+                                <h5 style="color: #ffaf08; font-weight: 400; filter: grayscale(100%);"><?php echo $rowProduct['subcategory_title']; ?></h5>
+                                <h5 style="filter: grayscale(100%);" class="price">P<?php echo $rowProduct['product_price'] ?></h5>
+                                
+                                <button style="filter: grayscale(100%);" class="order-btn"><i class='bx bxs-cart'></i>ORDER NOW</button>
+                            </div>
+                            <span style="color: #fff; font-weight: 800; font-size: 32px; position: absolute; filter: unset; padding-left: 10px; top: 35%; transform: translateY(50%); transform: rotate(-15deg);" class="status">NOT AVAILABLE</span>
+                        </a>
+                        <?php
+                        }
+                    ?>
+                </div>
+                    <?php
+                }
+                ?>
                 <div id="load-more-products">
                     <input type="submit" class="load-more-products" value="LOAD MORE">
                 </div>

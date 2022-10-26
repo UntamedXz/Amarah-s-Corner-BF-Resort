@@ -8,6 +8,10 @@
     </div>
     <ul class="side-menu">
         <li><a href="index" class="active"><i class='bx bxs-dashboard icon'></i>Dashboard</a></li>
+        <li class="divider" data-text="store">Store</li>
+        <li>
+            <a href="store-open-time"><i class='bx bxs-time icon'></i>Open Hours Time</a>
+        </li>
         <li class="divider" data-text="social">Social</li>
         <li>
             <a href="updates"><i class='bx bx-edit icon'></i>Updates</a>
@@ -22,14 +26,27 @@
         <li class="divider" data-text="product">Product</li>
         <li>
         <li><a href="product"><i class='bx bxs-bowl-hot icon'></i>Products</a></li>
-        <li><a href="stocks"><i class='bx bx-package icon'></i>Stocks</a></li>
-        </li>
         <li class="divider" data-text="orders">orders</li>
         <li>
             <a href="order"><i class='bx bxs-cart icon'></i>Orders</a>
         </li>
         <li>
+            <a href="order-pending"><i class='bx bxs-cart icon'></i>Pending</a>
+        </li>
+        <li>
+            <a href="order-confirmed"><i class='bx bxs-cart icon'></i>Confirmed</a>
+        </li>
+        <li>
+            <a href="order-preparing"><i class='bx bxs-cart icon'></i>Preparing</a>
+        </li>
+        <li>
+            <a href="to-be-received"><i class='bx bxs-cart icon'></i>To be Received</a>
+        </li>
+        <li>
             <a href="order-delivered"><i class='bx bx-package icon'></i>Order Delivered</a>
+        </li>
+        <li>
+            <a href="order-cancelled"><i class='bx bx-package icon'></i>Order Cancelled</a>
         </li>
         <li class="divider" data-text="settings">settings</li>
         <li>
@@ -57,13 +74,13 @@
                 <a href="#" id="search-btn" class="nav-link">
                     <i class="bx bx-search icon"></i>
                 </a>
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link notif">
                     <i class="bx bxs-bell"></i>
                     <span class="badge">5</span>
-                </a>
-                <a href="#" class="nav-link">
-                    <i class="bx bxs-message-square-dots"></i>
-                    <span class="badge">8</span>
+                    <ul class="notif-list">
+                        <li>Hi</li>
+                        <li>Gago</li>
+                    </ul>
                 </a>
             </div>
             <span class="divider"></span>
@@ -87,6 +104,13 @@
             } else {
                 $('#profileIcon').attr("src","../assets/images/" + $('#profileIconCheck').val());
             }
+        })
+
+        const bell = document.querySelector('.bxs-bell');
+        const notif_list = document.querySelector('.notif-list');
+
+        bell.addEventListener('click', function() {
+            notif_list.classList.toggle('show');
         })
     </script>
 

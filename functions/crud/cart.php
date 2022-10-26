@@ -224,11 +224,14 @@ if(isset($_POST['checkout_process'])) {
     $screenshot = $_FILES['screenshot']['name'] ?? null;
     $screenshottmp = $_FILES['screenshot']['tmp_name'] ?? null;
     $reference = $_POST['reference'] ?? null;
-    $shipping_value = $_POST['shipping_value'];
+    $shipping_value = $_POST['sf'];
     $order_total = $_POST['order_total_val'];
     $longitude = $_POST['lng'] ?? null;
     $latitude = $_POST['lat'] ?? null;
     $date = date('F j, Y h:i A');
+    $day = date('N');
+    $time = date('h:i A');
+
 
     if ($payment == 2) {
         $imgExt = explode('.', $screenshot);
@@ -242,7 +245,7 @@ if(isset($_POST['checkout_process'])) {
         if ($insert_orders) {
             $order_id = mysqli_insert_id($conn);
 
-            $insert_order_address = mysqli_query($conn, "INSERT INTO order_address (order_id, block_street_building, province, city_municipality, barangay) VALUES ('$order_id', NULLIF('$address', ''), NULLIF('$province', ''), NULLIF('$city', ''), NULLIF('$barangay', ''))");
+            $insert_order_address = mysqli_query($conn, "INSERT INTO order_address (order_id, billing_name, billing_number, block_street_building, province, city_municipality, barangay) VALUES ('$order_id', '$billing_name', '$billing_phone', NULLIF('$address', ''), NULLIF('$province', ''), NULLIF('$city', ''), NULLIF('$barangay', ''))");
 
             if ($insert_order_address) {
                 $get_cart = mysqli_query($conn, "SELECT * FROM cart WHERE user_id = $user_id");

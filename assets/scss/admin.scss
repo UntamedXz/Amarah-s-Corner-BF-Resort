@@ -541,7 +541,11 @@ li {
   z-index: 200;
 
   .logo__details {
-    background: transparent;
+    background: url(../images/adminpage_bg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -844,6 +848,37 @@ li {
           i {
             font-size: 18px;
             color: #fff;
+          }
+        }
+
+        .notif {
+          position: relative;
+
+          .notif-list {
+            position: absolute;
+            top: calc(100% + 20px);
+            right: 0;
+            background: var(--primary);
+            padding: 10px;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            width: 260px;
+            height: 400px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            overflow: hidden;
+
+            li {
+              padding: 10px;
+              border-bottom: 1px solid #070506;
+            }
+
+            &.show {
+              opacity: 1;
+              pointer-events: visible;
+              top: calc(100% + 10px);
+            }
           }
         }
       }
@@ -1234,9 +1269,9 @@ main {
                 // white-space: nowrap;
 
                 button {
-                  width: 80px;
                   height: 25px;
                   line-height: 25px;
+                  padding: 0 10px;
                   background: #ffaf08;
                   border: 1px solid #ffaf08;
                   outline: none;
@@ -2382,13 +2417,17 @@ main {
 
           button {
             background-color: #ffaf08;
-            height: 30px;
-            line-height: 30px;
+            height: 32px;
             border-radius: 5px;
-            border: none;
+            border: 2px solid #ffaf08;
             outline: none;
             font-weight: 700;
             font-size: 14px;
+
+            &:hover {
+              background-color: transparent;
+              color: #ffaf08;
+            }
           }
         }
 

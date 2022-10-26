@@ -2,7 +2,7 @@
 session_start();
 require_once './includes/database_conn.php';
 
-if(isset($_SESSION['email'])) {
+if(isset($_GET['id'])) {
     $order_id = $_GET['id'];
 
     $get_order_info = mysqli_query($conn, "SELECT * FROM orders WHERE order_id = $order_id");

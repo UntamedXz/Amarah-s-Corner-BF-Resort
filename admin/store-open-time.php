@@ -126,24 +126,56 @@ $admin_type = $info['admin_type'];
     <!-- DELETE -->
     <div id="popup-box" class="popup-box delete-modal">
         <div class="top">
-            <h3>Delete Feedback</h3>
+            <h3>Delete Category</h3>
             <div id="modalClose" class="fa-solid fa-xmark"></div>
         </div>
         <hr>
-        <form id="delete_feedback">
+        <form id="delete_category">
             <div style="display: none;" class="form-group">
-                <span>Feedback ID</span>
-                <input type="text" id="delete_feedback" name="delete_feedback" value="">
+                <span>Category ID</span>
+                <input type="text" id="delete_category_id" name="delete_category_id" value="">
             </div>
-            <p>Are you sure, you want to delete this feedback?</p>
+            <p>Are you sure, you want to delete this category?</p>
         </form>
         <hr>
         <div class="bottom">
             <div class="buttons">
                 <button id="modalClose" type="button" class="cancel">CLOSE</button>
-                <button form="delete_feedback" id="delete_feedback" type="submit" class="save">DELETE</button>
+                <button form="delete_category" id="deleteSubCategory" type="submit" class="save">DELETE</button>
             </div>
 
+        </div>
+    </div>
+
+    <!-- UPDATE -->
+    <div id="popup-box" class="popup-box edit-modal">
+        <div class="top">
+            <h3>Edit Store Open Hour Time</h3>
+            <div id="modalClose" class="fa-solid fa-xmark"></div>
+        </div>
+        <hr>
+        <form enctype="multipart/form-data" id="edit_open_hours">
+            <input type="hidden" name="day_id" id="day_id">
+            <div style="display: none;" class="form-group">
+                <span>Day</span>
+                <input type="text" id="day" name="day" value="">
+            </div>
+            <div class="form-group">
+                <span>Open Hour</span>
+                <input type="time" id="open_hour" name="open_hour" value="" required>
+            </div>
+            <div class="form-group">
+                <span>Close Hour</span>
+                <input type="time" id="close_hour" name="close_hour" value="" required>
+            </div>
+        </form>
+        <hr>
+        <div class="bottom">
+            <div class="buttons">
+                <button id="modalClose" type="button" class="cancel">CANCEL</button>
+                <button form="edit_open_hours" type="submit" id="update_category" name="update_category" class="save">SAVE
+                    CHANGES</button>
+            </div>
         </div>
     </div>
 
@@ -151,26 +183,37 @@ $admin_type = $info['admin_type'];
 
     <!-- MAIN -->
     <main>
-        <h1 class="title">FEEDBACK</h1>
+        <h1 class="title">View Store Open Hour Time</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="updates" class="active">View Customers Feedback</a></li>
+            <li><a href="view-category" class="active">View Store Open Hour Time</a></li>
         </ul>
         <section class="view-category">
             <div class="wrapper">
                 <table id="example" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Email</th>
-                            <th>Quality Score</th>
-                            <th>Feedback</th>
+                            <th>Day</th>
+                            <th>Open Hour</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                 </table>
             </div>
         </section>
+
+        <script>
+            if($('#admin_type').val() != 1) {
+                $('#getInsert').hide();
+                $('.edit-modal').hide();
+                $('.delete-modal').hide();
+            } else {
+                $('#getInsert').show();
+                $('.edit-modal').show();
+                $('.delete-modal').show();
+            }
+        </script>
 
         <script>
             // DATA TABLES
@@ -188,19 +231,48 @@ $admin_type = $info['admin_type'];
                 "iDisplayLength": 5,
                 order: [[0, 'desc']],
                 "ajax": {
-                    url: "./functions/feedback-table",
+                    url: "./functions/store-open-time-table",
                     type: "post"
                 }
             });
         </script>
 
         <script>
+            // GET EDIT
+            $(document).on('click', '#getEdit', function (e) {
+                e.preventDefault();
+                var day_id_edit = $(this).data('id');
+                $.ajax({
+                    url: './functions/crud/store-open-time',
+                    type: 'POST',
+                    data: 'day_id_edit=' + day_id_edit,
+                    success: function (res) {
+                        var obj = JSON.parse(res);
+                        $(".edit-modal").addClass("active");
+                        $("#day_id").val(obj.day_id);
+                        $("#open_hour").val(obj.open_hour);
+                        $("#close_hour").val(obj.close_hour);
+                        console.log(res);
+                    }
+                })
+            });
+
             // GET DELETE
             $(document).on('click', '#getDelete', function (e) {
                 e.preventDefault();
-                $('.delete-modal').addClass('active');
-                var id = $(this).data('id');
-                $("#delete_feedback").val(id);
+                // console.log('clicked');
+                var day_id_remove = $(this).data('id');
+                $.ajax({
+                    type: "POST",
+                    url: "./functions/crud/store-open-time",
+                    data: 'day_id_remove=' + day_id_remove,
+                    success: function (response) {
+                        if(response == 'success') {
+                            $('#example').DataTable().ajax.reload();
+                        }
+                        console.log(response);
+                    }
+                })
             });
 
             // CLOSE MODAL
@@ -210,22 +282,21 @@ $admin_type = $info['admin_type'];
                 $('.insert-modal').removeClass("active");
                 $(".delete-modal").removeClass("active");
                 $("#edit-category")[0].reset();
-                $("#insert-updates")[0].reset();
+                $("#insert-category")[0].reset();
                 $('#file').attr("src", '');
-                $('.error-text').text('');
-                $('.error-image').text('');
             })
         </script>
 
         <script>
-                // SUBMIT DELETE
-                $("#delete_feedback").on('submit', function (e) {
+            // SUBMIT EDIT
+            $(document).ready(function () {
+                $("#edit_open_hours").on('submit', function (e) {
                     e.preventDefault();
                     var form = new FormData(this);
-                    form.append('feedback', true);
+                    form.append('update_open_hour_time', true);
                     $.ajax({
                         type: "POST",
-                        url: "./functions/crud/feedback",
+                        url: "./functions/crud/store-open-time",
                         data: form,
                         dataType: 'text',
                         contentType: false,
@@ -233,20 +304,22 @@ $admin_type = $info['admin_type'];
                         processData: false,
                         success: function (response) {
                             if (response === 'success') {
-                                $('.delete-modal').removeClass("active");
+                                $('.edit-modal').removeClass("active");
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');
                                 $('#toast-icon').removeClass(
                                     'fa-solid fa-triangle-exclamation').addClass(
                                     'fa-solid fa-check warning');
                                 $('.text-1').text('Success!');
-                                $('.text-2').text('Update deleted successfully!');
+                                $('.text-2').text(
+                                    'Open-Closed Hour Successfully Updated!'
+                                );
                                 setTimeout(() => {
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");
                                 }, 5000);
                                 $('#example').DataTable().ajax.reload();
-                                $('#delete_feedback')[0].reset();
+                                $("#edit-category")[0].reset();
                             } else {
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');
@@ -256,11 +329,13 @@ $admin_type = $info['admin_type'];
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");
                                 }, 5000);
+                                $('#example').DataTable().ajax.reload();
                             }
+                            console.log(response);
                         }
                     })
                 })
-            ;
+            });
         </script>
 
 

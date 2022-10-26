@@ -81,11 +81,17 @@
 <script>
     // PROFILE DROPDOWN
     const profile = document.querySelector('.profile');
+    const bell = document.querySelector('.notif');
     const imgProfile = profile.querySelector('img');
     const dropdownProfile = profile.querySelector('.profile-link');
+    const dropdownNotif = profile.querySelector('.notif-list');
 
     imgProfile.addEventListener('click', function() {
         dropdownProfile.classList.toggle('show');
+    })
+
+    bell.addEventListener('click', function() {
+        dropdownNotif.classList.toggle('show');
     })
 
     window.addEventListener('click', function(e) {

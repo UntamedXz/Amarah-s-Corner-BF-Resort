@@ -1675,6 +1675,17 @@ footer .footer-wrapper .copyright span {
 .catalog .container .container-right .container-right-cont .catalog-box:nth-child(1), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(2), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(3), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(4), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(5), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(6), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(7), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(8) {
   display: flex;
 }
+.catalog .container .container-right .close-hour-note {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.catalog .container .container-right .close-hour-note span {
+  font-size: 26px;
+  font-weight: 500;
+}
 .catalog .container .container-right #load-more-products {
   display: flex;
   justify-content: center;

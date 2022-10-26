@@ -161,12 +161,13 @@ $userProfileIcon = $info['profile_image'];
             <table id="example" class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>Order No.</th>
                         <th>Ship To</th>
                         <th>Customer Email</th>
                         <th>Order Date</th>
                         <th>Total Amount</th>
                         <th>Order Status</th>
-                        <th>Actions</th>
+                        <!-- <th>Actions</th> -->
                     </tr>
                 </thead>
             </table>
@@ -174,7 +175,20 @@ $userProfileIcon = $info['profile_image'];
         </section>
 
         <script>
+
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            } 
             // DATA TABLES
+            var searchTerm = getUrlVars()['search'];
             var dataTable = $('#example').DataTable({
                 "serverSide": true,
                 "paging": true,
@@ -191,6 +205,9 @@ $userProfileIcon = $info['profile_image'];
                     url: "./functions/order-table",
                     type: "post"
                 },
+                search: {
+                    search: searchTerm
+                }
             });
 
             setInterval( function () {

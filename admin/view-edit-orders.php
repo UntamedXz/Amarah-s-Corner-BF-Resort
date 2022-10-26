@@ -121,8 +121,12 @@ $decode_id = base64_decode(urldecode($id));
                                     <span class="variation_value"><?php echo $vval; ?></span>
                                     <?php
                                     }
+                                    if($items['special_instructions'] != null) {
                                     ?>
                                     <span class="variation_value">SPECIAL INSTRUCTIONS: <?php echo $items['special_instructions'] ?></span>
+                                    <?php
+                                    }
+                                    ?>
                                     <span class="product_qty">x<?php echo $items['qty']; ?></span>
                                 </div>
                                 <span>P <?php echo $items['product_total']; ?></span>
