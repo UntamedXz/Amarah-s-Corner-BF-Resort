@@ -321,7 +321,10 @@ if(isset($_SESSION['id'])) {
             form.append('add_to_cart', true);
 
             if(userId == '') {
-                location.href = 'http://localhost/theserve-amarah-s-corner-las-pinas/login';
+                <?php
+                $_SESSION['link_user'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                ?>
+                location.href = 'http://localhost/theserve-amarah-s-corner-bf-resort/login';
             } else {
                 $.ajax ({
                     type: "POST",

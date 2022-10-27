@@ -1,9 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION['adminloggedin']) || $_SESSION['adminloggedin'] != true) {
+    $_SESSION['link'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     header("Location: ./login");
 } else {
     $admin_id = $_SESSION['admin_id'];
+    $_SESSION['link'] = '';
 }
 require_once '../includes/database_conn.php';
 

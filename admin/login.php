@@ -1,6 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['admin_id']) && !empty($_SESSION['id'])) {
+if (isset($_SESSION['admin_id']) && !empty($_SESSION['admin_id'])) {
+    // $_SESSION['link'] = '';
     header("Location: ./index");
 }
 ?>
@@ -146,7 +147,17 @@ if (isset($_SESSION['admin_id']) && !empty($_SESSION['id'])) {
                                 $('.progress').removeClass("active");
                             }, 5000);
                         } else if (response == 'success') {
-                            window.location.replace("index");
+                            <?php
+                            if(isset($_SESSION['link'])) {
+                                ?>
+                                window.location.replace("<?php echo $_SESSION['link']; ?>");
+                                <?php
+                            } else {
+                                ?>
+                                window.location.replace("index");
+                                <?php
+                            }
+                            ?>
                         } else if(response == 'email or username not registered') {
                             $('#toast').addClass('active');
                             $('.progress').addClass('active');

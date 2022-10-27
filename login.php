@@ -167,7 +167,17 @@ if(isset($_SESSION['id'])) {
                         }
 
                         if (response == 'success') {
-                            location.href = 'http://localhost/theserve-amarah-s-corner-bf-resort';
+                            <?php
+                            if(isset($_SESSION['link_user'])) {
+                                ?>
+                                location.href = '<?php echo $_SESSION['link_user']; ?>'
+                                <?php
+                            } else {
+                                ?>
+                                location.href = 'http://localhost/theserve-amarah-s-corner-bf-resort';
+                                <?php
+                            }
+                            ?>
                         }
 
                         console.log(response);

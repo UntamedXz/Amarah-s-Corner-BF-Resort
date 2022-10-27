@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2022 at 02:13 PM
+-- Generation Time: Oct 27, 2022 at 03:25 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -88,6 +88,13 @@ CREATE TABLE `cart` (
   `special_instructions` mediumtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`user_id`, `cart_id`, `category_id`, `subcategory_id`, `product_id`, `variation_value`, `product_qty`, `product_total_price`, `product_total`, `special_instructions`) VALUES
+(13, 15, 1, NULL, 4, NULL, 1, '119.00', '119.00', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -125,6 +132,13 @@ CREATE TABLE `chatbot` (
   `response` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `chatbot`
+--
+
+INSERT INTO `chatbot` (`id`, `messages`, `response`) VALUES
+(1, 'bading', ' ');
+
 -- --------------------------------------------------------
 
 --
@@ -150,8 +164,11 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`user_id`, `name`, `username`, `email`, `password`, `phone_number`, `user_birthday`, `user_gender`, `user_profile_image`, `verified`, `vkey`) VALUES
-(1, 'Jennifer Sabado', 'jenn_sabado', 'untamedandromeda@gmail.com', '$2y$10$KkGSXrfUEl6Jd/ECa9d7A.P.QCL3erAlS0SqAq5dg7anMmVhROuTq', '09915362419', '2000-12-22', 'FEMALE', '633ea7c71c0ef.jpg', 1, NULL),
-(10, 'Jennifer Sabado', 'jennifer.sabado', 'jennifer.sabado@cvsu.edu.ph', '$2y$10$RBrtZqqd0HEAusMlRkDZj.XeYlsc/T9E5dG9PRdClVhTPYRY1UmDa', '09162622138', '2000-12-22', 'FEMALE', NULL, 1, NULL);
+(12, 'Jennifer Sabado', 'jenn.sabado', 'jennsabado22@gmail.com', '$2y$10$5AWK/LCslT0pRZwEpjrgAOcfLYpDKp7HkghDGZcoGkGvhhL6uTBom', '09915362419', '2000-12-22', 'FEMALE', NULL, 1, 'df7a98cb5b97d5bf2c6bf82e3694b6c0'),
+(13, 'Mark Ryan Jancorda', 'ryjin', 'markryanjancorda@yahoo.com', '$2y$10$YOFUWEtnAZ0KCIFXqLzPluUcYmGDaLSvmh4ju95FXBGFzHF2ctZoe', '09154704204', '1992-03-11', 'MALE', NULL, 0, 'a8b56ff26155d02b3271a395350d2ef9'),
+(14, 'Jennifer Sabado', 'Jenifer Sabado', 'jennifer.sabado@cvsu.edu.ph', '$2y$10$XH27SR.YENVjFIViSoWcou1A8EsmieRUByWB4uZmKpqdA81vXoF7q', '09915362419', '2000-12-22', 'FEMALE', NULL, 0, 'c01fabf1469f0372c44f4a5a5105b504'),
+(16, 'Jennifer Sabado', 'jennifer.sabado', 'untamedandromeda@gmail.com', '$2y$10$jTHq/OFM8//H.DwIC7QAbOXgO.tgl2JfBr7.fmjtnXT0HSr2rKN.q', '09915362419', '2000-12-22', 'FEMALE', NULL, 1, '8213886e872133b27a8f9bb0aad3d964'),
+(17, 'Rainie Akemi', 'Lopez', 'jennifer.sabado1hi2.in@gmail.com', '$2y$10$cLwdhxYk/8CQmsDW.1wsjOyqye13Q0IqftdY7kmI/q0eWxPTad1Ta', '09915362419', '2000-12-22', 'FEMALE', NULL, 1, 'bcbf84f574cf600d3e8e13849e483fda');
 
 -- --------------------------------------------------------
 
@@ -193,7 +210,35 @@ CREATE TABLE `feedback` (
 INSERT INTO `feedback` (`id`, `email`, `quality_score`, `feedback`) VALUES
 (2, 'untamedandromeda@gmail.com', 4, 'ediwow asdfghjkl;qwertyuiop'),
 (3, 'untamedandromeda@gmail.com', 5, 'Sheeeet sarap lang masasabi ko!'),
-(4, 'untamedandromeda@gmail.com', 1, 'Di na kayo yung kilala kong Amarah. Nagbago na kayo. Ampanget! TSEEEEEEEEEEEEEEEEEEEEEE!');
+(4, 'untamedandromeda@gmail.com', 1, 'Di na kayo yung kilala kong Amarah. Nagbago na kayo. Ampanget! TSEEEEEEEEEEEEEEEEEEEEEE!'),
+(5, 'jennsabado22@gmail.com', 5, 'Masarap siya! Rooooooor!'),
+(6, 'untamedandromeda@gmail.com', 4, 'test');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `open_hours`
+--
+
+CREATE TABLE `open_hours` (
+  `day_id` int(11) NOT NULL,
+  `day` varchar(255) DEFAULT NULL,
+  `open_hour` varchar(255) DEFAULT NULL,
+  `close_hour` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `open_hours`
+--
+
+INSERT INTO `open_hours` (`day_id`, `day`, `open_hour`, `close_hour`) VALUES
+(1, 'Monday', '11:00 AM', '03:00 AM'),
+(2, 'Tuesday', '11:00 AM', '03:00 AM'),
+(3, 'Wednesday', '11:00 AM', '03:00 AM'),
+(4, 'Thursday', '11:00 AM', '03:00 AM'),
+(5, 'Friday', '11:00 AM', '03:00 AM'),
+(6, 'Saturday', '11:00 AM', '03:00 AM'),
+(7, 'Sunday', '11:00 AM', '03:00 AM');
 
 -- --------------------------------------------------------
 
@@ -206,22 +251,25 @@ CREATE TABLE `orders` (
   `user_id` int(11) DEFAULT NULL,
   `payment_method` int(11) DEFAULT NULL,
   `delivery_method` int(11) DEFAULT NULL,
-  `shipping_fee` varchar(255) DEFAULT NULL,
+  `shipping_fee` decimal(10,2) DEFAULT NULL,
+  `longitude` varchar(255) DEFAULT NULL,
+  `latitude` varchar(255) DEFAULT NULL,
   `screenshot_payment` varchar(255) DEFAULT NULL,
   `reference` varchar(255) DEFAULT NULL,
   `order_total` varchar(255) DEFAULT NULL,
   `order_date` varchar(255) DEFAULT NULL,
-  `order_status` int(11) DEFAULT NULL
+  `order_status` int(11) DEFAULT NULL,
+  `completed_date` varchar(255) DEFAULT NULL,
+  `notified` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `user_id`, `payment_method`, `delivery_method`, `shipping_fee`, `screenshot_payment`, `reference`, `order_total`, `order_date`, `order_status`) VALUES
-(1, 1, 1, 1, '0.00', NULL, NULL, '1823.00', 'October 8, 2022 09:49 PM', 5),
-(3, 1, 1, 1, '0.00', NULL, NULL, '115.00', 'October 8, 2022 10:25 PM', 5),
-(4, 1, 1, 2, '135.00', NULL, NULL, '1086.00', 'October 8, 2022 11:17 PM', 5);
+INSERT INTO `orders` (`order_id`, `user_id`, `payment_method`, `delivery_method`, `shipping_fee`, `longitude`, `latitude`, `screenshot_payment`, `reference`, `order_total`, `order_date`, `order_status`, `completed_date`, `notified`) VALUES
+(3, 17, 2, 2, '82.00', '120.9850172375418', '14.438448751331308', '6356a340cd746.png', '4342435235353', '691.00', 'October 24, 2022 10:37 PM', 3, NULL, NULL),
+(4, 17, 1, 1, NULL, NULL, NULL, NULL, NULL, '240.00', 'October 26, 2022 01:57 PM', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -245,9 +293,8 @@ CREATE TABLE `order_address` (
 --
 
 INSERT INTO `order_address` (`order_address_id`, `order_id`, `billing_name`, `billing_number`, `block_street_building`, `province`, `city_municipality`, `barangay`) VALUES
-(64, 1, 'Jennifer Sabado', '09915362419', 'Block 130, Bagong Kampi St., Green Valley', 'Cavite', 'Bacoor', 'San Nicolas III'),
-(66, 3, 'Jennifer Sabado', '09915362419', 'Block 130, Bagong Kampi St., Green Valley', 'Cavite', 'Bacoor', 'San Nicolas III'),
-(67, 4, 'Jennifer Sabado', '09915362419', 'Block 130, Bagong Kampi St., Green Valley', 'Cavite', 'Bacoor', 'San Nicolas III');
+(86, 3, 'Rainie Akemi', '09915362419', 'B2 L8, Peacock St.', 'Metro Manila', 'Las Pinas', 'Talon Uno'),
+(87, 4, 'Rainie Akemi', '09915362419', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -259,25 +306,23 @@ CREATE TABLE `order_items` (
   `order_items_id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
   `subcategory_id` int(11) DEFAULT NULL,
+  `variation_value` varchar(255) DEFAULT NULL,
   `qty` varchar(255) DEFAULT NULL,
-  `product_total` varchar(255) DEFAULT NULL
+  `product_total` varchar(255) DEFAULT NULL,
+  `special_instructions` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `order_items`
 --
 
-INSERT INTO `order_items` (`order_items_id`, `order_id`, `product_id`, `subcategory_id`, `qty`, `product_total`) VALUES
-(100, 1, 4, 0, '5', '595.00'),
-(101, 1, 3, 1, '5', '600.00'),
-(102, 1, 2, 3, '1', '249.00'),
-(103, 1, 1, 3, '1', '249.00'),
-(104, 1, 3, 1, '1', '130.00'),
-(105, 3, 3, 1, '1', '115.00'),
-(106, 4, 4, 0, '3', '357.00'),
-(107, 4, 3, 1, '3', '345.00'),
-(108, 4, 2, 3, '1', '249.00');
+INSERT INTO `order_items` (`order_items_id`, `order_id`, `product_id`, `category_id`, `subcategory_id`, `variation_value`, `qty`, `product_total`, `special_instructions`) VALUES
+(134, 3, 14, 2, 1, 'SIZE: 22oz | ADDONS: Cofee Jelly', '3', '360.00', NULL),
+(135, 3, 2, 3, 3, 'SIZE: 12 inch', '1', '249.00', NULL),
+(136, 4, 3, 2, 1, 'SIZE: 22oz | ADDONS: Nata', '1', '120.00', NULL),
+(137, 4, 3, 2, 1, 'SIZE: 22oz | ADDONS: Nata', '1', '120.00', NULL);
 
 -- --------------------------------------------------------
 
@@ -318,7 +363,7 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`payment_id`, `payment_title`) VALUES
-(1, 'Cash on Delivery'),
+(1, 'Cash on Delivery/Pick Up'),
 (2, 'Gcash');
 
 -- --------------------------------------------------------
@@ -355,12 +400,77 @@ INSERT INTO `product` (`category_id`, `subcategory_id`, `product_id`, `product_t
 (2, 1, 3, 'Classic', 'Classic Flavor Milktea', 'classic', '633b9a87b5007.jpg', NULL, NULL, 'Classic', '90.00', NULL, NULL, NULL, 2),
 (1, NULL, 4, 'Saucy Spaghetti', 'Saucy Spaghetti Pasta', 'saucy-spaghetti', '633ba3ff1901a.jpg', NULL, NULL, 'Saucy Spaghetti', '119.00', NULL, 1, NULL, 1),
 (1, NULL, 5, 'Creamy Carbonara', 'Creamy Carbonara Pasta', 'creamy-carbonara', '633ba43b84324.jpg', NULL, NULL, 'Creamy Carbonara', '119.00', NULL, 1, NULL, 1),
-(4, NULL, 6, 'Buffalo Wings', 'Bufallo flavor wings', 'buffalo-wings', '6343c19ad8229.jpg', NULL, NULL, 'Buffalo Wings', '139.00', NULL, NULL, NULL, 2),
-(4, NULL, 7, 'Honey Garlic Wings', 'Honey Garlic Flavor wings', 'honey-garlic-wings', '6343c2480edfe.jpg', NULL, NULL, 'Honey Garlic Wings', '139.00', NULL, NULL, NULL, 2),
+(4, NULL, 6, 'Buffalo Wings', 'Bufallo flavor wings', 'buffalo-wings', '6343c19ad8229.jpg', NULL, NULL, 'Buffalo Wings', '129.00', NULL, NULL, NULL, 2),
+(4, NULL, 7, 'Honey Garlic Wings', 'Honey Garlic Flavor wings', 'honey-garlic-wings', '6343c2480edfe.jpg', NULL, NULL, 'Honey Garlic Wings', '129.00', NULL, NULL, NULL, 2),
 (7, NULL, 8, 'Cheesy Fries', 'Cheesy Fries flavor snack', 'cheesy-fries', '6343c2a82c668.jpg', NULL, NULL, 'Cheesy Fries', '145.00', NULL, 1, NULL, 1),
 (7, NULL, 9, 'Cheesy Nachos', 'Cheesy Nachos flavor snack', 'cheesy-nachos', '6343c2c93349e.jpg', NULL, NULL, 'Cheesy Nachos', '145.00', NULL, 1, NULL, 1),
-(5, 8, 10, 'Espresso', 'Espresso flavor coffee', 'espresso', NULL, NULL, NULL, 'Espresso', '160.00', NULL, 1, NULL, 1),
-(6, 10, 11, 'Strawberry Jasmine', 'Strawberry Jasmine flavor fruit tea', 'strawberry-jasmine', '6343c449c8342.png', NULL, NULL, 'Strawberry Jasmine', '88.00', NULL, NULL, NULL, 2);
+(5, 8, 10, 'Espresso', '12oz Espresso Flavor Coffee', 'espresso', NULL, NULL, NULL, 'Espresso', '145.00', NULL, 1, NULL, 1),
+(6, 10, 11, 'Strawberry Jasmine', 'Strawberry Jasmine flavor fruit tea', 'strawberry-jasmine', '6343c449c8342.png', NULL, NULL, 'Strawberry Jasmine', '88.00', NULL, NULL, NULL, 2),
+(2, 1, 12, 'Taro', 'Taro Flavor Milktea', 'taro', '634e6a9d557fc.jpg', NULL, NULL, 'Taro', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 13, 'Matcha', 'Matcha Flavor Milktea', 'matcha', NULL, NULL, NULL, 'Matcha', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 14, 'Vanilla', 'Vanilla Flavor Milktea', 'vanilla', '634e6b0b9abf0.jpg', NULL, NULL, 'Vanilla', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 15, 'Okinawa', 'Okinawa Flavor Milktea', 'okinawa', '634e6c132d0a0.jpg', NULL, NULL, 'Okinawa', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 16, 'Cookies and Cream', 'Cookies and Cream Flavor Milktea', 'cookies-and-cream', '634e6c62e4832.jpg', NULL, NULL, 'Cookies and Cream', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 17, 'Dark Chocolate', 'Dark Chocolate Flavor Milktea', 'dark-chocolate', '634e6cb7a4df0.jpg', NULL, NULL, 'Dark Chocolate', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 18, 'Wintermelon', 'Wintermelon Flavor Milktea', 'wintermelon', '634e6cfcd3a7c.jpg', NULL, NULL, 'Wintermelon', '90.00', NULL, NULL, NULL, 2),
+(2, 1, 19, 'Double Dutch', 'Double Dutch Flavor Milktea', 'double-dutch', '634e6d3b9647d.jpg', NULL, NULL, 'Double Dutch', '90.00', NULL, NULL, NULL, 2),
+(2, 2, 20, 'House Blend Winter', 'House Blend Winter Flavor Milktea', 'house-blend-winter', NULL, NULL, NULL, 'House Blend Winter', '125.00', NULL, NULL, NULL, 2),
+(2, 2, 21, 'White Rabbit', 'White Rabbit Flavor Milktea', 'white-rabbit', NULL, NULL, NULL, 'White Rabbit', '125.00', NULL, NULL, NULL, 2),
+(2, 2, 22, 'Red Velvet', 'Red Velvet Flavor Milktea', 'red-velvet', '634e85e5f2e06.jpg', NULL, NULL, 'Red Velvet', '125.00', NULL, NULL, NULL, 2),
+(2, 2, 23, 'Milky Taro', 'Milk Taro Flavor Milktea', 'milky-taro', '634e916983027.jpg', NULL, NULL, 'Milky Taro', '125.00', NULL, NULL, NULL, 2),
+(2, 2, 24, 'Choco Lava', 'Choco Lava Flavor Milktea', 'choco-lava', '634e91aa9d943.jpg', NULL, NULL, 'Choco Lava', '125.00', NULL, NULL, NULL, 2),
+(2, 2, 25, 'Overload Oreo', 'Overload Oreo Flavor Milktea', 'overload-oreo', '634e91e3de4fd.jpg', NULL, NULL, 'Overload Oreo', '125.00', NULL, NULL, NULL, 2),
+(2, 2, 26, 'Brown Sugar', 'Brown Sugar Flavor Milktea', 'brown-sugar', NULL, NULL, NULL, 'Brown Sugar', '125.00', NULL, NULL, NULL, 2),
+(4, NULL, 27, 'Salted Egg', 'Salted Egg Flavor Wings', 'salted-egg', '634e93045e955.jpg', NULL, NULL, 'Salted Egg', '129.00', NULL, NULL, NULL, 2),
+(4, NULL, 28, 'Garlic Parmesan', 'Garlic Parmesan Flavor Wings', 'garlic-parmesan', '634e935c2d107.jpg', NULL, NULL, 'Garlic Parmesan', '129.00', NULL, NULL, NULL, 2),
+(4, NULL, 29, 'Buttered Garlic', 'Buttered Garlic Flavor Wings', 'buttered-garlic', '634e93958723c.jpg', NULL, NULL, 'Buttered Garlic', '129.00', NULL, NULL, NULL, 2),
+(5, 8, 30, 'Americano', '12oz Americano Flavor Coffee', 'americano', NULL, NULL, NULL, 'Americano', '145.00', NULL, 1, NULL, 1),
+(5, 8, 31, 'Mocha', '12oz Mocha Flavor Coffee', 'mocha', NULL, NULL, NULL, 'Mocha', '145.00', NULL, 1, NULL, 1),
+(5, 8, 32, 'Vanilla Latte', '12oz Vanilla Latte Flavor Coffee', 'vanilla-latte', NULL, NULL, NULL, 'Vanilla Latte', '145.00', NULL, 1, NULL, 1),
+(5, 8, 33, 'Hazelnut Latte', '12oz Hazelnut Latte Flavor Coffee', 'hazelnut-latte', NULL, NULL, NULL, 'Hazelnut Latte', '145.00', NULL, 1, NULL, 1),
+(5, 8, 34, 'Capuccino', '12oz Capuccino Flavor Coffee', 'capuccino', NULL, NULL, NULL, 'Capuccino', '145.00', NULL, 1, NULL, 1),
+(5, 7, 35, 'Spanish Cold Brew', '16oz Spanish Cold Brew Flavor Coffee', 'spanish-cold-brew', NULL, NULL, NULL, 'Spanish Cold Brew', '130.00', NULL, 1, NULL, 1),
+(5, 7, 36, 'Iced Latte', '16oz Iced Latte Flavor Coffee', 'iced-latte', NULL, NULL, NULL, 'Iced Latte', '130.00', NULL, 1, NULL, 1),
+(5, 7, 37, 'Iced Mocha', '16oz Iced Mocha Flavor Coffee', 'iced-mocha', NULL, NULL, NULL, 'Iced Mocha', '130.00', NULL, 1, NULL, 1),
+(5, 7, 38, 'Iced Vanilla', '16oz Iced Vanilla Flavor Coffee', 'iced-vanilla', NULL, NULL, NULL, 'Iced Vanilla', '130.00', NULL, 1, NULL, 1),
+(5, 7, 39, 'Iced Hazelnut', '16oz Iced Hazelnut Flavor Coffee', 'iced-hazelnut', NULL, NULL, NULL, 'Iced Hazelnut', '130.00', NULL, 1, NULL, 1),
+(5, 7, 40, 'Iced Caramel', '16oz Iced Caramel Flavor Coffee', 'iced-caramel', NULL, NULL, NULL, 'Iced Caramel', '130.00', NULL, 1, NULL, 1),
+(5, 9, 41, 'Vanilla', 'Vanilla Flavor Frappe', 'vanilla', NULL, NULL, NULL, 'Vanilla', '150.00', NULL, NULL, NULL, 2),
+(5, 9, 42, 'Red Velvet', 'Red Velvel Flavor Frappe', 'red-velvet', NULL, NULL, NULL, 'Red Velvet', '150.00', NULL, NULL, NULL, 2),
+(5, 9, 43, 'Java Chips', 'Java Chips Flavor Frappe', 'java-chips', NULL, NULL, NULL, 'Java Chips', '150.00', NULL, NULL, NULL, 2),
+(5, 9, 44, 'Choco Fudge', 'Choco Fudge Flavor Frappe', 'choco-fudge', NULL, NULL, NULL, 'Choco Fudge', '150.00', NULL, NULL, NULL, 2),
+(5, 9, 45, 'Oreo Delight', 'Oreo Delight Flavor Frappe', 'oreo-delight', NULL, NULL, NULL, 'Oreo Delight', '150.00', NULL, NULL, NULL, 2),
+(5, 9, 46, 'Coffee Jelly', 'Coffee Jelly Flavor Frappe', 'coffee-jelly', NULL, NULL, NULL, 'Coffee Jelly', '150.00', NULL, NULL, NULL, 2),
+(3, 3, 47, 'Pepperoni', 'Pepperoni Flavor Pizza', 'pepperoni', '634e976f3bd0b.jpg', NULL, NULL, 'Pepperoni', '199.00', NULL, NULL, NULL, 2),
+(3, 3, 48, 'Beef and Mushroom', 'Beef and Mushroom Flavor Pizza', 'beef-and-mushroom', '634e979edaacd.jpg', NULL, NULL, 'Beef and Mushroom', '199.00', NULL, NULL, NULL, 2),
+(3, 4, 49, 'Beef and Mushroom Overload', 'Beef and Mushroom Overload Flavor Pizza', 'beef-and-mushroom-overload', '634e97e35a212.jpg', NULL, NULL, 'Beef and Mushroom Overload', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 50, 'Pepperoni Overload', 'Pepperoni Overload Flavor Pizza', 'pepperoni-overload', '634e980a229bb.jpg', NULL, NULL, 'Pepperoni Overload', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 51, 'Creamcheese Supreme', 'Creamcheese Supreme Flavor Pizza', 'creamcheese-supreme', '634e984846c10.jpg', NULL, NULL, 'Creamcheese Supreme', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 52, 'Spinach Overload', 'Spinach Overload Flavor Pizza', 'spinach-overload', '634e98776df3e.jpg', NULL, NULL, 'Spinach Overload', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 53, 'All Meat Pizza', 'All Meat Flavor Pizza', 'all-meat-pizza', '634e989fd9020.jpg', NULL, NULL, 'All Meat Pizza', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 54, 'Beef and Bacon Overload', 'Beef and Bacon Overload Flavor Pizza', 'beef-and-bacon-overload', NULL, NULL, NULL, 'Beef and Bacon Overload', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 55, 'Bacon and Ham', 'Bacon and Ham Flavor Pizza', 'bacon-and-ham', '634e991363632.jpg', NULL, NULL, 'Bacon and Ham', '249.00', NULL, NULL, NULL, 2),
+(3, 4, 56, 'Triple Cheese', 'Triple Cheese Flavor Pizza', 'triple-cheese', '634e9946caa48.jpg', NULL, NULL, 'Triple Cheese', '249.00', NULL, NULL, NULL, 2),
+(6, 10, 57, 'Green Apple Jasmine', 'Green Apple Jasmine Flavor Fruit Tea', 'green-apple-jasmine', '634e99a91936f.png', NULL, NULL, 'Green Apple Jasmine', '80.00', NULL, NULL, NULL, 2),
+(6, 10, 58, 'Blueberry Jasmine', 'Blueberry Jasmine Flavor Fruit Tea', 'blueberry-jasmine', '634e99dfb5f3e.png', NULL, NULL, 'Blueberry Jasmine', '80.00', NULL, NULL, NULL, 2),
+(6, 10, 59, 'Mango Jasmine', 'Mango Jasmine Flavor Fruit Tea', 'mango-jasmine', '634e9a2a040ec.png', NULL, NULL, 'Mango Jasmine', '80.00', NULL, NULL, NULL, 2),
+(6, 10, 60, 'Passionfruit Jasmine', 'Passionfruit Jasmine Flavor Fruit Tea', 'passionfruit-jasmine', '634e9a6886077.png', NULL, NULL, 'Passionfruit Jasmine', '80.00', NULL, NULL, NULL, 2),
+(6, 11, 61, 'Strawberry Lemonade', 'Strawberry Flavor Lemonade', 'strawberry-lemonade', '634f48b120a0a.png', NULL, NULL, 'Strawberry Lemonade', '140.00', NULL, 1, NULL, 1),
+(6, 11, 62, 'Passionfruit Lemonade', 'Passionfruit Flavor Lemonade', 'passionfruit-lemonade', '634f4930d469e.png', NULL, NULL, 'Passionfruit Lemonade', '140.00', NULL, 1, NULL, 1),
+(6, 11, 63, 'Cucumber Lemonade', 'Cucumber Flavor Lemonade', 'cucumber-lemonade', '634f4951b37fd.png', NULL, NULL, 'Cucumber Lemonade', '140.00', NULL, 1, NULL, 1),
+(6, 11, 64, 'Blueberry Lemonade', 'Blueberry Flavor Lemonade', 'blueberry-lemonade', '634f496c813d6.png', NULL, NULL, 'Blueberry Lemonade', '140.00', NULL, 1, NULL, 1),
+(6, 11, 65, 'Green Apple Lemonade', 'Green Apple Flavor Lemonade', 'green-apple-lemonade', '634f498bb0482.png', NULL, NULL, 'Green Apple Lemonade', '140.00', NULL, 1, NULL, 1),
+(6, 15, 66, 'Avocado Cheesecake', '22oz Avocado Flavor Cheesecake', 'avocado-cheesecake', '634f4a2f9c35a.png', NULL, NULL, 'Avocado Cheesecake', '159.00', NULL, 1, NULL, 1),
+(6, 15, 67, 'Strawberry Cheesecake', '22oz Strawberry Flavor Cheesecake', 'strawberry-cheesecake', '634f4a8046efd.png', NULL, NULL, 'Strawberry Cheesecake', '159.00', NULL, 1, NULL, 1),
+(6, 15, 68, 'Blueberry Cheesecake', '22oz Blueberry Flavor Cheesecake', 'blueberry-cheesecake', '634f4ab71a0f9.png', NULL, NULL, 'Blueberry Cheesecake', '159.00', NULL, 1, NULL, 1),
+(6, 15, 69, 'Mango Cheesecake', '22oz Mango Flavor Cheesecake', 'mango-cheesecake', '634f4ad701e7d.png', NULL, NULL, 'Mango Cheesecake', '159.00', NULL, 1, NULL, 1),
+(6, 15, 70, 'Vanilla Cheesecake', '22oz Vanilla Flavor Cheesecake', 'vanilla-cheesecake', '634f4b06b955b.png', NULL, NULL, 'Vanilla Cheesecake', '159.00', NULL, 1, NULL, 1),
+(6, 16, 71, 'Strawberry Queen', 'Strawberry Queen Flavor Milkshake', 'strawberry-queen', '634f4b44ee16c.png', NULL, NULL, 'Strawberry Queen', '130.00', NULL, NULL, NULL, 2),
+(6, 16, 72, 'Avocado Delight', 'Avocado Delight Flavor Milkshake', 'avocado-delight', '634f4ba22b685.png', NULL, NULL, 'Avocado Delight', '130.00', NULL, NULL, NULL, 2),
+(6, 16, 73, 'Taro', 'Taro Flavor Milkshake', 'taro', '634f4bbf1f665.png', NULL, NULL, 'Taro', '130.00', NULL, NULL, NULL, 2),
+(6, 16, 74, 'Matcha', 'Matcha Flavor Milkshake', 'matcha', '634f4c0749188.png', NULL, NULL, 'Matcha', '130.00', NULL, NULL, NULL, 2),
+(6, 16, 75, 'Milo Dino', 'Milo Dino Flavor Milkshake', 'milo-dino', '634f4c358b466.png', NULL, NULL, 'Milo Dino', '130.00', NULL, NULL, NULL, 2),
+(1, NULL, 76, 'Test', 'Test', 'test', NULL, NULL, NULL, 'Test', '90.00', NULL, NULL, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -383,9 +493,68 @@ INSERT INTO `product_attribute` (`product_id`, `attribute_id`, `attribute_name`)
 (3, 325, 'SIZE'),
 (3, 326, 'ADDONS'),
 (1, 327, 'SIZE'),
-(6, 329, 'Pieces'),
-(7, 331, 'Pieces'),
-(11, 333, 'Size');
+(11, 333, 'Size'),
+(12, 346, 'SIZE'),
+(12, 347, 'ADDONS'),
+(13, 348, 'SIZE'),
+(13, 349, 'ADDONS'),
+(14, 352, 'SIZE'),
+(14, 353, 'ADDONS'),
+(15, 356, 'SIZE'),
+(15, 357, 'ADDONS'),
+(16, 360, 'SIZE'),
+(16, 361, 'ADDONS'),
+(17, 364, 'SIZE'),
+(17, 365, 'ADDONS'),
+(18, 368, 'SIZE'),
+(18, 369, 'ADDONS'),
+(19, 372, 'SIZE'),
+(19, 373, 'ADDONS'),
+(20, 376, 'SIZE'),
+(20, 377, 'ADDONS'),
+(21, 380, 'SIZE'),
+(21, 381, 'ADDONS'),
+(22, 384, 'SIZE'),
+(22, 385, 'ADDONS'),
+(23, 388, 'SIZE'),
+(23, 389, 'ADDONS'),
+(24, 392, 'SIZE'),
+(24, 393, 'ADDONS'),
+(25, 396, 'SIZE'),
+(25, 397, 'ADDONS'),
+(26, 400, 'SIZE'),
+(26, 401, 'ADDONS'),
+(27, 404, 'Pieces'),
+(28, 406, 'Pieces'),
+(29, 408, 'Pieces'),
+(6, 409, 'Pieces'),
+(7, 410, 'Pieces'),
+(41, 412, 'SIZE'),
+(42, 414, 'SIZE'),
+(43, 416, 'SIZE'),
+(44, 418, 'SIZE'),
+(45, 420, 'SIZE'),
+(46, 422, 'SIZE'),
+(47, 424, 'SIZE'),
+(48, 426, 'SIZE'),
+(49, 429, 'SIZE'),
+(50, 431, 'SIZE'),
+(51, 433, 'SIZE'),
+(52, 435, 'SIZE'),
+(53, 437, 'SIZE'),
+(54, 439, 'SIZE'),
+(55, 441, 'SIZE'),
+(56, 444, 'SIZE'),
+(59, 450, 'SIZE'),
+(58, 451, 'SIZE'),
+(57, 453, 'SIZE'),
+(60, 455, 'SIZE'),
+(71, 457, 'SIZE'),
+(72, 460, 'SIZE'),
+(73, 462, 'SIZE'),
+(74, 464, 'SIZE'),
+(75, 466, 'SIZE'),
+(76, 468, 'SIZE');
 
 -- --------------------------------------------------------
 
@@ -458,16 +627,185 @@ INSERT INTO `product_variation` (`product_id`, `attribute_id`, `variation_id`, `
 (3, 326, 785, 'Cream Cheese', '25.00', NULL, NULL, 1),
 (1, 327, 786, '10 inch', '199.00', NULL, NULL, 1),
 (1, 327, 787, '12 inch', '249.00', NULL, NULL, 1),
-(6, 329, 792, 'Solo 1 - 4pcs', '139.00', NULL, NULL, 1),
-(6, 329, 793, 'Solo 2 - 6pcs', '219.00', NULL, NULL, 1),
-(6, 329, 794, 'Sharing - 8pcs', '249.00', NULL, NULL, 1),
-(6, 329, 795, 'Barkada Bundle - 24pcs', '679.00', NULL, NULL, 1),
-(7, 331, 800, 'Solo 1 - 4pcs', '139.00', NULL, NULL, 1),
-(7, 331, 801, 'Solo 2 - 6pcs', '219.00', NULL, NULL, 1),
-(7, 331, 802, 'Sharing - 8pcs', '249.00', NULL, NULL, 1),
-(7, 331, 803, 'Barkada Bundle - 24pcs', '679.00', NULL, NULL, 1),
 (11, 333, 806, '16oz', '88.00', NULL, NULL, 1),
-(11, 333, 807, '22oz', '99.00', NULL, NULL, 1);
+(11, 333, 807, '22oz', '99.00', NULL, NULL, 1),
+(12, 346, 841, '16oz', '90.00', NULL, NULL, 1),
+(12, 346, 842, '22oz', '105.00', NULL, NULL, 1),
+(12, 347, 843, 'None', '0.00', NULL, NULL, 1),
+(12, 347, 844, 'Pearl', '10.00', NULL, NULL, 1),
+(12, 347, 845, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(12, 347, 846, 'Nata', '15.00', NULL, NULL, 1),
+(12, 347, 847, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(13, 348, 848, '16oz', '90.00', NULL, NULL, 1),
+(13, 348, 849, '22oz', '105.00', NULL, NULL, 1),
+(13, 349, 850, 'None', '0.00', NULL, NULL, 1),
+(13, 349, 851, 'Pearl', '10.00', NULL, NULL, 1),
+(13, 349, 852, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(13, 349, 853, 'Nata', '15.00', NULL, NULL, 1),
+(13, 349, 854, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(14, 352, 862, '16oz', '90.00', NULL, NULL, 1),
+(14, 352, 863, '22oz', '105.00', NULL, NULL, 1),
+(14, 353, 864, 'None', '0.00', NULL, NULL, 1),
+(14, 353, 865, 'Pearl', '10.00', NULL, NULL, 1),
+(14, 353, 866, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(14, 353, 867, 'Nata', '15.00', NULL, NULL, 1),
+(14, 353, 868, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(15, 356, 876, '16oz', '90.00', NULL, NULL, 1),
+(15, 356, 877, '22oz', '105.00', NULL, NULL, 1),
+(15, 357, 878, 'None', '0.00', NULL, NULL, 1),
+(15, 357, 879, 'Pearl', '10.00', NULL, NULL, 1),
+(15, 357, 880, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(15, 357, 881, 'Nata', '15.00', NULL, NULL, 1),
+(15, 357, 882, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(16, 360, 890, '16oz', '90.00', NULL, NULL, 1),
+(16, 360, 891, '22oz', '105.00', NULL, NULL, 1),
+(16, 361, 892, 'None', '0.00', NULL, NULL, 1),
+(16, 361, 893, 'Pearl', '10.00', NULL, NULL, 1),
+(16, 361, 894, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(16, 361, 895, 'Nata', '15.00', NULL, NULL, 1),
+(16, 361, 896, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(17, 364, 904, '16oz', '90.00', NULL, NULL, 1),
+(17, 364, 905, '22oz', '105.00', NULL, NULL, 1),
+(17, 365, 906, 'None', '0.00', NULL, NULL, 1),
+(17, 365, 907, 'Pearl', '10.00', NULL, NULL, 1),
+(17, 365, 908, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(17, 365, 909, 'Nata', '15.00', NULL, NULL, 1),
+(17, 365, 910, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(18, 368, 918, '16oz', '90.00', NULL, NULL, 1),
+(18, 368, 919, '22oz', '105.00', NULL, NULL, 1),
+(18, 369, 920, 'None', '0.00', NULL, NULL, 1),
+(18, 369, 921, 'Pearl', '10.00', NULL, NULL, 1),
+(18, 369, 922, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(18, 369, 923, 'Nata', '15.00', NULL, NULL, 1),
+(18, 369, 924, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(19, 372, 932, '16oz', '90.00', NULL, NULL, 1),
+(19, 372, 933, '22oz', '105.00', NULL, NULL, 1),
+(19, 373, 934, 'None', '0.00', NULL, NULL, 1),
+(19, 373, 935, 'Pearl', '10.00', NULL, NULL, 1),
+(19, 373, 936, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(19, 373, 937, 'Nata', '15.00', NULL, NULL, 1),
+(19, 373, 938, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(20, 376, 946, '16oz', '125.00', NULL, NULL, 1),
+(20, 376, 947, '22oz', '135.00', NULL, NULL, 1),
+(20, 377, 948, 'None', '0.00', NULL, NULL, 1),
+(20, 377, 949, 'Pearl', '10.00', NULL, NULL, 1),
+(20, 377, 950, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(20, 377, 951, 'Nata', '15.00', NULL, NULL, 1),
+(20, 377, 952, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(21, 380, 960, '16oz', '125.00', NULL, NULL, 1),
+(21, 380, 961, '22oz', '135.00', NULL, NULL, 1),
+(21, 381, 962, 'None', '0.00', NULL, NULL, 1),
+(21, 381, 963, 'Pearl', '10.00', NULL, NULL, 1),
+(21, 381, 964, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(21, 381, 965, 'Nata', '15.00', NULL, NULL, 1),
+(21, 381, 966, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(22, 384, 974, '16oz', '125.00', NULL, NULL, 1),
+(22, 384, 975, '22oz', '135.00', NULL, NULL, 1),
+(22, 385, 976, 'None', '0.00', NULL, NULL, 1),
+(22, 385, 977, 'Pearl', '10.00', NULL, NULL, 1),
+(22, 385, 978, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(22, 385, 979, 'Nata', '15.00', NULL, NULL, 1),
+(22, 385, 980, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(23, 388, 988, '16oz', '125.00', NULL, NULL, 1),
+(23, 388, 989, '22oz', '135.00', NULL, NULL, 1),
+(23, 389, 990, 'None', '0.00', NULL, NULL, 1),
+(23, 389, 991, 'Pearl', '10.00', NULL, NULL, 1),
+(23, 389, 992, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(23, 389, 993, 'Nata', '15.00', NULL, NULL, 1),
+(23, 389, 994, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(24, 392, 1002, '16oz', '125.00', NULL, NULL, 1),
+(24, 392, 1003, '22oz', '135.00', NULL, NULL, 1),
+(24, 393, 1004, 'None', '0.00', NULL, NULL, 1),
+(24, 393, 1005, 'Pearl', '10.00', NULL, NULL, 1),
+(24, 393, 1006, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(24, 393, 1007, 'Nata', '15.00', NULL, NULL, 1),
+(24, 393, 1008, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(25, 396, 1016, '16oz', '125.00', NULL, NULL, 1),
+(25, 396, 1017, '22oz', '135.00', NULL, NULL, 1),
+(25, 397, 1018, 'None', '0.00', NULL, NULL, 1),
+(25, 397, 1019, 'Pearl', '10.00', NULL, NULL, 1),
+(25, 397, 1020, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(25, 397, 1021, 'Nata', '15.00', NULL, NULL, 1),
+(25, 397, 1022, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(26, 400, 1030, '16oz', '125.00', NULL, NULL, 1),
+(26, 400, 1031, '22oz', '135.00', NULL, NULL, 1),
+(26, 401, 1032, 'None', '0.00', NULL, NULL, 1),
+(26, 401, 1033, 'Pearl', '10.00', NULL, NULL, 1),
+(26, 401, 1034, 'Cofee Jelly', '15.00', NULL, NULL, 1),
+(26, 401, 1035, 'Nata', '15.00', NULL, NULL, 1),
+(26, 401, 1036, 'Cream Cheese', '25.00', NULL, NULL, 1),
+(27, 404, 1045, 'Solo 1 - 4pcs', '129.00', NULL, NULL, 1),
+(27, 404, 1046, 'Solo 2 - 6pcs', '199.00', NULL, NULL, 1),
+(27, 404, 1047, 'Sharing - 8pcs', '229.00', NULL, NULL, 1),
+(27, 404, 1048, 'Barkada Bundle - 24pcs', '619.00', NULL, NULL, 1),
+(28, 406, 1053, 'Solo 1 - 4pcs', '129.00', NULL, NULL, 1),
+(28, 406, 1054, 'Solo 2 - 6pcs', '199.00', NULL, NULL, 1),
+(28, 406, 1055, 'Sharing - 8pcs', '229.00', NULL, NULL, 1),
+(28, 406, 1056, 'Barkada Bundle - 24pcs', '619.00', NULL, NULL, 1),
+(29, 408, 1061, 'Solo 1 - 4pcs', '129.00', NULL, NULL, 1),
+(29, 408, 1062, 'Solo 2 - 6pcs', '199.00', NULL, NULL, 1),
+(29, 408, 1063, 'Sharing - 8pcs', '229.00', NULL, NULL, 1),
+(29, 408, 1064, 'Barkada Bundle - 24pcs', '619.00', NULL, NULL, 1),
+(6, 409, 1065, 'Solo 1 - 4pcs', '139.00', NULL, NULL, 1),
+(6, 409, 1066, 'Solo 2 - 6pcs', '219.00', NULL, NULL, 1),
+(6, 409, 1067, 'Sharing - 8pcs', '249.00', NULL, NULL, 1),
+(6, 409, 1068, 'Barkada Bundle - 24pcs', '679.00', NULL, NULL, 1),
+(7, 410, 1069, 'Solo 1 - 4pcs', '139.00', NULL, NULL, 1),
+(7, 410, 1070, 'Solo 2 - 6pcs', '219.00', NULL, NULL, 1),
+(7, 410, 1071, 'Sharing - 8pcs', '249.00', NULL, NULL, 1),
+(7, 410, 1072, 'Barkada Bundle - 24pcs', '679.00', NULL, NULL, 1),
+(41, 412, 1075, '16oz', '150.00', NULL, NULL, 1),
+(41, 412, 1076, '22oz', '165.00', NULL, NULL, 1),
+(42, 414, 1079, '16oz', '150.00', NULL, NULL, 1),
+(42, 414, 1080, '22oz', '165.00', NULL, NULL, 1),
+(43, 416, 1083, '16oz', '150.00', NULL, NULL, 1),
+(43, 416, 1084, '22oz', '165.00', NULL, NULL, 1),
+(44, 418, 1087, '16oz', '150.00', NULL, NULL, 1),
+(44, 418, 1088, '22oz', '165.00', NULL, NULL, 1),
+(45, 420, 1091, '16oz', '150.00', NULL, NULL, 1),
+(45, 420, 1092, '22oz', '165.00', NULL, NULL, 1),
+(46, 422, 1095, '16oz', '150.00', NULL, NULL, 1),
+(46, 422, 1096, '22oz', '165.00', NULL, NULL, 1),
+(47, 424, 1099, '10 inch', '199.00', NULL, NULL, 1),
+(47, 424, 1100, '12 inch', '249.00', NULL, NULL, 1),
+(48, 426, 1103, '10 inch', '199.00', NULL, NULL, 1),
+(48, 426, 1104, '12 inch', '249.00', NULL, NULL, 1),
+(49, 429, 1109, '10 inch', '249.00', NULL, NULL, 1),
+(49, 429, 1110, '12 inch', '289.00', NULL, NULL, 1),
+(50, 431, 1113, '10 inch', '249.00', NULL, NULL, 1),
+(50, 431, 1114, '12 inch', '289.00', NULL, NULL, 1),
+(51, 433, 1117, '10 inch', '249.00', NULL, NULL, 1),
+(51, 433, 1118, '12 inch', '289.00', NULL, NULL, 1),
+(52, 435, 1121, '10 inch', '249.00', NULL, NULL, 1),
+(52, 435, 1122, '12 inch', '289.00', NULL, NULL, 1),
+(53, 437, 1125, '10 inch', '249.00', NULL, NULL, 1),
+(53, 437, 1126, '12 inch', '289.00', NULL, NULL, 1),
+(54, 439, 1129, '10 inch', '249.00', NULL, NULL, 1),
+(54, 439, 1130, '12 inch', '289.00', NULL, NULL, 1),
+(55, 441, 1133, '10 inch', '249.00', NULL, NULL, 1),
+(55, 441, 1134, '12 inch', '289.00', NULL, NULL, 1),
+(56, 444, 1139, '10 inch', '249.00', NULL, NULL, 1),
+(56, 444, 1140, '12 inch', '289.00', NULL, NULL, 1),
+(59, 450, 1151, '16oz', '80.00', NULL, NULL, 1),
+(59, 450, 1152, '22oz', '90.00', NULL, NULL, 1),
+(58, 451, 1153, '16oz', '80.00', NULL, NULL, 1),
+(58, 451, 1154, '22oz', '90.00', NULL, NULL, 1),
+(57, 453, 1157, '16oz', '80.00', NULL, NULL, 1),
+(57, 453, 1158, '22oz', '90.00', NULL, NULL, 1),
+(60, 455, 1161, '16oz', '80.00', NULL, NULL, 1),
+(60, 455, 1162, '22oz', '90.00', NULL, NULL, 1),
+(71, 457, 1165, '16oz', '130.00', NULL, NULL, 1),
+(71, 457, 1166, '22oz', '145.00', NULL, NULL, 1),
+(72, 460, 1171, '16oz', '130.00', NULL, NULL, 1),
+(72, 460, 1172, '22oz', '145.00', NULL, NULL, 1),
+(73, 462, 1175, '16oz', '130.00', NULL, NULL, 1),
+(73, 462, 1176, '22oz', '145.00', NULL, NULL, 1),
+(74, 464, 1179, '16oz', '130.00', NULL, NULL, 1),
+(74, 464, 1180, '22oz', '145.00', NULL, NULL, 1),
+(75, 466, 1183, '16oz', '130.00', NULL, NULL, 1),
+(75, 466, 1184, '22oz', '145.00', NULL, NULL, 1),
+(76, 468, 1187, '16oz', '90.00', NULL, NULL, 1),
+(76, 468, 1188, '22oz', '150.00', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -513,7 +851,9 @@ INSERT INTO `subcategory` (`category_id`, `subcategory_id`, `subcategory_title`)
 (5, 8, 'Hot Coffee'),
 (5, 9, 'Frappe'),
 (6, 10, 'Fruit Tea'),
-(6, 11, 'Lemonade');
+(6, 11, 'Lemonade'),
+(6, 15, 'Cheesecake Series'),
+(6, 16, 'Milkshake');
 
 -- --------------------------------------------------------
 
@@ -593,6 +933,12 @@ ALTER TABLE `feedback`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `open_hours`
+--
+ALTER TABLE `open_hours`
+  ADD PRIMARY KEY (`day_id`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
@@ -613,7 +959,8 @@ ALTER TABLE `order_address`
 --
 ALTER TABLE `order_items`
   ADD PRIMARY KEY (`order_items_id`),
-  ADD KEY `order_id` (`order_id`);
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `category_id` (`category_id`);
 
 --
 -- Indexes for table `order_status`
@@ -704,7 +1051,7 @@ ALTER TABLE `admin_type`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -716,13 +1063,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `chatbot`
 --
 ALTER TABLE `chatbot`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `delivery`
@@ -734,7 +1081,13 @@ ALTER TABLE `delivery`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `open_hours`
+--
+ALTER TABLE `open_hours`
+  MODIFY `day_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -746,13 +1099,13 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `order_address`
 --
 ALTER TABLE `order_address`
-  MODIFY `order_address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `order_address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `order_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `order_status`
@@ -770,13 +1123,13 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `product_attribute`
 --
 ALTER TABLE `product_attribute`
-  MODIFY `attribute_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
+  MODIFY `attribute_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=469;
 
 --
 -- AUTO_INCREMENT for table `product_status`
@@ -794,7 +1147,7 @@ ALTER TABLE `product_type`
 -- AUTO_INCREMENT for table `product_variation`
 --
 ALTER TABLE `product_variation`
-  MODIFY `variation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=808;
+  MODIFY `variation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1189;
 
 --
 -- AUTO_INCREMENT for table `stock_status`
@@ -806,7 +1159,7 @@ ALTER TABLE `stock_status`
 -- AUTO_INCREMENT for table `subcategory`
 --
 ALTER TABLE `subcategory`
-  MODIFY `subcategory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `subcategory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `updates`
@@ -848,7 +1201,8 @@ ALTER TABLE `order_address`
 -- Constraints for table `order_items`
 --
 ALTER TABLE `order_items`
-  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `product`

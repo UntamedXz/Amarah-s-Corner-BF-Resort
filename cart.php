@@ -2,6 +2,7 @@
 session_start();
 require_once './includes/database_conn.php';
 if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) {
+    $_SESSION['link_user'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     header("Location: ./login");
 }
 
