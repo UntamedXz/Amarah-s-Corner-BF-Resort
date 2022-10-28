@@ -240,7 +240,7 @@ if(isset($_POST['checkout_process'])) {
         $newImageName = uniqid() . '.' . $imgExt;
         move_uploaded_file($screenshottmp, '../../assets/images/' . $newImageName);
 
-        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, longitude, latitude, screenshot_payment, reference, order_total, order_date, order_status) VALUES ('$user_id', '$payment', '$delivery', NULLIF('$shipping_value', ''), NULLIF('$longitude', ''), NULLIF('$latitude', ''), '$newImageName', '$reference', '$order_total', '$date', '1')");
+        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, longitude, latitude, screenshot_payment, reference, order_total, order_date, order_status, notified) VALUES ('$user_id', '$payment', '$delivery', NULLIF('$shipping_value', ''), NULLIF('$longitude', ''), NULLIF('$latitude', ''), '$newImageName', '$reference', '$order_total', '$date', '1', '0')");
 
         if ($insert_orders) {
             $order_id = mysqli_insert_id($conn);
@@ -331,7 +331,7 @@ if(isset($_POST['checkout_process'])) {
             }
         }
     } else {
-        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, longitude, latitude, order_total, order_date, order_status) VALUES ('$user_id', '$payment', '$delivery', NULLIF('$shipping_value', ''), NULLIF('$longitude', ''), NULLIF('$latitude', ''), '$order_total', '$date', '1')");
+        $insert_orders = mysqli_query($conn, "INSERT INTO orders (user_id, payment_method, delivery_method, shipping_fee, longitude, latitude, order_total, order_date, order_status, notified) VALUES ('$user_id', '$payment', '$delivery', NULLIF('$shipping_value', ''), NULLIF('$longitude', ''), NULLIF('$latitude', ''), '$order_total', '$date', '1', '0')");
 
         if ($insert_orders) {
             $order_id = mysqli_insert_id($conn);

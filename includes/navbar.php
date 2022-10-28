@@ -10,7 +10,6 @@
         </form>
         <div class="left">
             <div id="search-btn" class="bx bx-search-alt-2"></div>
-            <div id="tracking" class="tracking"><i class='bx bxs-map-pin'></i><span>Order Tracking</span></div>
             <a href="cart" class="nav-link">
                 <i class="bx bxs-cart"></i>
                 <span class="badge"></span>

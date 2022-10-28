@@ -861,92 +861,81 @@ main .breadcrumbs li.divider {
   color: var(--black);
   pointer-events: none;
 }
-main .dashboard .dashboard-wrapper {
-  background: url(../images/adminpage_bg.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+main .dashboard {
   width: 100%;
-  height: auto;
-  padding: 20px;
-  color: #ffaf08;
+  height: 300px;
   display: flex;
-  border-radius: 5px;
+  flex-direction: column;
   gap: 20px;
-  flex-wrap: wrap;
 }
-main .dashboard .dashboard-wrapper .box {
-  width: 100%;
-  height: auto;
-  background-color: #ffaf08;
-  color: #070506;
-  padding: 5px 10px;
-  border-radius: 5px;
+main .dashboard .wrapper {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-@media (min-width: 768px) {
-  main .dashboard .dashboard-wrapper .box {
-    width: 32.33%;
-  }
+main .dashboard .wrapper h1 {
+  font-weight: 500;
+  font-size: 16px;
 }
-@media (min-width: 1100px) {
-  main .dashboard .dashboard-wrapper .box {
-    width: 16%;
-  }
-}
-main .dashboard .dashboard-wrapper .box .titles {
+main .dashboard .wrapper .boxes__container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+main .dashboard .wrapper .boxes__container .box {
+  background-color: #070506;
+  height: 100px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  color: #ffaf08;
+  padding: 50px;
   align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 170px;
+  gap: 15px;
 }
-main .dashboard .dashboard-wrapper .box .titles i {
-  width: 50%;
-  font-size: 70px;
+main .dashboard .wrapper .boxes__container .box .icon i {
+  font-size: 32px;
 }
-main .dashboard .dashboard-wrapper .box .titles .label {
-  width: 50%;
+main .dashboard .wrapper .boxes__container .box .title__count {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
-main .dashboard .dashboard-wrapper .box .titles .label .count {
-  font-size: 42px;
-  font-weight: 600;
-  align-self: flex-end;
-  justify-self: flex-end;
-  line-height: 42px;
-}
-main .dashboard .dashboard-wrapper .box .titles .label span {
-  font-weight: 500;
-  align-self: flex-end;
-  justify-self: flex-end;
-}
-main .dashboard .dashboard-wrapper .box .hr {
-  height: 1px;
-  background-color: rgba(7, 5, 6, 0.3137254902);
-  width: 100%;
-  margin: 2px 0;
-}
-main .dashboard .dashboard-wrapper .box .view {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-main .dashboard .dashboard-wrapper .box .view span {
+main .dashboard .wrapper .boxes__container .box .title__count .title {
   font-size: 14px;
+  line-height: 14px;
   font-weight: 500;
 }
-main .dashboard .dashboard-wrapper .box .view button {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  display: flex;
-  align-items: center;
+main .dashboard .wrapper .boxes__container .box .title__count .count {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 700;
 }
-main .dashboard .dashboard-wrapper .box .view button i {
-  font-size: 24px;
+main .dashboard .graph__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+main .dashboard .graph__wrapper h1 {
+  font-weight: 500;
+  font-size: 16px;
+}
+main .dashboard .graph__wrapper .container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+main .dashboard .graph__wrapper .container .chartBox {
+  width: 50%;
+  border-radius: 5px;
+}
+main .dashboard .graph__wrapper .container .chartBox .vertical-menu {
+  width: 100%;
+  text-align: center;
 }
 main .insert-category {
   width: 100%;

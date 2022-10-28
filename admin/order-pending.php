@@ -14,6 +14,8 @@ $get_admin_info = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id = $adm
 $info = mysqli_fetch_array($get_admin_info);
 
 $userProfileIcon = $info['profile_image'];
+
+$read_orders = mysqli_query($conn, "UPDATE orders SET notified = 1");
 ?>
 <!DOCTYPE html>
 <html lang="en">

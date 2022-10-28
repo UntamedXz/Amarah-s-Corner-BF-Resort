@@ -1588,10 +1588,11 @@ footer .footer-wrapper .copyright span {
   text-decoration: none;
   background: var(--black);
   padding: 15px;
-  max-width: 300px;
+  max-width: 320px;
   border-radius: 5px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex-direction: row;
   gap: 10px;
   display: none;
@@ -1618,16 +1619,15 @@ footer .footer-wrapper .copyright span {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 150px;
+  width: 50%;
+  height: 100%;
   border-radius: 5px;
   overflow: hidden;
-  border: 1px solid #ffaf08;
 }
 .catalog .container .container-right .container-right-cont .catalog-box .no-img-cont img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 5px;
 }
 .catalog .container .container-right .container-right-cont .catalog-box .no-img-cont img:hover {
@@ -1654,7 +1654,6 @@ footer .footer-wrapper .copyright span {
   background: var(--primary);
   border: 2px solid #ffaf08;
   font-weight: 700;
-  border: none;
   outline: none;
   border-radius: 5px;
   display: flex;

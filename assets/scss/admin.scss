@@ -987,98 +987,91 @@ main {
 
   // DASHBOARD
   .dashboard {
-    .dashboard-wrapper {
-      background: url(../images/adminpage_bg.png);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      width: 100%;
-      height: auto;
-      padding: 20px;
-      color: #ffaf08;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .wrapper {
       display: flex;
-      border-radius: 5px;
-      gap: 20px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 10px;
 
-      .box {
-        @media (min-width: 768px) {
-          width: 32.33%;
-        }
-
-        @media (min-width: 1100px) {
-          width: 16%;
-        }
-
-        width: 100%;
-        height: auto;
-        background-color: #ffaf08;
-        color: #070506;
-        padding: 5px 10px;
-        border-radius: 5px;
+      h1 {
+        font-weight: 500;
+        font-size: 16px;
+      }
+  
+      .boxes__container {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
-
-        .titles {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+  
+        .box {
+          background-color: #070506;
+          height: 100px;
+          border-radius: 5px;
           display: flex;
           flex-direction: row;
+          color: #ffaf08;
+          padding: 50px;
           align-items: center;
-
-          i {
-            width: 50%;
-            font-size: 70px;
+          justify-content: space-between;
+          flex: 1;
+          min-width: 170px;
+          gap: 15px;
+  
+          .icon {
+            i {
+              font-size: 32px;
+            }
           }
-
-          .label {
-            width: 50%;
+  
+          .title__count {
             display: flex;
             flex-direction: column;
-            gap: 0;
-
-            .count {
-              font-size: 42px;
-              font-weight: 600;
-              align-self: flex-end;
-              justify-self: flex-end;
-              line-height: 42px;
-            }
-
-            span {
+  
+            .title {
+              font-size: 14px;
+              line-height: 14px;
               font-weight: 500;
-              align-self: flex-end;
-              justify-self: flex-end;
+            }
+  
+            .count {
+              font-size: 16px;
+              line-height: 16px;
+              font-weight: 700;
             }
           }
         }
+      }
+    }
 
-        .hr {
-          height: 1px;
-          background-color: #07050650;
-          width: 100%;
-          margin: 2px 0;
-        }
+    .graph__wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
 
-        .view {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+      h1 {
+        font-weight: 500;
+        font-size: 16px;
+      }
 
-          span {
-            font-size: 14px;
-            font-weight: 500;
-          }
+      .container {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
 
-          button {
-            background-color: transparent;
-            border: none;
-            outline: none;
-            display: flex;
-            align-items: center;
+        .chartBox {
+          width: 50%;
+          border-radius: 5px;
 
-            i {
-              font-size: 24px;
-            }
+          .vertical-menu {
+            width: 100%;
+            text-align: center;
           }
         }
       }

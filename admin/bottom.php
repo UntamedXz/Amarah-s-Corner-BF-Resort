@@ -4,6 +4,8 @@
 <!-- NAVBAR -->
 
 <!-- SCRIPT -->
+
+
 <script>
     document.querySelector('#close-alert').onclick = () => {
         alertbox.style.display = 'none';

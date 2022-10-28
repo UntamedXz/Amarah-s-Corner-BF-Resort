@@ -262,6 +262,7 @@ $admin_type = $info['admin_type'];
                 </table>
             </div>
         </section>
+    </main>
 
         <script>
             if($('#admin_type').val() != 1) {
