@@ -14,6 +14,8 @@ $get_admin_info = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id = $adm
 $info = mysqli_fetch_array($get_admin_info);
 
 $userProfileIcon = $info['profile_image'];
+
+$read_orders = mysqli_query($conn, "UPDATE orders SET notified = 1");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,11 +154,11 @@ $userProfileIcon = $info['profile_image'];
 
     <!-- MAIN -->
     <main>
-        <h1 class="title">View Order Delivered</h1>
+        <h1 class="title">View Delivered Orders</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="order-delivered" class="active">View Order Delivered</a></li>
+            <li><a href="view-category" class="active">View Delivered Orders</a></li>
         </ul>
         <section class="orders">
         <div class="wrapper">
@@ -168,7 +170,6 @@ $userProfileIcon = $info['profile_image'];
                         <th>Customer Email</th>
                         <th>Order Date</th>
                         <th>Total Amount</th>
-                        <th>Order Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -177,17 +178,21 @@ $userProfileIcon = $info['profile_image'];
         </section>
 
         <script>
-            if($('#admin_type').val() != 1) {
-                $('.delete-modal').hide();
-            } else {
-                $('.delete-modal').show();
-            }
-        </script>
 
-        <script>
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            } 
             // DATA TABLES
+            var searchTerm = getUrlVars()['search'];
             var dataTable = $('#example').DataTable({
-                "processing": true,
                 "serverSide": true,
                 "paging": true,
                 "pagingType": "simple",
@@ -202,17 +207,26 @@ $userProfileIcon = $info['profile_image'];
                 "ajax": {
                     url: "./functions/order-delivered-table",
                     type: "post"
+                },
+                search: {
+                    search: searchTerm
                 }
             });
+
+            setInterval( function () {
+                dataTable.ajax.reload();
+            }, 10000 );
+
+
 
             // GET EDIT
             $(document).on('click', '#getEdit', function (e) {
                 e.preventDefault();
-                var order_id_view = $(this).data('id');
+                var order_id = $(this).data('id');
                 $.ajax({
-                    url: './functions/crud/order-delivered',
+                    url: './functions/crud/order',
                     type: 'POST',
-                    data: 'order_id_view=' + order_id_view,
+                    data: 'order_id=' + order_id,
                     success: function (res) {
                         location.href = res;
                     }
@@ -244,11 +258,12 @@ $userProfileIcon = $info['profile_image'];
             // SUBMIT DELETE
             $("#delete_order").on('submit', function(e) {
                     e.preventDefault();
-                    console.log('test');
+                    var form = new FormData(this);
+                    form.append('delete_order', true);
                     $.ajax({
                         type: "POST",
-                        url: "./functions/delete-order",
-                        data: new FormData(this),
+                        url: "./functions/crud/order",
+                        data: form,
                         dataType: 'text',
                         contentType: false,
                         cache: false,
@@ -260,7 +275,7 @@ $userProfileIcon = $info['profile_image'];
                                 $('.progress').addClass('active');
                                 $('#toast-icon').removeClass('fa-solid fa-triangle-exclamation').addClass('fa-solid fa-check warning');
                                 $('.text-1').text('Success!');
-                                $('.text-2').text('Product deleted successfully!');
+                                $('.text-2').text('Order deleted successfully!');
                                 setTimeout(() => {
                                     $('#toast').removeClass("active");
                                     $('.progress').removeClass("active");

@@ -148,23 +148,6 @@ if(isset($_GET['id'])) {
                             <div class="tab inventory_simple_tab">
                                 <div class="hgroup">
                                     <div class="label">
-                                        <span>Manage stock?</span>
-                                    </div>
-                                    <div class="input">
-                                        <input type="checkbox" name="manage_stock" id="manage_stock" <?php if(isset($product_stock)) {echo 'checked'; } ?>>
-                                        <span style="padding-left: 5px;">Manage stock level (quantity)</span>
-                                    </div>
-                                </div>
-                                <div class="hgroup stock_qty_field" style="display: none;">
-                                    <div class="label">
-                                        <span>Stock quantity</span>
-                                    </div>
-                                    <div class="input">
-                                        <input type="text" name="stock_qty" id="stock_qty" value="<?php if(isset($product_stock)) { echo $product_stock; } ?>">
-                                    </div>
-                                </div>
-                                <div class="hgroup">
-                                    <div class="label">
                                         <span>Stock status</span>
                                     </div>
                                     <div class="input">
@@ -264,17 +247,7 @@ if(isset($_GET['id'])) {
                                                 <input type="text" name="variable_reg_price[]" id="variable_reg_price" value="<?php echo $variation_info['product_price']; ?>">
                                             </div>
                                             <div class="vgroup">
-                                                <span>Sale price</span>
-                                                <input type="text" name="variable_sale_price[]" id="variable_sale_price" value="<?php echo $variation_info['product_sale']; ?>">
-                                            </div>
-                                        </div>
-                                        <div class="hgroup">
-                                            <div class="vgroup">
-                                                <span>Stock quantity</span>
-                                                <input type="text" name="variable_stock[]" id="variable_stock" value="<?php echo $variation_info['stock']; ?>">
-                                            </div>
-                                            <div class="vgroup">
-                                                <span>Stock status</span>
+                                            <span>Stock status</span>
                                                 <select style="height: 30px; line-height: 30px; border: none; outline: none; border-radius: 5px;" name="variable_stock_status[]" id="variable_stock_status">
                                                     <?php   
                                                     $get_status = mysqli_query($conn, "SELECT * FROM stock_status");

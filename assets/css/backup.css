@@ -1035,20 +1035,25 @@ section {
 }
 .banner .banner__wrapper {
   width: 100%;
+  height: 100%;
 }
 .banner .banner__wrapper .banner__content {
   width: 100%;
+  height: auto;
 }
 .banner .banner__wrapper .banner__content .banner__card {
   width: 100%;
+  height: auto;
 }
 .banner .banner__wrapper .banner__content .banner__card .banner__image {
+  height: 100%;
   width: 100%;
   object-fit: cover;
 }
 .banner .banner__wrapper .banner__content .banner__card .banner__image img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .branch {
@@ -2635,7 +2640,8 @@ footer .footer-wrapper .copyright span {
 .account .account-wrapper .second-row .tab-content form .form-group input[type=text],
 .account .account-wrapper .second-row .tab-content form .form-group input[type=email],
 .account .account-wrapper .second-row .tab-content form .form-group input[type=tel],
-.account .account-wrapper .second-row .tab-content form .form-group input[type=password] {
+.account .account-wrapper .second-row .tab-content form .form-group input[type=password],
+.account .account-wrapper .second-row .tab-content form .form-group select {
   height: 40px;
   width: 100%;
   border: none;
@@ -2701,6 +2707,12 @@ footer .footer-wrapper .copyright span {
   display: none;
 }
 .account .account-wrapper .second-row .tab-content #password.active {
+  display: flex;
+}
+.account .account-wrapper .second-row .tab-content #address {
+  display: none;
+}
+.account .account-wrapper .second-row .tab-content #address.active {
   display: flex;
 }
 
@@ -2804,6 +2816,18 @@ footer .footer-wrapper .copyright span {
   padding: 0 5px;
   border: 2px solid rgba(7, 5, 6, 0.2235294118);
   border-radius: 5px;
+}
+.checkout .checkout_wrapper .left_checkout_wrapper form .group_form_group .form_group select {
+  background-color: #ffaf08;
+  color: #070506;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  height: 25px;
+  line-height: 25px;
+  padding: 0 5px;
 }
 .checkout .checkout_wrapper .left_checkout_wrapper form .group_form_group .form_group span {
   color: #070506;

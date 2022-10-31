@@ -2,15 +2,7 @@
 session_start();
 require_once "./includes/database_conn.php";
 
-$id = $_GET['id'];
-$decode_id = base64_decode(urldecode($id));
-
-$getCategoryTitle = mysqli_query($conn, "SELECT category_title FROM category WHERE category_id = $decode_id");
-
-$categoryTitle = '';
-while ($result = mysqli_fetch_assoc($getCategoryTitle)) {
-    $categoryTitle = $result['category_title'];
-}
+$search = $_GET['search'];
 
 if(isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
@@ -101,51 +93,40 @@ if(isset($_SESSION['id'])) {
     </section>
 
     <section class="catalog" id="catalog">
-        <h3 class="title-header"><?php echo $categoryTitle ?></h3>
+        <h3 class="title-header">Search result</h3>
         <div class="container">
             <div class="container-right">
                 <?php
                 date_default_timezone_set('Asia/Manila');
                 $day = date('N');
-                $time = date('h:i');
+                $current_time = date('G:i');
 
                 $get_time_db = mysqli_query($conn, "SELECT * FROM open_hours WHERE day_id = $day");
 
                 $get_time = mysqli_fetch_array($get_time_db);
 
 
-                $open_time = $get_time['open_hour'];
-                $start_time = date('h:i', strtotime($open_time));
-                $close_time = $get_time['close_hour'];
-                $end_time = date('h:i', strtotime($close_time));
+                $open_time = date('G:i', strtotime($get_time['open_hour']));
+                $close_time = date('G:i', strtotime($get_time['close_hour']));
 
-                $status = 'closed';
+                // echo $open_time . " < " . $current_time . " && " . $current_time . " < " . $close_time;
 
-                if($start_time > $end_time) {
-                    if($start_time < $time && $time > $end_time) {
-                        // echo $start_time . ' < ' . $time . ' && ' . $time . '> ' . $end_time; 
-                        $status = 'open';
-                    } else {
-                        // echo $start_time . ' < ' . $time . ' && ' . $time . '> ' . $end_time; 
-                        $status = 'closed';
-                    }
-                } else {
-                    if($start_time < $time && $time < $end_time) {
-                        $status = 'open';
-                    } else {
-                        $status = 'closed';
-                    }
-                }
-                ?>
+                // echo "<br>";
 
-                <?php
-                if($status == 'open') {
+                // if (($open_time < $current_time) && ($current_time < $close_time)) {
+                //     echo 'true';
+                // } else {
+                //     echo 'false';
+                // }
+
+                if (($open_time < $current_time) && ($current_time < $close_time)) {
                     ?>
                 <div class="container-right-cont">
                     <?php
-                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id WHERE product.category_id = $decode_id");
+                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id LEFT JOIN category ON product.category_id=category.category_id WHERE product_keyword LIKE '%$search%' OR category.category_title LIKE '%$search%'");
 
-                    foreach ($getProduct as $rowProduct) {
+                    if(mysqli_num_rows($getProduct) > 0) {
+                        foreach ($getProduct as $rowProduct) {
                             ?>
                     <a href="product?link=<?php echo $rowProduct['product_slug'] . "&id=" . $rowProduct['product_id']; ?>"
                         class="catalog-box" style="position: relative;">
@@ -168,92 +149,78 @@ if(isset($_SESSION['id'])) {
                             <h4><?php echo $rowProduct['product_title'] ?></h4>
                             <h5 style="color: #ffaf08; font-weight: 400;">
                                 <?php echo $rowProduct['subcategory_title']; ?></h5>
-                            <?php
-                                if($rowProduct['product_price'] != null) {
-                                    ?>
                             <h5 class="price">P<?php echo $rowProduct['product_price'] ?></h5>
-                            <?php
-                                }
-                                ?>
-                            <?php
-                            if($rowProduct['product_type'] == 1 && $rowProduct['product_status'] == 1 && $rowProduct['product_price'] != null) {
-                                ?>
-                            <button class="order-btn">ORDER NOW</button>
-                            <?php
-                            } else if($rowProduct['product_type'] == 2) {
-                                ?>
-                            <button class="order-btn">SELECT OPTIONS</button>
-                            <?php
-                            } else {
-                                ?>
-                            <button class="order-btn">READ MORE</button>
-                            <?php
-                            }
-                            ?>
+
+                            <button class="order-btn"><i class='bx bxs-cart'></i>ORDER NOW</button>
                         </div>
                     </a>
                     <?php
-                        }
+                                }
+                    } else {
+                        ?>
+                    <h3>No search result...</h3>
+                    <?php
+                    }
                     ?>
                 </div>
-                <div id="load-more-products">
-                    <input type="submit" class="load-more-products" value="LOAD MORE">
-                </div>
-            </div>
-            <?php
+                <?php
                 } else {
                     ?>
-            <div class="container-right-cont">
-                <?php
-                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id WHERE product.category_id = $decode_id");
+                <div class="container-right-cont">
+                    <?php
+                    $getProduct = mysqli_query($conn, "SELECT subcategory.subcategory_title, product.product_status, product.product_img1, product.product_title, product.product_price, product.product_slug, product.product_type, product.product_id FROM product LEFT JOIN subcategory ON product.subcategory_id=subcategory.subcategory_id LEFT JOIN category ON product.category_id=category.category_id WHERE product_keyword LIKE '%$search%' OR category.category_title LIKE '%$search%'");
 
                     if(mysqli_num_rows($getProduct) > 0) {
                         foreach ($getProduct as $rowProduct) {
                             ?>
-                <a href="#" class="catalog-box" style="position: relative;">
-                    <?php
+                    <a href="#" class="catalog-box" style="position: relative;">
+                        <?php
                                 if(!empty($rowProduct['product_img1'])) {
                                 ?>
-                    <div class="img-cont">
-                        <img style="filter: grayscale(100%);"
-                            src="./assets/images/<?php echo $rowProduct['product_img1']; ?>" alt="">
-                    </div>
-                    <?php
+                        <div class="img-cont">
+                            <img style="filter: grayscale(100%);"
+                                src="./assets/images/<?php echo $rowProduct['product_img1']; ?>" alt="">
+                        </div>
+                        <?php
                                 } else {
                                 ?>
-                    <div class="no-img-cont">
-                        <img style="filter: grayscale(100%);" src="./assets/images/image_not_available-yellow.png"
-                            alt="">
-                    </div>
-                    <?php
+                        <div class="no-img-cont">
+                            <img style="filter: grayscale(100%);" src="./assets/images/image_not_available-yellow.png"
+                                alt="">
+                        </div>
+                        <?php
                                 }
                                 ?>
-                    <div class="details">
-                        <h4 style="filter: grayscale(100%);"><?php echo $rowProduct['product_title'] ?></h4>
-                        <h5 style="color: #ffaf08; font-weight: 400; filter: grayscale(100%);">
-                            <?php echo $rowProduct['subcategory_title']; ?></h5>
-                        <h5 style="filter: grayscale(100%);" class="price">
-                            P<?php echo $rowProduct['product_price'] ?></h5>
+                        <div class="details">
+                            <h4 style="filter: grayscale(100%);"><?php echo $rowProduct['product_title'] ?></h4>
+                            <h5 style="color: #ffaf08; font-weight: 400; filter: grayscale(100%);">
+                                <?php echo $rowProduct['subcategory_title']; ?></h5>
+                            <h5 style="filter: grayscale(100%);" class="price">
+                                P<?php echo $rowProduct['product_price'] ?></h5>
 
-                        <button style="filter: grayscale(100%);" class="order-btn"><i class='bx bxs-cart'></i>ORDER
-                            NOW</button>
-                    </div>
-                    <span
-                        style="color: #fff; font-weight: 800; font-size: 32px; position: absolute; filter: unset; padding-left: 10px; top: 35%; transform: translateY(50%); transform: rotate(-15deg);"
-                        class="status">NOT AVAILABLE</span>
-                </a>
-                <?php
+                            <button style="filter: grayscale(100%);" class="order-btn"><i class='bx bxs-cart'></i>ORDER
+                                NOW</button>
+                        </div>
+                        <span
+                            style="color: #fff; font-weight: 800; font-size: 32px; position: absolute; filter: unset; padding-left: 10px; top: 35%; transform: translateY(50%); transform: rotate(-15deg);"
+                            class="status">NOT AVAILABLE</span>
+                    </a>
+                    <?php
                                 }
                     } else {
                         ?>
-                <h3>No search result...</h3>
-                <?php
+                    <h3>No search result...</h3>
+                    <?php
                     }
                     ?>
-            </div>
-            <?php
+                </div>
+                <?php
                 }
                 ?>
+                <div id="load-more-products">
+                    <input type="submit" class="load-more-products" value="LOAD MORE">
+                </div>
+            </div>
     </section>
 
     <?php include './includes/cart-count.php' ?>

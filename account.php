@@ -41,17 +41,18 @@ if(isset($_SESSION['id'])) {
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://f001.backblazeb2.com/file/buonzz-assets/jquery.ph-locations-v1.0.0.js"></script>
     <link rel="stylesheet" href="./assets/css/backup.css">
     <title>Amarah's Corner - BF Resort Las Piñas</title>
 
     <style>
-        body {
-            background: url(./assets/images/background.png) no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            height: 100vh;
-        }
+    body {
+        background: url(./assets/images/background.png) no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        height: 100vh;
+    }
     </style>
 </head>
 
@@ -64,13 +65,13 @@ if(isset($_SESSION['id'])) {
     <input type="hidden" id="profileIconCheck" value="<?php echo $userProfileIcon; ?>">
 
     <script>
-        $(window).on('load', function() {
-            if($('#profileIconCheck').val() == '') {
-                $('#profileIcon').attr("src","./assets/images/no_profile_pic.png");
-            } else {
-                $('#profileIcon').attr("src","./assets/images/" + $('#profileIconCheck').val());
-            }
-        })
+    $(window).on('load', function() {
+        if ($('#profileIconCheck').val() == '') {
+            $('#profileIcon').attr("src", "./assets/images/no_profile_pic.png");
+        } else {
+            $('#profileIcon').attr("src", "./assets/images/" + $('#profileIconCheck').val());
+        }
+    })
     </script>
 
     <!-- TOAST -->
@@ -86,7 +87,7 @@ if(isset($_SESSION['id'])) {
         <i class="fa-solid fa-xmark close"></i>
         <div class="progress"></div>
     </div>
-    
+
     <?php 
     $getProfileInfo = mysqli_query($conn, "SELECT * FROM customers WHERE user_id = $userId");
     
@@ -105,7 +106,8 @@ if(isset($_SESSION['id'])) {
                     <?php
                     } else {
                     ?>
-                    <img src="./assets/images/<?php echo $rowInfo['user_profile_image']; ?>" alt="" id="old-profile-src">
+                    <img src="./assets/images/<?php echo $rowInfo['user_profile_image']; ?>" alt=""
+                        id="old-profile-src">
                     <?php
                     }
                     ?>
@@ -114,9 +116,10 @@ if(isset($_SESSION['id'])) {
                     <form id="update_img">
                         <div class="form-group">
                             <input type="hidden" name="user_id" id="user_id" value="<?php echo $userId; ?>">
-                            <input type="hidden" name="old_profile_pic" id="old_profile_pic" value="<?php echo $rowInfo['user_profile_image'] ?>">
-                        <input type="file" accept=".jpg, .jpeg, .png" name="profile_pic" id="profile_pic">
-                        <button type="submit">UPDATE</button>
+                            <input type="hidden" name="old_profile_pic" id="old_profile_pic"
+                                value="<?php echo $rowInfo['user_profile_image'] ?>">
+                            <input type="file" accept=".jpg, .jpeg, .png" name="profile_pic" id="profile_pic">
+                            <button type="submit">UPDATE</button>
                         </div>
                     </form>
                 </div>
@@ -136,6 +139,7 @@ if(isset($_SESSION['id'])) {
                     <div class="tab">
                         <button id="profile-btn">PROFILE</button>
                         <button id="contact-btn">CONTACT</button>
+                        <button id="address-btn">ADDRESS</button>
                         <button id="password-btn">PASSWORD</button>
                     </div>
                 </div>
@@ -166,7 +170,8 @@ if(isset($_SESSION['id'])) {
                         <span class="basicInformation">BASIC INFORMATION</span>
                         <hr>
                         <div class="basicInfoWrapper">
-                            <span>Birthday: <strong><?php if($rowInfo['user_birthday'] != '0000-00-00') { echo $str_bday; }  ?></strong></span>
+                            <span>Birthday:
+                                <strong><?php if($rowInfo['user_birthday'] != '0000-00-00') { echo $str_bday; }  ?></strong></span>
                             <span>Gender: <strong><?php echo $rowInfo['user_gender'] ?></strong></span>
                         </div>
                     </div>
@@ -178,23 +183,28 @@ if(isset($_SESSION['id'])) {
                         <input type="hidden" name="profile_details_id" id="" value="<?php echo $userId ?>">
                         <div class="form-group">
                             <span>Name</span>
-                            <input type="text" name="customer_name" id="customer_name" placeholder="Input complete name" value="<?php echo $rowInfo['name'] ?>">
+                            <input type="text" name="customer_name" id="customer_name" placeholder="Input complete name"
+                                value="<?php echo $rowInfo['name'] ?>">
                         </div>
                         <div class="form-group">
                             <span>Username</span>
-                            <input type="text" name="customer_username" id="customer_username" placeholder="Input username" value="<?php echo $rowInfo['username'] ?>">
+                            <input type="text" name="customer_username" id="customer_username"
+                                placeholder="Input username" value="<?php echo $rowInfo['username'] ?>">
                         </div>
                         <div class="form-group">
                             <span>Birthday</span>
-                            <input type="date" name="customer_bday" id="customer_bday" value="<?php echo $rowInfo['user_birthday']; ?>">
+                            <input type="date" name="customer_bday" id="customer_bday"
+                                value="<?php echo $rowInfo['user_birthday']; ?>">
                         </div>
                         <div class="form-group">
                             <span>Gender</span>
                             <div class="gender">
-                              <input type="radio" name="gender" id="" value="FEMALE" <?php if($rowInfo['user_gender'] == "FEMALE") { echo "checked"; } ?>>
+                                <input type="radio" name="gender" id="" value="FEMALE"
+                                    <?php if($rowInfo['user_gender'] == "FEMALE") { echo "checked"; } ?>>
                                 <label for="for female">FEMALE</label>
-                                <input type="radio" name="gender" id="" value="MALE" <?php if($rowInfo['user_gender'] == "MALE") { echo "checked"; } ?>>
-                                <label   for="for female">MALE</label>
+                                <input type="radio" name="gender" id="" value="MALE"
+                                    <?php if($rowInfo['user_gender'] == "MALE") { echo "checked"; } ?>>
+                                <label for="for female">MALE</label>
                             </div>
                         </div>
                         <button type="submit">UPDATE</button>
@@ -205,7 +215,9 @@ if(isset($_SESSION['id'])) {
                         <input type="hidden" name="profile_details_id" id="" value="<?php echo $userId ?>">
                         <div class="form-group">
                             <span>Phone Number</span>
-                            <input type="tel" name="phone_number" id="phone_number" placeholder="Input phone number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="11" value="<?php echo $rowInfo['phone_number'] ?>">
+                            <input type="tel" name="phone_number" id="phone_number" placeholder="Input phone number"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="11"
+                                value="<?php echo $rowInfo['phone_number'] ?>">
                         </div>
                         <div class="form-group">
                             <span>Email</span>
@@ -220,20 +232,101 @@ if(isset($_SESSION['id'])) {
                         <input type="hidden" name="password_id" id="" value="<?php echo $userId ?>">
                         <div class="form-group">
                             <span>Old Password</span>
-                            <input type="password" name="old_password" id="old_password" placeholder="Input old password">
-                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-old_password"></span>
+                            <input type="password" name="old_password" id="old_password"
+                                placeholder="Input old password">
+                            <span style="color: #000; font-size: 13px; font-weight: 800;"
+                                class="error-old_password"></span>
                         </div>
                         <div class="form-group">
                             <span>New Password</span>
-                            <input type="password" name="new_password" id="new_password" placeholder="Input new password">
-                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-new_password"></span>
+                            <input type="password" name="new_password" id="new_password"
+                                placeholder="Input new password">
+                            <span style="color: #000; font-size: 13px; font-weight: 800;"
+                                class="error-new_password"></span>
                         </div>
                         <div class="form-group">
                             <span>Confirm Password</span>
-                            <input type="password" name="confirm_password" id="confirm_password" placeholder="Input confirm password">
-                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-confirm_password"></span>
+                            <input type="password" name="confirm_password" id="confirm_password"
+                                placeholder="Input confirm password">
+                            <span style="color: #000; font-size: 13px; font-weight: 800;"
+                                class="error-confirm_password"></span>
                         </div>
                         <button type="submit">UPDATE</button>
+                    </form>
+
+                    <form id="address">
+                        <h1 class="profile-details">ADDRESS</h1>
+                        <hr>
+                        <input type="hidden" name="profile_details_id" id="user_id" value="<?php echo $userId ?>">
+                        <div class="form-group">
+                            <span>Province</span>
+                            <select name="province" id="province">
+                                <option value="">Select Province</option>
+                                <?php
+                                $get_province = mysqli_query($conn, "SELECT * FROM refprovince ORDER BY provDesc");
+
+                                foreach($get_province as $province) {
+                                    $isSelected = '';
+                                    if ($rowInfo['province'] == $province['provCode']) {
+                                        $isSelected = "selected";
+                                    }
+                                ?>
+                                <option value="<?php echo $province['provCode']; ?>" <?php echo $isSelected; ?>>
+                                    <?php echo $province['provDesc']; ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-province"></span>
+                        </div>
+                        <div class="form-group city_container">
+                            <span>City</span>
+                            <select name="city" id="city" disabled="true">
+                                <option value="">Select City</option>
+                                <?php   
+                                $province_db = $rowInfo['province'];
+                                $get_city = mysqli_query($conn, "SELECT * FROM refcitymun WHERE provCode = $province_db ORDER BY citymunDesc");
+
+                                foreach($get_city as $city) {
+                                    $isSelected = '';
+                                    if ($rowInfo['city_municipality'] == $city['citymunCode']) {
+                                        $isSelected = "selected";
+                                    }
+                                    ?>
+                                    <option value="<?php echo $city['citymunCode'] ?>" <?php echo $isSelected; ?>><?php echo $city['citymunDesc'] ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-city"></span>
+                        </div>
+                        <div class="form-group barangay_container">
+                            <span>Barangay</span>
+                            <select name="barangay" id="barangay" disabled="true">
+                                <option value="">Select Barangay</option>
+                                <?php   
+                                $city_db = $rowInfo['city_municipality'];
+                                $get_barangay = mysqli_query($conn, "SELECT * FROM refbrgy WHERE citymunCode = $city_db ORDER BY brgyDesc");
+
+                                foreach($get_barangay as $barangay) {
+                                    $isSelected = '';
+                                    if ($rowInfo['barangay'] == $barangay['brgyCode']) {
+                                        $isSelected = "selected";
+                                    }
+                                    ?>
+                                    <option value="<?php echo $barangay['brgyCode'] ?>" <?php echo $isSelected; ?>><?php echo $barangay['brgyDesc'] ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-barangay"></span>
+                        </div>
+                        <div class="form-group">
+                            <span>Block No., Bldg. & St. Name</span>
+                            <input type="text" name="block" id="block" placeholder="Input Block No., Bldg. & St. Name" value="<?php if($rowInfo['block_street_building'] != null) { echo $rowInfo['block_street_building']; } ?>">
+                            <span style="color: #000; font-size: 13px; font-weight: 800;" class="error-block"></span>
+                        </div>
+                        <button type="submit" form="address">UPDATE</button>
                     </form>
                 </div>
             </div>
@@ -251,6 +344,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').addClass('active');
                 $('.tab-content #contact').removeClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('#toast-icon').removeClass('fa-solid fa-triangle-exclamation').addClass('fa-solid fa-check warning');
@@ -271,6 +365,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').addClass('active');
                 $('.tab-content #contact').removeClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('.text-1').text('Error!');
@@ -289,6 +384,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').addClass('active');
                 $('.tab-content #contact').removeClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('.text-1').text('Error!');
@@ -317,6 +413,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').removeClass('active');
                 $('.tab-content #contact').addClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('#toast-icon').removeClass('fa-solid fa-triangle-exclamation').addClass('fa-solid fa-check warning');
@@ -337,6 +434,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').removeClass('active');
                 $('.tab-content #contact').addClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('.text-1').text('Error!');
@@ -355,6 +453,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').removeClass('active');
                 $('.tab-content #contact').addClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('.text-1').text('Error!');
@@ -372,7 +471,76 @@ if(isset($_SESSION['id'])) {
     }
     ?>
 
-<?php
+    <!-- FOR ADDRESS VALIDATION -->
+    <?php
+    if(isset($_SESSION['address'])) {
+        $alert = $_SESSION['address'];
+        if($alert == 'success') {
+            echo "
+            <script>
+                $('.tab-content #profile_details').css('display', 'none');
+                $('.tab-content #profile_details').removeClass('active');
+                $('.tab-content #contact').removeClass('active');
+                $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').addClass('active');
+                $('#toast').addClass('active');
+                $('.progress').addClass('active');
+                $('#toast-icon').removeClass('fa-solid fa-triangle-exclamation').addClass('fa-solid fa-check warning');
+                $('.text-1').text('Success!');
+                $('.text-2').text('Address updated successfully!');
+    
+                setTimeout(() => {
+                $('#toast').removeClass('active');
+                $('.progress').removeClass('active');
+                }, 5000);
+                </script>
+            ";
+            unset($_SESSION['address']);
+        } else if($alert == 'failed') {
+            echo "
+            <script>
+                $('.tab-content #profile_details').css('display', 'none');
+                $('.tab-content #profile_details').removeClass('active');
+                $('.tab-content #contact').removeClass('active');
+                $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').addClass('active');
+                $('#toast').addClass('active');
+                $('.progress').addClass('active');
+                $('.text-1').text('Error!');
+                $('.text-2').text('Something went wrong!!');
+                setTimeout(() => {
+                $('#toast').removeClass('active');
+                $('.progress').removeClass('active');
+                }, 5000);
+                </script>
+            ";
+            unset($_SESSION['address']);
+        } else {
+            echo "
+            <script>
+                $('.tab-content #profile_details').css('display', 'none');
+                $('.tab-content #profile_details').removeClass('active');
+                $('.tab-content #contact').addClass('active');
+                $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
+                $('#toast').addClass('active');
+                $('.progress').addClass('active');
+                $('.text-1').text('Error!');
+                $('.text-2').text('Something went wrong!');
+                setTimeout(() => {
+                $('#toast').removeClass('active');
+                $('.progress').removeClass('active');
+                }, 5000);
+                </script>
+            ";
+            unset($_SESSION['address']);
+        }
+    } else {
+        $alert = '';
+    }
+    ?>
+
+    <?php
     if(isset($_SESSION['password'])) {
         $alert = $_SESSION['password'];
         if($alert == 'success') {
@@ -382,6 +550,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').removeClass('active');
                 $('.tab-content #contact').removeClass('active');
                 $('.tab-content #password').addClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('#toast-icon').removeClass('fa-solid fa-triangle-exclamation').addClass('fa-solid fa-check warning');
@@ -402,6 +571,7 @@ if(isset($_SESSION['id'])) {
                 $('.tab-content #profile_details').removeClass('active');
                 $('.tab-content #contact').addClass('active');
                 $('.tab-content #password').removeClass('active');
+                $('.tab-content #address').removeClass('active');
                 $('#toast').addClass('active');
                 $('.progress').addClass('active');
                 $('.text-1').text('Error!');
@@ -421,240 +591,349 @@ if(isset($_SESSION['id'])) {
 
     <?php include './includes/cart-count.php' ?>
     <script>
-        var loader = document.getElementById("preloader");
+    var loader = document.getElementById("preloader");
 
-        window.addEventListener("load", function () {
-            loader.style.display = "none";
-        })
+    window.addEventListener("load", function() {
+        loader.style.display = "none";
+    })
 
-        $('#profile-btn').on('click', function(e) {
-            e.preventDefault();
-            $('.tab-content #profile_details').css("display", "flex");
-            $('.tab-content #profile_details').addClass('active');
-            $('.tab-content #contact').removeClass('active');
-            $('.tab-content #password').removeClass('active');
-        })
-
-        $('#contact-btn').on('click', function(e) {
-            e.preventDefault();
-            $('.tab-content #profile_details').css("display", "none");
-            $('.tab-content #profile_details').removeClass('active');
-            $('.tab-content #contact').addClass('active');
-            $('.tab-content #password').removeClass('active');
-        })
-
-        $('#password-btn').on('click', function(e) {
-            e.preventDefault();
-            $('.tab-content #profile_details').css("display", "none");
-            $('.tab-content #profile_details').removeClass('active');
-            $('.tab-content #contact').removeClass('active');
-            $('.tab-content #password').addClass('active');
-        })
-
-        // PROFILE IMAGE
-        $(window).on('load', function() {
-            var src = $('#old-profile-src').attr('src');
-            var split = src.split('/');
-            var oldProfileImg = split[split.length-1];
-
-            if(oldProfileImg == 'no_profile_pic.png') {
-                $('#remove').css("display", "none")
-            } else {
-                $('#remove').on('click', function(e) {
-                    e.preventDefault();
-                    var src = $('#old-profile-src').attr('src');
-                    var split = src.split('/');
-                    var oldProfileImg = split[split.length-1];
-                    var user_id = $(this).data('id');
-
-                    $.ajax({
-                        type: "POST",
-                        url: "./functions/crud/profile",
-                        data: {
-                            'delete_image': true,
-                            'user_id': user_id,
-                            'OldProfileImg': oldProfileImg,
-                        },
-                        success: function(response) {
-                            if(response == 'success') {
-                                location.reload();
-                            }
-                            console.log(response);
-                        }
-                    })
-                })
+    // GET CITY
+    $("#province").change(function() {
+        $('#city').attr('disabled', false);
+        var province_id = $(this).val();
+        $.ajax({
+            url: "./functions/crud/profile",
+            type: "POST",
+            data: {
+                province_id: province_id,
+                get_city: true,
+            },
+            success: function(data) {
+                $('#city').html(data);
             }
         })
+    })
 
-        // UPDATE PROFILE IMAGE
-        $('#update_img').on('submit', function(e) {
-            e.preventDefault();
-
-            if($.trim($('#profile_pic').val()).length == 0) {
-                $('.error-image').text('Insert image!');
-            } else {
-                var imageExt = $('#profile_pic').val().split('.').pop().toLowerCase();
-
-                if($.inArray(imageExt, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
-                    $('.error-image').text('File not supported!');
-                } else {
-                    var imageSize = $('#profile_pic')[0].files[0].size;
-
-                    if(imageSize > 10485760) {
-                        $('.error-image').text('File too large!');
-                    } else {
-                        var form = new FormData(this);
-                        form.append('update_profile_picture', true);
-                        $.ajax({
-                            url: "./functions/crud/profile",
-                            type: "POST",
-                            data: form,
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function(response) {
-                                if(response == 'success') {
-                                    location.reload();
-                                } else {
-                                    alert(response);
-                                }
-                            }
-                        })
-                    }
-                }
+    // GET BARANGAY
+    $("#city").change(function() {
+        $('#barangay').attr('disabled', false);
+        var city_id = $(this).val();
+        console.log(city_id);
+        $.ajax({
+            url: "./functions/crud/profile",
+            type: "POST",
+            data: {
+                city_id: city_id,
+                get_barangay: true,
+            },
+            success: function(data) {
+                $('#barangay').html(data);
             }
         })
+    })
 
-        // SUBMIT UPDATE PROFILE DETAILS
-        $('#profile_details').on('submit', function(e){
-            e.preventDefault()
+    $('#profile-btn').on('click', function(e) {
+        e.preventDefault();
+        $('.tab-content #profile_details').css("display", "flex");
+        $('.tab-content #profile_details').addClass('active');
+        $('.tab-content #contact').removeClass('active');
+        $('.tab-content #password').removeClass('active');
+        $('.tab-content #address').removeClass('active');
+    })
 
-            var form = new FormData(this);
-            form.append('update_profile_details', true);
+    $('#contact-btn').on('click', function(e) {
+        e.preventDefault();
+        $('.tab-content #profile_details').css("display", "none");
+        $('.tab-content #profile_details').removeClass('active');
+        $('.tab-content #contact').addClass('active');
+        $('.tab-content #password').removeClass('active');
+        $('.tab-content #address').removeClass('active');
+    })
 
-            $.ajax({
-                url: "./functions/crud/profile",
-                type: "POST",
-                data: form,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(response) {
-                    if(response == 'success') {
-                        location.reload();
-                    } else {
-                        location.reload();
-                    }
-                }
-            })
-        })
+    $('#password-btn').on('click', function(e) {
+        e.preventDefault();
+        $('.tab-content #profile_details').css("display", "none");
+        $('.tab-content #profile_details').removeClass('active');
+        $('.tab-content #contact').removeClass('active');
+        $('.tab-content #password').addClass('active');
+        $('.tab-content #address').removeClass('active');
+    })
 
-        // SUBMIT UPDATE CONTACT
-        $('#contact').on('submit', function(e){
-            e.preventDefault()
+    $('#address-btn').on('click', function(e) {
+        e.preventDefault();
+        $('.tab-content #profile_details').css("display", "none");
+        $('.tab-content #profile_details').removeClass('active');
+        $('.tab-content #contact').removeClass('active');
+        $('.tab-content #password').removeClass('active');
+        $('.tab-content #address').addClass('active');
+    })
 
-            var form = new FormData(this);
-            form.append('update_contact', true);
+    // PROFILE IMAGE
+    $(window).on('load', function() {
+        var src = $('#old-profile-src').attr('src');
+        var split = src.split('/');
+        var oldProfileImg = split[split.length - 1];
 
-            $.ajax({
-                url: "./functions/crud/profile",
-                type: "POST",
-                data: form,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(response) {
-                    if(response == 'success') {
-                        location.reload();
-                    } else if(response == 'failed') {
-                        location.reload();
-                    }
-                }
-            })
-        })
+        if (oldProfileImg == 'no_profile_pic.png') {
+            $('#remove').css("display", "none")
+        } else {
+            $('#remove').on('click', function(e) {
+                e.preventDefault();
+                var src = $('#old-profile-src').attr('src');
+                var split = src.split('/');
+                var oldProfileImg = split[split.length - 1];
+                var user_id = $(this).data('id');
 
-        // SUBMIT UPDATE PASSWORD
-        $('#password').on('submit', function(e) {
-            e.preventDefault();
-            var old_password = $('#old_password').val();
-            var new_password = $('#new_password').val();
-            var confirm_password = $('#confirm_password').val();
-
-            if($.trim(old_password).length == 0) {
-                $('.error-old_password').text('Input old password!');
-            } else if($.trim(old_password).length < 6) {
-                $('.error-old_password').text('Password is too short!');
-            } else {
-                $('.error-old_password').text('');
-            }
-
-            if($.trim(new_password).length == 0) {
-                $('.error-new_password').text('Input new password!');
-            } else if($.trim(new_password).length < 6) {
-                $('.error-new_password').text('Password is too short!');
-            } else {
-                $('.error-new_password').text('');
-            }
-
-            if($.trim(confirm_password).length == 0) {
-                $('.error-confirm_password').text('Input confirm password!');
-            } else if($.trim(confirm_password).length < 8) {
-                $('.error-confirm_password').text('Password is too short!');
-            } else {
-                $('.error-confirm_password').text('');
-            }
-
-            if($('.error-old_password').text() != '' || $('.error-new_password').text() != '' || $('.error-confirm_password').text() != '') {
-                $('#toast').addClass('active');
-                $('.progress').addClass('active');
-                $('.text-1').text('Error!');
-                $('.text-2').text('Fill all required fields!');
-                setTimeout(() => {
-                    $('#toast').removeClass("active");
-                    $('.progress').removeClass("active");
-                }, 5000);
-            } else {
-                var form = new FormData(this);
-                form.append('update_password', true);
                 $.ajax({
                     type: "POST",
                     url: "./functions/crud/profile",
-                    data: form,
-                    dataType: 'text',
-                    contentType: false,
-                    cache: false,
-                    processData: false,
+                    data: {
+                        'delete_image': true,
+                        'user_id': user_id,
+                        'OldProfileImg': oldProfileImg,
+                    },
                     success: function(response) {
-                        if(response == 'wrong password') {
-                            $('#toast').addClass('active');
-                            $('.progress').addClass('active');
-                            $('.text-1').text('Error!');
-                            $('.text-2').text('Wrong password!');
-                            setTimeout(() => {
-                                $('#toast').removeClass("active");
-                                $('.progress').removeClass("active");
-                            }, 5000);
-                        } else if(response == 'password not matched!') {
-                            $('#toast').addClass('active');
-                            $('.progress').addClass('active');
-                            $('.text-1').text('Error!');
-                            $('.text-2').text('The password confirmation does not match!');
-                            setTimeout(() => {
-                                $('#toast').removeClass("active");
-                                $('.progress').removeClass("active");
-                            }, 5000);
-                        } else if(response == 'success') {
+                        if (response == 'success') {
                             location.reload();
                         }
+                        console.log(response);
                     }
                 })
+            })
+        }
+    })
+
+    // UPDATE PROFILE IMAGE
+    $('#update_img').on('submit', function(e) {
+        e.preventDefault();
+
+        if ($.trim($('#profile_pic').val()).length == 0) {
+            $('.error-image').text('Insert image!');
+        } else {
+            var imageExt = $('#profile_pic').val().split('.').pop().toLowerCase();
+
+            if ($.inArray(imageExt, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                $('.error-image').text('File not supported!');
+            } else {
+                var imageSize = $('#profile_pic')[0].files[0].size;
+
+                if (imageSize > 10485760) {
+                    $('.error-image').text('File too large!');
+                } else {
+                    var form = new FormData(this);
+                    form.append('update_profile_picture', true);
+                    $.ajax({
+                        url: "./functions/crud/profile",
+                        type: "POST",
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response == 'success') {
+                                location.reload();
+                            } else {
+                                alert(response);
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    })
+
+    // SUBMIT UPDATE PROFILE DETAILS
+    $('#profile_details').on('submit', function(e) {
+        e.preventDefault()
+
+        var form = new FormData(this);
+        form.append('update_profile_details', true);
+
+        $.ajax({
+            url: "./functions/crud/profile",
+            type: "POST",
+            data: form,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+                if (response == 'success') {
+                    location.reload();
+                } else {
+                    location.reload();
+                }
             }
         })
+    })
 
-        $('.close').on('click', function(e) {
+    // SUBMIT UPDATE CONTACT
+    $('#contact').on('submit', function(e) {
+        e.preventDefault()
+
+        var form = new FormData(this);
+        form.append('update_contact', true);
+
+        $.ajax({
+            url: "./functions/crud/profile",
+            type: "POST",
+            data: form,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response) {
+                if (response == 'success') {
+                    location.reload();
+                } else if (response == 'failed') {
+                    location.reload();
+                }
+            }
+        })
+    })
+
+    // SUBMIT UPDATE ADDRESS
+    $('#address').on('submit', function(e) {
+        e.preventDefault()
+
+        if ($('#province').val().length == 0) {
+            $('.error-province').text('Select Province!');
+        } else {
+            $('.error-province').text('');
+        }
+
+        if ($('#city').val().length == 0) {
+            $('.error-city').text('Select City!');
+        } else {
+            $('.error-city').text('');
+        }
+
+        if ($('#barangay').val().length == 0) {
+            $('.error-barangay').text('Select Barangay!');
+        } else {
+            $('.error-barangay').text('');
+        }
+
+        if ($('#block').val().length == 0) {
+            $('.error-block').text('Input Block No., Bldg. & St. Name!');
+        } else {
+            $('.error-block').text('');
+        }
+
+        if ($('.error-province').text() != '' || $('.error-city').text() != '' || $('.error-barangay').text() !=
+            '' || $('.error-block').text() != '') {
+            $('#toast').addClass('active');
+            $('.progress').addClass('active');
+            $('.text-1').text('Error!');
+            $('.text-2').text('Fill all required fields!');
+            setTimeout(() => {
+                $('#toast').removeClass("active");
+                $('.progress').removeClass("active");
+            }, 5000);
+        } else {
+            var form = new FormData(this);
+            form.append('update_address', true);
+
+            $.ajax({
+                url: "./functions/crud/profile",
+                type: "POST",
+                data: form,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(response) {
+                    if (response == 'success') {
+                        location.reload();
+                    } else if (response == 'failed') {
+                        location.reload();
+                    }
+                    console.log(response);
+                }
+            })
+        }
+    })
+
+    // SUBMIT UPDATE PASSWORD
+    $('#password').on('submit', function(e) {
+        e.preventDefault();
+        var old_password = $('#old_password').val();
+        var new_password = $('#new_password').val();
+        var confirm_password = $('#confirm_password').val();
+
+        if ($.trim(old_password).length == 0) {
+            $('.error-old_password').text('Input old password!');
+        } else if ($.trim(old_password).length < 6) {
+            $('.error-old_password').text('Password is too short!');
+        } else {
+            $('.error-old_password').text('');
+        }
+
+        if ($.trim(new_password).length == 0) {
+            $('.error-new_password').text('Input new password!');
+        } else if ($.trim(new_password).length < 6) {
+            $('.error-new_password').text('Password is too short!');
+        } else {
+            $('.error-new_password').text('');
+        }
+
+        if ($.trim(confirm_password).length == 0) {
+            $('.error-confirm_password').text('Input confirm password!');
+        } else if ($.trim(confirm_password).length < 8) {
+            $('.error-confirm_password').text('Password is too short!');
+        } else {
+            $('.error-confirm_password').text('');
+        }
+
+        if ($('.error-old_password').text() != '' || $('.error-new_password').text() != '' || $(
+                '.error-confirm_password').text() != '') {
+            $('#toast').addClass('active');
+            $('.progress').addClass('active');
+            $('.text-1').text('Error!');
+            $('.text-2').text('Fill all required fields!');
+            setTimeout(() => {
+                $('#toast').removeClass("active");
+                $('.progress').removeClass("active");
+            }, 5000);
+        } else {
+            var form = new FormData(this);
+            form.append('update_password', true);
+            $.ajax({
+                type: "POST",
+                url: "./functions/crud/profile",
+                data: form,
+                dataType: 'text',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(response) {
+                    if (response == 'wrong password') {
+                        $('#toast').addClass('active');
+                        $('.progress').addClass('active');
+                        $('.text-1').text('Error!');
+                        $('.text-2').text('Wrong password!');
+                        setTimeout(() => {
+                            $('#toast').removeClass("active");
+                            $('.progress').removeClass("active");
+                        }, 5000);
+                    } else if (response == 'password not matched!') {
+                        $('#toast').addClass('active');
+                        $('.progress').addClass('active');
+                        $('.text-1').text('Error!');
+                        $('.text-2').text('The password confirmation does not match!');
+                        setTimeout(() => {
+                            $('#toast').removeClass("active");
+                            $('.progress').removeClass("active");
+                        }, 5000);
+                    } else if (response == 'success') {
+                        location.reload();
+                    }
+                }
+            })
+        }
+    })
+
+    $('.close').on('click', function(e) {
         $('#toast').removeClass("active");
         $('.progress').removeClass("active");
-        })
+    })
     </script>
 </body>
 

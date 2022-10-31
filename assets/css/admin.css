@@ -935,7 +935,11 @@ main .dashboard .graph__wrapper .container .chartBox {
 }
 main .dashboard .graph__wrapper .container .chartBox .vertical-menu {
   width: 100%;
+  height: 100% !important;
   text-align: center;
+}
+main .dashboard .graph__wrapper .container .chartBox #myChart {
+  height: 100% !important;
 }
 main .insert-category {
   width: 100%;

@@ -14,6 +14,8 @@ $get_admin_info = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id = $adm
 $info = mysqli_fetch_array($get_admin_info);
 
 $userProfileIcon = $info['profile_image'];
+
+$read_orders = mysqli_query($conn, "UPDATE orders SET notified = 1");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,11 +154,11 @@ $userProfileIcon = $info['profile_image'];
 
     <!-- MAIN -->
     <main>
-        <h1 class="title">View Orders</h1>
+        <h1 class="title">View Preparing Orders</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="view-category" class="active">View Orders</a></li>
+            <li><a href="view-category" class="active">View Preparing Orders</a></li>
         </ul>
         <section class="orders">
         <div class="wrapper">
@@ -168,7 +170,6 @@ $userProfileIcon = $info['profile_image'];
                         <th>Customer Email</th>
                         <th>Order Date</th>
                         <th>Total Amount</th>
-                        <th>Order Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

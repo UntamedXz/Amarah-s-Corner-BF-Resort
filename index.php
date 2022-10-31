@@ -430,21 +430,26 @@ document.querySelector("#send").addEventListener("click", async () => {
 
         <div class="banner__wrapper swiper mySwiper">
             <div class="banner__content swiper-wrapper">
-                <div class="banner__card swiper-slide">
+                <div class="banner__card swiper-slide h-100">
                     <div class="banner__image">
                         <img src="./assets/images/banner2.jpg" alt="">
                     </div>
                 </div>
-                <div class="banner__card swiper-slide">
+                <div class="banner__card swiper-slide h-100">
                     <div class="banner__image">
                         <img src="./assets/images/banner.jpg" alt="">
                     </div>
                 </div>
-                <div class="banner__card swiper-slide">
+                <div class="banner__card swiper-slide h-100">
                     <div class="banner__image">
                         <img src="./assets/images/banner4.jpg" alt="">
                     </div>
                 </div>
+                <!-- <div class="banner__card swiper-slide h-100">
+                    <div class="banner__image">
+                        <img src="./assets/images/banner5-final.jpg" alt="">
+                    </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -531,13 +536,16 @@ document.querySelector("#send").addEventListener("click", async () => {
 
                 $username = $row['username'];
                 $pfp = $row['user_profile_image'];
+                $no_pfp = 'no_profile_pic.png';
                 $name = $row['name'];
+
+                echo $pfp;
             ?>
             <div class="feedbacks__card">
                 <div class="feedbacks__top">
                     <div class="feedbacks__user-profile">
                         <div class="feedbacks__user-profile__image">
-                            <img class="img" src="./assets/images/<?php echo $pfp; ?>">
+                            <img class="img" src="./assets/images/<?php if($pfp != null) { echo $pfp; } else { echo $no_pfp; } ?>">
                         </div>
                         <div class="feedbacks__name-user">
                             <h4><?php echo $name; ?></h4>

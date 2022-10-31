@@ -271,6 +271,19 @@ if(isset($_SESSION['id'])) {
                                     $('.progress').removeClass("active");
                                 }, 5000);
                                 $('#register')[0].reset();
+                            } else if(response == 'for key') {
+                                $('#toast').addClass('active');
+                                $('.progress').addClass('active');
+                                $('#toast-icon').removeClass(
+                                    'fa-solid fa-triangle-exclamation').addClass(
+                                    'fa-solid fa-check warning');
+                                $('.text-1').text('Success!');
+                                $('.text-2').text('Check email for verification!');
+                                setTimeout(() => {
+                                    $('#toast').removeClass("active");
+                                    $('.progress').removeClass("active");
+                                }, 5000);
+                                $('#register')[0].reset();
                             } else {
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');

@@ -154,11 +154,11 @@ $read_orders = mysqli_query($conn, "UPDATE orders SET notified = 1");
 
     <!-- MAIN -->
     <main>
-        <h1 class="title">View Orders</h1>
+        <h1 class="title">View Pending Orders</h1>
         <ul class="breadcrumbs">
             <li><a href="index">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="view-category" class="active">View Orders</a></li>
+            <li><a href="view-category" class="active">View Pending Orders</a></li>
         </ul>
         <section class="orders">
         <div class="wrapper">
@@ -170,7 +170,6 @@ $read_orders = mysqli_query($conn, "UPDATE orders SET notified = 1");
                         <th>Customer Email</th>
                         <th>Order Date</th>
                         <th>Total Amount</th>
-                        <th>Order Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

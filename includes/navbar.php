@@ -4,8 +4,8 @@
     <!-- NAVIGATION BAR 1 -->
     <div class="header-1">
         <a href="#" class="logo"><img src="./assets/images/official_logo.png" alt=""></a>
-        <form action="#" class="search-form">
-            <input type="text" name="search-input" id="search-input" placeholder="search here...">
+        <form action="#" class="search-form" id="search_form">
+            <input type="text" name="search-input" id="search-input" placeholder="search here..." value="<?php if(isset($_GET['search'])) { echo $_GET['search']; } ?>">
             <label for="search-input" class="bx bx-search-alt-2"></label>
         </form>
         <div class="left">
@@ -20,7 +20,7 @@
                 <img id="profileIcon" src="" alt="">
                 <ul class="profile-link">
                     <li><a href="account"><i class="bx bxs-user-circle icon"></i>Profile</a></li>
-                    
+
                     <li><a href="./includes/logout"><i class="bx bxs-log-out-circle"></i>Logout</a></li>
                 </ul>
             </div>
@@ -46,119 +46,114 @@
 </nav>
 
 <div class="tracking_wrapper">
-            <span class="track_title">TRACK YOUR ORDER</span>
-            <span class="error-all" style="color: #dc3545; font-weight: 600; font-size: 13px;"></span>
-            <form id="tracking_form">
-                <div class="form_group">
-                    <span>Email</span>
-                    <input type="email" id="email" name="email" required>
-                    <span class="error-email" style="color: #dc3545; font-weight: 600; font-size: 13px;"></span>
-                </div>
-                <div class="form_group">
-                    <span>Order ID</span>
-                    <input type="text" id="order-id" onkeypress='return event.charCode >= 48 && event.charCode <= 57' name="order-id" required>
-                    <span class="error-order-id" style="color: #dc3545; font-weight: 600; font-size: 13px;"></span>
-                </div>
-                <button form="tracking_form" type="submit">TRACK MY ORDER</button>
-            </form>
+    <span class="track_title">TRACK YOUR ORDER</span>
+    <span class="error-all" style="color: #dc3545; font-weight: 600; font-size: 13px;"></span>
+    <form id="tracking_form">
+        <div class="form_group">
+            <span>Email</span>
+            <input type="email" id="email" name="email" required>
+            <span class="error-email" style="color: #dc3545; font-weight: 600; font-size: 13px;"></span>
         </div>
-
-        <!-- TOAST -->
-    <div class="toast" id="toast">
-        <div class="toast-content" id="toast-content">
-            <i id="toast-icon" class="fa-solid fa-triangle-exclamation warning"></i>
-
-            <div class="message">
-                <span class="text text-1" id="text-1"></span>
-                <span class="text text-2" id="text-2"></span>
-            </div>
+        <div class="form_group">
+            <span>Order ID</span>
+            <input type="text" id="order-id" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                name="order-id" required>
+            <span class="error-order-id" style="color: #dc3545; font-weight: 600; font-size: 13px;"></span>
         </div>
-        <i class="fa-solid fa-xmark close"></i>
-        <div class="progress"></div>
+        <button form="tracking_form" type="submit">TRACK MY ORDER</button>
+    </form>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <div class="toast-content" id="toast-content">
+        <i id="toast-icon" class="fa-solid fa-triangle-exclamation warning"></i>
+
+        <div class="message">
+            <span class="text text-1" id="text-1"></span>
+            <span class="text text-2" id="text-2"></span>
+        </div>
     </div>
+    <i class="fa-solid fa-xmark close"></i>
+    <div class="progress"></div>
+</div>
 
 <script>
-    // PROFILE DROPDOWN
-    const profile = document.querySelector('.profile');
-    const bell = document.querySelector('.notif');
-    const imgProfile = profile.querySelector('img');
-    const dropdownProfile = profile.querySelector('.profile-link');
-    const dropdownNotif = profile.querySelector('.notif-list');
+$('#search_form').on('submit', function(e) {
+    e.preventDefault();
+    var search_input = $('#search-input').val();
 
-    imgProfile.addEventListener('click', function() {
-        dropdownProfile.classList.toggle('show');
-    })
+    if (search_input != undefined && search_input != null) {
+        window.location = 'search-result?search=' + search_input;
+    }
+})
 
-    bell.addEventListener('click', function() {
-        dropdownNotif.classList.toggle('show');
-    })
+// PROFILE DROPDOWN
+const profile = document.querySelector('.profile');
+const bell = document.querySelector('.notif');
+const imgProfile = profile.querySelector('img');
+const dropdownProfile = profile.querySelector('.profile-link');
+const dropdownNotif = profile.querySelector('.notif-list');
 
-    window.addEventListener('click', function(e) {
-        if (e.target !== imgProfile) {
-            if (e.target !== dropdownProfile) {
-                if (dropdownProfile.classList.contains('show')) {
-                    dropdownProfile.classList.remove('show');
-                }
+imgProfile.addEventListener('click', function() {
+    dropdownProfile.classList.toggle('show');
+})
+
+bell.addEventListener('click', function() {
+    dropdownNotif.classList.toggle('show');
+})
+
+window.addEventListener('click', function(e) {
+    if (e.target !== imgProfile) {
+        if (e.target !== dropdownProfile) {
+            if (dropdownProfile.classList.contains('show')) {
+                dropdownProfile.classList.remove('show');
+            }
+        }
+    }
+})
+
+const tracking = document.querySelector('#tracking');
+const tracking_form = document.querySelector('.tracking_wrapper');
+
+tracking.addEventListener('click', function() {
+    tracking_form.classList.add('active');
+    document.getElementById('backgroundOverlay').classList.add('active');
+    document.querySelector('.search-form').classList.remove('active');
+})
+
+document.getElementById('backgroundOverlay').addEventListener('click', function() {
+    document.getElementById('backgroundOverlay').classList.remove('active');
+    tracking_form.classList.remove('active');
+})
+
+$('.close').on('click', function(e) {
+    $('#toast').removeClass("active");
+    $('.progress').removeClass("active");
+})
+
+$('#tracking_form').on('submit', function(e) {
+    e.preventDefault();
+    var form = new FormData(this);
+    form.append('check_tracking', true);
+    $.ajax({
+        type: "POST",
+        url: "./functions/crud/cart",
+        contentType: false,
+        cache: false,
+        processData: false,
+        data: form,
+        success: function(response) {
+            var str = response;
+            if (str.includes("your-order?id")) {
+                location.href = response;
+                console.log(response);
+            } else {
+                $('.error-all').text('Invalid credentials!');
             }
         }
     })
-
-    const tracking = document.querySelector('#tracking');
-    const tracking_form = document.querySelector('.tracking_wrapper');
-
-    tracking.addEventListener('click', function() {
-        tracking_form.classList.add('active');
-        document.getElementById('backgroundOverlay').classList.add('active');
-        document.querySelector('.search-form').classList.remove('active');
-    })
-
-    document.getElementById('backgroundOverlay').addEventListener('click', function() {
-        document.getElementById('backgroundOverlay').classList.remove('active');
-        tracking_form.classList.remove('active');
-    })
-
-    $('.close').on('click', function(e) {
-        $('#toast').removeClass("active");
-        $('.progress').removeClass("active");
-    })
-
-    $('#tracking_form').on('submit', function (e) {
-        e.preventDefault();
-        var form = new FormData(this);
-        form.append('check_tracking', true);
-            $.ajax({
-                type: "POST",
-                url: "./functions/crud/cart",
-                contentType: false,
-                cache: false,
-                processData: false,
-                data: form,
-                success: function (response) {
-                    var str = response;
-                    if(str.includes("your-order?id")) {
-                        location.href = response;
-                    console.log(response);
-                    } else {
-                        $('.error-all').text('Invalid credentials!');
-                    }
-                }
-            })
-
-    })
-
-    // CLOCK SCRIPT
-    function myTime() {
-        var time = new Date();
-        $('.clock').html(time.toLocaleTimeString());
-    }
-
-    $(document).ready(function() {
-        setInterval(myTime, 1000);
-    })
-
-    var date = new Date();
-
-    document.getElementById('date').innerHTML = date;
+})
 </script>
 
 <?php

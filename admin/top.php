@@ -26,7 +26,11 @@
         <li class="divider" data-text="product">Product</li>
         <li>
         <li><a href="product"><i class='bx bxs-bowl-hot icon'></i>Products</a></li>
-        <li class="divider" data-text="orders">orders</li>
+        <li class="divider" data-text="coupons">coupons</li>
+        <li>
+            <a href="store-open-time"><i class='bx bxs-time icon'></i>Coupons</a>
+        </li>
+        <li class="divider" data-text="orders">Coupons</li>
         <li>
             <a href="order"><i class='bx bxs-cart icon'></i>Orders</a>
         </li>

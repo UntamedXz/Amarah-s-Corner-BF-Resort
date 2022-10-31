@@ -29,6 +29,18 @@ if(isset($_POST['update_status'])) {
     $row = mysqli_fetch_array($get_delivery_method);
     $delivery_method_id = $row['delivery_method'];
 
+    
+    $getdet = mysqli_query($conn, "SELECT * FROM orders WHERE order_id =$order_id");
+    $getadd = mysqli_query($conn, "SELECT * FROM order_address WHERE order_id =$order_id");
+    
+    $row = mysqli_fetch_array($getdet);
+    $row2 = mysqli_fetch_array($getadd);
+    $lng = $row['longitude'];  
+    $lat = $row['latitude'];  
+    $fee = $row['shipping_fee'];  
+    $add = $row2['block_street_building'];
+
+
     if ($selected == 1) {
         if($delivery_method_id == 1) {
             $body = [
@@ -555,7 +567,95 @@ if(isset($_POST['update_status'])) {
                 }
             }
         }
-    } else if($selected == 4) {
+    } else if($selected == 4) {    
+        $key = "pk_test_929096cd212d3fdf7baf925728e87cb3"; // put your lalamove API key here
+        $secret = "sk_test_tr/l1Zg3PyBdu3OKgasoAdjHjFBLDFt35X6JCQhSXal85dTw6+oaTozfiIr6oXdP"; // put your lalamove API secret here
+
+        $time = time() * 1000;
+        $baseURL = "https://rest.sandbox.lalamove.com"; // URl to Lalamove Sandbox API
+        $method = 'POST';
+        $path = '/v2/orders';
+        $region = 'PH_MNL';
+
+        $body = '{
+        "serviceType": "MOTORCYCLE",
+        "specialRequests": [],
+        "requesterContact": {
+        "name": "Amarah Pizza Corner",
+        "phone": "0899183138"
+        },
+        "stops": [
+        {
+            "location": {
+                "lat": "14.437238300580049",
+                "lng": "120.99027438102536"
+            },
+            "addresses": {
+                "en_PH": {
+                    "displayString": "BF las pinas resort",
+                    "market": "'.$region.'"
+                }
+            }
+        },
+        {
+            "location": {
+                "lat": "'.$lat.'",
+                "lng": "'.$lng.'"
+            },
+           "addresses": {
+               "en_PH": {
+                   "displayString": "'.$add.'",
+                   "market": "'.$region.'"
+               }
+           }
+        }
+        ],
+        "deliveries": [
+        {
+            "toStop": 1,
+            "toContact": {
+                "name": "'.$name.'",
+                "phone": "'.$number.'"
+            },
+           "remarks": "Do not take this order - SANDBOX CLIENT TEST"
+        }
+        ],
+        "quotedTotalFee": {
+        "amount": "'.$fee.'",
+        "currency": "PHP"
+        }
+        }';
+
+        $rawSignature = "{$time}\r\n{$method}\r\n{$path}\r\n\r\n{$body}";
+        $signature = hash_hmac("sha256", $rawSignature, $secret);
+        $startTime = microtime(true);
+        $token = $key.':'.$time.':'.$signature;
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => $baseURL.$path,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 3,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HEADER => false, 
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => $body,
+        CURLOPT_HTTPHEADER => array(
+        "Content-type: application/json; charset=utf-8",
+        "Authorization: hmac ".$token,
+        "Accept: application/json",
+        "X-LLM-Market: {$region}" 
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+        $res = json_decode($response, JSON_OBJECT_AS_ARRAY);
+   
         if($delivery_method_id == 1) {
             $body = [
                 'Messages' => [

@@ -59,7 +59,6 @@ $userProfileIcon = $info['profile_image'];
                             icon: "../assets/images/official_logo_crop.png",
                             tag: "New order!",
                         })
-                        $('#audioBox')[0].play();
                         notification.addEventListener("click", function(e) {
                             e.preventDefault();
                             location.href =
@@ -67,6 +66,7 @@ $userProfileIcon = $info['profile_image'];
                         })
                     }
                 })
+                $('#audioBox')[0].play();
             }
         };
         xhttp.open("GET", "./functions/get-order-notif.php", true);
