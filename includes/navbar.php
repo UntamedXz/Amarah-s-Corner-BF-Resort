@@ -19,9 +19,11 @@
             <div class="profile">
                 <img id="profileIcon" src="" alt="">
                 <ul class="profile-link">
-                    <li><a href="account"><i class="bx bxs-user-circle icon"></i>Profile</a></li>
+                    <li><a href="account"><i class="fa-solid fa-circle-user"></i>Profile</a></li>
 
-                    <li><a href="./includes/logout"><i class="bx bxs-log-out-circle"></i>Logout</a></li>
+                    <li><a href="order?page=1"><i class="fa-solid fa-clock icon"></i>Orders</a></li>
+
+                    <li><a href="./includes/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></li>
                 </ul>
             </div>
         </div>

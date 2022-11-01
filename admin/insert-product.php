@@ -119,7 +119,7 @@ if(isset($_GET['id'])) {
                         <span class="label">
                             Display Price
                         </span>
-                        <input type="text" name="display_price" id="display_price" value="<?php if(isset($product_price)) { echo $product_price; } ?>">
+                        <input type="text" name="display_price" id="display_price" value="<?php if(isset($product_price)) { echo $product_price; } ?>" required>
                         <span class="error error_display_price"></span>
                     </div>
                     <!-- SIMPLE -->
@@ -160,10 +160,8 @@ if(isset($_GET['id'])) {
                                             foreach($get_stock_status as $stock_status) {
 
                                             $is_selected = '';
-                                            if(isset($product_stock)) {
-                                                if($product_stock == $stock_status['stock_id']) {
-                                                    $is_selected = "selected";
-                                                }
+                                            if($product_status == $stock_status['stock_id']) {
+                                                $is_selected = "selected";
                                             }
                                             ?>
                                             <option value="<?php echo $stock_status['stock_id']; ?>" <?php echo $is_selected; ?>><?php echo $stock_status['stock']; ?></option>
@@ -240,7 +238,7 @@ if(isset($_GET['id'])) {
                                         <div class="hgroup">
                                             <div class="vgroup">
                                                 <span>Regular price</span>
-                                                <input type="text" name="variable_reg_price[]" id="variable_reg_price" value="<?php echo $variation_info['product_price']; ?>">
+                                                <input type="text" name="variable_reg_price[]" id="variable_reg_price" class="variable_reg_price" value="<?php echo $variation_info['product_price']; ?>">
                                             </div>
                                             <div class="vgroup">
                                             <span>Stock status</span>
@@ -262,6 +260,7 @@ if(isset($_GET['id'])) {
                                                 </select>
                                             </div>
                                         </div>
+                                        <span class="error error_product_price"></span>
                                     </div>
                                     <?php
                                 }
@@ -476,6 +475,7 @@ if(isset($_GET['id'])) {
                     if(selected_value === '1') {
                         $('.simple_product_tab').css('display', 'flex');
                         $('.variable_product_tab').css('display', 'none');
+                        $('.display_price').css('display', 'none');
                     } else if(selected_value === '2') {
                         $('.variable_product_tab').css('display', 'flex');
                         $('.simple_product_tab').css('display', 'none');
@@ -689,7 +689,47 @@ if(isset($_GET['id'])) {
                                 $('.error_product_keyword').text('');
                             }
 
-                            if($('.error_product_cat').text() != '' || $('.error_product_subcat').text() != '' || $('.error_product_name').text() != '' || $('.error_product_slug').text() != '' || $('.error_product_image').text() != '' || $('.error_product_keyword').text() != '') {
+                            // if($.trim($('.variable_reg_price').val()).length == 0) {
+                            //     $('.attributes_btn').css('background-color', '#ffaf08');
+                            //     $('.attributes_btn').css('color', '#070506');
+                            //     $('.variations_btn').css('background-color', 'transparent');
+                            //     $('.variations_btn').css('color', '#ffaf08');
+                            //     $('.attributes_tab').css('display', 'none');
+                            //     $('.variation_tab').css('display', 'flex');
+                            //     $('.error_product_price').text('Input variation price!');
+                            // } else {
+                            //     $('.error_product_price').text('');
+                            // }
+
+                            // if($('#variable_reg_price').prop('required')) {
+                            //     $('.attributes_btn').css('background-color', '#ffaf08');
+                            //     $('.attributes_btn').css('color', '#070506');
+                            //     $('.variations_btn').css('background-color', 'transparent');
+                            //     $('.variations_btn').css('color', '#ffaf08');
+                            //     $('.attributes_tab').css('display', 'none');
+                            //     $('.variation_tab').css('display', 'flex');
+                            //     $('.error_product_price').text('Input variation price!');
+                            //     console.log('gago');
+                            // }
+
+                            var variation_price = $('.variable_reg_price');
+
+                            for(var i = 0; i < variation_price.length; i++) {
+                                if($.trim($(variation_price[i]).val()).length == 0) {
+                                    $('.attributes_btn').css('background-color', '#ffaf08');
+                                    $('.attributes_btn').css('color', '#070506');
+                                    $('.variations_btn').css('background-color', 'transparent');
+                                    $('.variations_btn').css('color', '#ffaf08');
+                                    $('.attributes_tab').css('display', 'none');
+                                    $('.variation_tab').css('display', 'flex');
+                                    $(variation_price[i]).prop('required', true);
+                                    $('.error_product_price').text('Input variation price!');
+                                } else {
+                                    $('.error_product_price').text('');
+                                }
+                            }
+
+                            if($('.error_product_cat').text() != '' || $('.error_product_subcat').text() != '' || $('.error_product_name').text() != '' || $('.error_product_slug').text() != '' || $('.error_product_image').text() != '' || $('.error_product_keyword').text() != '' || $('.error_product_price').text() != '') {
                                 $('#toast').addClass('active');
                                 $('.progress').addClass('active');
                                 $('.text-1').text('Error!');
@@ -712,11 +752,9 @@ if(isset($_GET['id'])) {
                                         var str = data;
                                         if(str.includes("insert-product?id")) {
                                             location.href = data;
-                                        } else if(str.includes("Undefined array key 2")) {
+                                        } else if(str.includes("<b>Warning</b>")) {
                                             location.reload();
-                                        } else if(data == '') {
-                                            location.reload();
-                                        } else if(str.includes("Uncaught TypeError: count():")) {
+                                        } else if(str.includes("<b>Fatal error</b>:")) {
                                             location.reload();
                                         } else if(data === 'Product already exist!') {
                                             $('#toast').addClass('active');

@@ -340,15 +340,16 @@ $decode_id = base64_decode(urldecode($id));
                             <select name="selected_status" id="selected_status" required>
                                 <option value="">SELECT PROCESS</option>
                                 <?php
-                                $get_option = mysqli_query($conn, "SELECT * FROM order_status");
-                                $get_selected = mysqli_query($conn, "SELECT * FROM orders WHERE order_id = $decode_id");
-
-                                $fetch = mysqli_fetch_array($get_selected);
-                                $selected = $fetch['order_status'];
+                                $get_option = mysqli_query($conn, "SELECT order_status.order_status_id, order_status.order_status_name, status_per_order_status.status_per_order_status
+                                FROM order_status
+                                LEFT JOIN status_per_order_status
+                                ON order_status.order_status_id = status_per_order_status.order_status_id
+                                WHERE order_id = $decode_id AND status_per_order_status.status_per_order_status = 0");
+                                
 
                                 foreach($get_option as $option) {
                                 ?>
-                                <option value="<?php echo $option['order_status_id']; ?>" <?php if($option['order_status_id'] == $selected) { echo 'selected="selected"';} ?>><?php echo $option['order_status_name']; ?></option>
+                                <option value="<?php echo $option['order_status_id']; ?>"><?php echo $option['order_status_name']; ?></option>
                                 <?php
                                 }
                                 ?>

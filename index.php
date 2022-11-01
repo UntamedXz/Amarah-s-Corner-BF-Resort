@@ -469,9 +469,9 @@ document.querySelector("#send").addEventListener("click", async () => {
                 $get_category = mysqli_query($conn, "SELECT * FROM category");
 
                 foreach ($get_category as $category_row) {
-                $encryptedCategoryId = urlencode(base64_encode($category_row['category_id']));
+                $category = $category_row['category_id'];
                 ?>
-                    <a href="catalog?id=<?php echo $encryptedCategoryId; ?>" class="menu__card swiper-slide">
+                    <a href="catalog?category=<?php echo $category . '&page=1'; ?>" class="menu__card swiper-slide">
                         <div class="menu__image">
                             <img src="./assets/images/<?php echo $category_row['categoty_thumbnail']; ?>" alt="">
                         </div>

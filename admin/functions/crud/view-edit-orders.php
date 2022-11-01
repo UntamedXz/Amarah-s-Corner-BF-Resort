@@ -20,6 +20,10 @@ if(isset($_POST['update_status'])) {
 
     $update = mysqli_query($conn, "UPDATE orders SET order_status = $selected WHERE order_id = $order_id");
 
+    for($i = 1; $i <= $selected; $i++) {
+        $update_status = mysqli_query($conn, "UPDATE status_per_order_status SET status_per_order_status = 1 WHERE order_id = $order_id AND order_status_id = $i");
+    }
+
     $get_delivery_method = mysqli_query($conn, "SELECT orders.delivery_method, delivery.delivery_title
     FROM delivery
     INNER JOIN orders

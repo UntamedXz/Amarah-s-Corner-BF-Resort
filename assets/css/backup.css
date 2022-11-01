@@ -1564,22 +1564,14 @@ footer .footer-wrapper .copyright span {
 .catalog .container {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 15px;
 }
-.catalog .container .container-left {
-  width: 250px;
-  padding-top: 50px;
-}
-.catalog .container .container-left .container-left-cont {
-  background: var(--black);
-  width: 100%;
-  height: 400px;
-  border-radius: 5px;
-}
 .catalog .container .container-right {
-  width: 1100px;
+  width: 1170px;
+  max-width: 94%;
 }
 .catalog .container .container-right .container-right-cont {
   width: 100%;
@@ -1600,7 +1592,6 @@ footer .footer-wrapper .copyright span {
   justify-content: space-between;
   flex-direction: row;
   gap: 10px;
-  display: none;
 }
 .catalog .container .container-right .container-right-cont .catalog-box .img-cont {
   display: flex;
@@ -1676,9 +1667,6 @@ footer .footer-wrapper .copyright span {
   border: 2px solid #ffaf08;
   color: #ffaf08;
 }
-.catalog .container .container-right .container-right-cont .catalog-box:nth-child(1), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(2), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(3), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(4), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(5), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(6), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(7), .catalog .container .container-right .container-right-cont .catalog-box:nth-child(8) {
-  display: flex;
-}
 .catalog .container .container-right .close-hour-note {
   width: 100%;
   height: auto;
@@ -1690,25 +1678,51 @@ footer .footer-wrapper .copyright span {
   font-size: 26px;
   font-weight: 500;
 }
-.catalog .container .container-right #load-more-products {
+.catalog .container .container-right .pagination_container {
+  margin-top: 10px;
+  margin-bottom: 20px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
 }
-.catalog .container .container-right #load-more-products .load-more-products {
-  padding: 5px 10px;
-  background: var(--black);
-  color: var(--primary);
-  border: 1px solid var(--black);
-  border-radius: 5px;
-  text-transform: uppercase;
-  font-weight: 700;
+.catalog .container .container-right .pagination_container .pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
-.catalog .container .container-right #load-more-products .load-more-products:hover {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--black);
-  border: 1px solid var(--primary);
+.catalog .container .container-right .pagination_container .pagination a {
+  text-decoration: none;
+}
+.catalog .container .container-right .pagination_container .pagination a .button {
+  height: 30px;
+  width: 100%;
+  padding: 0 10px;
+  background-color: #070506;
+  border: 2px solid #070506;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.catalog .container .container-right .pagination_container .pagination a .button span, .catalog .container .container-right .pagination_container .pagination a .button .icon {
+  text-decoration: none;
+  color: #ffaf08;
+  font-weight: 600;
+}
+.catalog .container .container-right .pagination_container .pagination a .button:hover {
+  background-color: transparent;
+}
+.catalog .container .container-right .pagination_container .pagination a .button:hover span, .catalog .container .container-right .pagination_container .pagination a .button:hover .icon {
+  color: #070506 !important;
+}
+.catalog .container .container-right .pagination_container .pagination a .button.active {
+  background-color: #070506;
+}
+.catalog .container .container-right .pagination_container .pagination a .button.active span {
+  color: #ffaf08;
 }
 
 .cart .wrapper {
@@ -3368,6 +3382,178 @@ footer .footer-wrapper .copyright span {
 }
 .verified h4 {
   font-weight: 500;
+}
+
+.order {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  gap: 20px;
+  color: #ffaf08;
+}
+.order .order_header {
+  background-color: black;
+  padding: 20px;
+  width: 50em;
+  max-width: 94%;
+  border-radius: 5px;
+}
+.order .container {
+  background: black;
+  width: 50em;
+  max-width: 94%;
+  border-radius: 5px;
+  padding: 20px;
+}
+.order .container .hr-top {
+  border: none;
+  height: 10px;
+  background: linear-gradient(-135deg, black 5px, transparent 0) 0 5px, linear-gradient(135deg, black 5px, #ffaf08 0) 0 5px;
+  background-color: black;
+  background-position: left bottom;
+  background-repeat: repeat-x;
+  background-size: 10px 10px;
+}
+.order .container .order_id_wrapper {
+  width: 100%;
+  padding: 1em;
+}
+.order .container .layout {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+@media (min-width: 481px) {
+  .order .container .layout {
+    flex-direction: row;
+  }
+}
+.order .container .layout .col {
+  padding: 1em;
+  margin: 0 2px 2px 0;
+  background: black;
+  border-radius: 5px;
+}
+.order .container .layout .col-main {
+  flex: 1;
+  border: 2px solid #ffaf08;
+  border-radius: 5px;
+  margin: 10px;
+}
+.order .container .layout .col-complementary {
+  flex: 2;
+  text-align: center;
+  font-weight: bold;
+}
+.order .container .layout .col-complementary .status_pic {
+  width: 100%;
+}
+.order .container .order_summary {
+  margin-top: 20px;
+}
+.order .container .order_summary .myOrders {
+  width: 100%;
+  background: #ffaf08;
+  font-weight: bold;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  margin-bottom: 5px;
+}
+.order .container .order_summary .myOrders i {
+  font-size: 24px;
+}
+.order .container .order_summary .myOrders .left {
+  padding-right: 5px;
+}
+.order .container .order_summary .myOrders .left.active {
+  transform: rotate(180deg);
+}
+.order .container .order_summary .myOrders .right {
+  padding-left: 5px;
+}
+.order .container .order_summary .myOrders .right.active {
+  transform: rotate(180deg);
+}
+.order .container .order_summary #myOrders {
+  display: none;
+}
+.order .container .order_summary #myOrders .summary_wrapper {
+  padding: 5px 10px;
+}
+.order .container .order_summary #myOrders .summary_wrapper .products {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.order .container .order_summary #myOrders .summary_wrapper .products .menu_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.order .container .order_summary #myOrders .summary_wrapper .hr-normal {
+  border: 1px solid #ffaf08;
+}
+.order .container .hr-bot {
+  border: none;
+  height: 10px;
+  background: linear-gradient(-135deg, #ffaf08 5px, transparent 0) 0 5px, linear-gradient(135deg, #ffaf08 5px, black 0) 0 5px;
+  background-color: #ffaf08;
+  background-position: left bottom;
+  background-repeat: repeat-x;
+  background-size: 10px 10px;
+}
+.order .pagination_container {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.order .pagination_container .pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.order .pagination_container .pagination a {
+  text-decoration: none;
+}
+.order .pagination_container .pagination a .button {
+  height: 30px;
+  width: 100%;
+  padding: 0 10px;
+  background-color: #070506;
+  border: 2px solid #070506;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.order .pagination_container .pagination a .button span, .order .pagination_container .pagination a .button .icon {
+  text-decoration: none;
+  color: #ffaf08;
+  font-weight: 600;
+}
+.order .pagination_container .pagination a .button:hover {
+  background-color: transparent;
+}
+.order .pagination_container .pagination a .button:hover span, .order .pagination_container .pagination a .button:hover .icon {
+  color: #070506 !important;
+}
+.order .pagination_container .pagination a .button.active {
+  background-color: #070506;
+}
+.order .pagination_container .pagination a .button.active span {
+  color: #ffaf08;
 }
 
 /*# sourceMappingURL=backup.css.map */
